@@ -3,5 +3,3 @@
 Soy Juani
 
 hola
-
-la chispa
