@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "errorManagement.h"
 #include "bstADT.h"
 
 struct node {
@@ -22,8 +23,7 @@ struct bstCDT {
 
 bstADT newBst(cmp fx) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
-    if (newTree == NULL) {
-    }
+    assert(newTree == NULL);
     newTree->fx = fx;
     return newTree;
 }
