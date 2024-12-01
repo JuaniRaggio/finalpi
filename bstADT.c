@@ -13,9 +13,6 @@ struct node {
 
 struct bstCDT {
     struct node * root;
-    struct node * inorderIterator;
-    struct node * preorderIterator;
-    struct node * postorderIterator;
     size_t sizeValue;
     size_t nodeCounter;
     size_t treeHeight;
@@ -24,17 +21,18 @@ struct bstCDT {
 
 // If added returns true
 // else false
-bool insert(bstADT bst, const void ** elem) {
+bool insert(bstADT bst, const void * elem) {
     bool added = false;
     int comparison;
-    for (struct node * toAdd = bst->root, * prev = bst->root, * pivot = bst->root; !added;) {
+    for (struct node * current = bst->root, * prev = bst->root, * pivot = bst->root; !added;) {
         if (prev == NULL) {
             struct node * newRoot = calloc(1, sizeof(struct node));
             assert(newRoot == NULL, ENOMEM, false);
-            // Ver como leemos las cosas del csv
-            memcpy(&newRoot->value, elem, sizeof(void *));
+            newRoot->value = malloc(bst->sizeValue);
+            memcpy(newRoot->value, elem, sizeof(void *));
             added = true;
-        } else if ((comparison = bst->fx(toAdd->value, *elem)) > 0) {
+        } else if ((comparison = bst->fx(current->value, elem)) > 0) {
+            current = current->left;
         }
     }
 }
