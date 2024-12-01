@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 #include "errorManagement.h"
 #include "bstADT.h"
 
@@ -20,9 +22,23 @@ struct bstCDT {
     cmp fx;
 };
 
+// If added returns true
+// else false
+bool insert(bstADT bst, const void * elem) {
+    bool added = false;
+    for (struct node * toAdd = bst->root, * prev = bst->root, * pivot = bst->root; !added;) {
+        if (prev == NULL) {
+            struct node * newRoot = calloc(1, sizeof(struct node));
+            assert(newRoot == NULL, ENOMEM, false);
+            // Ver como leemos las cosas del csv
+            memcpy(newRoot->value, elem, bst->sizeValue);
+        }
+    }
+}
+
 bstADT newBst(size_t size, cmp fx) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
-    assert(newTree == NULL);
+    assert(newTree == NULL, ENOMEM, NULL);
     newTree->sizeValue = size;
     newTree->fx = fx;
     return newTree;
@@ -47,8 +63,6 @@ int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-typedef struct node * node;
-
 struct node * rightRotate(struct node *y) {
     struct node * x = y->left;
     struct node * T2 = x->right;
@@ -69,9 +83,6 @@ struct node * leftRotate(struct node *x) {
     return y;
 }
 
-
-int insert(bstADT bst, void * elem) {
-}
 
 void freeBstRec(struct node * root) {
     if (root == NULL) return;
