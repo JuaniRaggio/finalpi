@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "errorManagement.h"
+#include "agencysADT.h"
 #include "bstADT.h"
 
 struct node {
@@ -21,7 +22,7 @@ struct bstCDT {
 
 // If added returns true
 // else false
-bool insert(bstADT bst, const void * elem) {
+bool insertBST(bstADT bst, const void * elem) {
     bool added = false;
     int comparison;
     for (struct node * current = bst->root, * prev = bst->root, * pivot = bst->root; !added;) {
@@ -37,7 +38,7 @@ bool insert(bstADT bst, const void * elem) {
     }
 }
 
-bstADT newBst(size_t size, cmp fx) {
+bstADT newBST(size_t size, cmp fx) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
     assert(newTree == NULL, ENOMEM, NULL);
     newTree->sizeValue = size;
@@ -45,11 +46,11 @@ bstADT newBst(size_t size, cmp fx) {
     return newTree;
 }
 
-unsigned int size(const bstADT bst) {
+unsigned int sizeBST(const bstADT bst) {
     return bst->nodeCounter;
 }
 
-unsigned int height(const bstADT bst) {
+unsigned int heightBST(const bstADT bst) {
     return bst->treeHeight;
 }
 
