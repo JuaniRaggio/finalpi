@@ -24,14 +24,17 @@ struct bstCDT {
 
 // If added returns true
 // else false
-bool insert(bstADT bst, const void * elem) {
+bool insert(bstADT bst, const void ** elem) {
     bool added = false;
+    int comparison;
     for (struct node * toAdd = bst->root, * prev = bst->root, * pivot = bst->root; !added;) {
         if (prev == NULL) {
             struct node * newRoot = calloc(1, sizeof(struct node));
             assert(newRoot == NULL, ENOMEM, false);
             // Ver como leemos las cosas del csv
-            memcpy(newRoot->value, elem, bst->sizeValue);
+            memcpy(&newRoot->value, elem, sizeof(void *));
+            added = true;
+        } else if ((comparison = bst->fx(toAdd->value, *elem)) > 0) {
         }
     }
 }
