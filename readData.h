@@ -1,6 +1,9 @@
 #ifndef __readData_h_
 #define __readData_h_
 
+#define TICKET_FILE 1
+#define INFRACTION_FILE 2
+
 /*
 *Funcion que lee el archivo de Tickets
 * @param argc dimension de argv
@@ -13,6 +16,6 @@ void csvTickets(int argc, const char * argv[]);
 * @param argc dimension de argv
 * @param argv[] arreglo de la informacion a leer
 */
-void csvTickets(int argc, const char * argv[]);
+void csvInfraction(int argc, const char * argv[]);
 
 #endif
