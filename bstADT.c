@@ -5,32 +5,38 @@
 #include "errorManagement.h"
 #include "agencysADT.h"
 #include "bstADT.h"
+#include "./validations/validIDADT.h"
+
+// Ver como manejamos los maxdesclen
+#define MAX_DESCRIPTION_LEN 50
 
 #define MONTHS 12
 #define PLATE_LEN 10
 
-typedef struct infraction {
-    char plate[PLATE_LEN + 1];
+typedef struct ticket {
+    char plate[PLATE_LEN];
     char * issueDate;
     size_t infractionID;
     size_t amount;
-} TInfraction;
+} TTicket;
 
-typedef struct year {
+typedef struct LInfraction {
+	unsigned char ID;
+	size_t amount;
+	struct LInfraction * next;
+} LInfraction;
+
+typedef struct LYear {
     size_t yearN;
     size_t collected[MONTHS];
-    // Ver si es arbol -> left + right
-    // Si es list -> next
-    // Si es HT -> nada
-} TYear;
+    struct year * next;
+} LYear;
 
 typedef struct agency {
     char * agencyName;
-    size_t * infractionAmount;
+    LInfraction * infractionList;
     size_t maxID;
-    size_t maxAmount;
-    size_t minAmount;
-    // Ver si arbol de años, lista de años o hashTable de años
+    LYear * firstYear;
 } TAgency;
 
 typedef struct node {
@@ -42,61 +48,24 @@ typedef struct node {
 
 struct bstCDT {
     TNode * root;
+    TNode * iterator;
     size_t agencyCounter;
     size_t treeHeight;
-    cmp fx;
 };
-
-
-TNode * insertRec(TNode * root, cmp fx, elemType element, int * added, size_t * height) {
-    int comparison;
-    if (root == NULL) {
-        TNode * newNode = calloc(1, sizeof(TNode));
-        newNode->agencyData = element;
-        ++*height;
-        *added = 1;
-        return newNode;
-    } else if ((comparison = fx(root->agencyData, element)) == 0) {
-        *added = 0;
-        return root;
-    }
-    ++*height;
-    if (comparison < 0) {
-        root->right = insertRec(root->right, fx, element, added, height);
-    } else {
-        root->left = insertRec(root->left, fx, element, added, height);
-    }
-    return root;
-}
-
-// Agrega un elemento respetando el orden
-// Retorna 1 si lo pudo agregar (no estaba), cero si no (ya estaba)
-int insert(bstADT bst, elemType elem) {
-    int added = 0;
-    size_t height = 0;
-    bst->root = insertRec(bst->root, bst->fx, elem, &added, &height);
-    bst->agencyCounter += added;
-    if (height > bst->treeHeight) bst->treeHeight = height;
-    return added;
-}
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, TInfraction * data) {
 }
 
 // If added returns true
 // else false
-bool insertInfraction(bstADT agencyBST, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
+bool insertInfraction(bstADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
     bool added = false;
-
     // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
     // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
-    TInfraction * data = malloc(sizeof(TInfraction));
+    LInfraction * data = malloc(sizeof(LInfraction));
     assert(data == NULL, ENOMEM, false);
+    data->ID = infractionID;
     data->amount = amount;
-    data->infractionID = infractionID;
-    data->issueDate = malloc(strlen(issueDate) + 1);
-    strcpy(data->issueDate, issueDate);
-    strncpy(data->plate, plate, PLATE_LEN + 1);
 
     agencyBST->root = insertAgencyRec(agencyBST->root, agencyName, data);
     agencyBST->treeHeight += added;
@@ -129,7 +98,6 @@ elemType * inorder(const bstADT bst) {
 bstADT newBST(cmp fx) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
     assert(newTree == NULL, ENOMEM, NULL);
-    newTree->fx = fx;
     return newTree;
 }
 
