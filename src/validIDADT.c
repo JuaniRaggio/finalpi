@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../lib/lib.h"
-#include "../errorManagement.h"
+#include "lib.h"
+#include "errorManagement.h"
 #include "validIDADT.h"
 
 #define BLOCK 69

@@ -1,11 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "../errorManagement.h"
-#include "getline.h"
+#include "errorManagement.h"
+#include "lib.h"
 
-unsigned int
-getLine(char s[], unsigned int maxLength) {
+unsigned int getLine(char s[], unsigned int maxLength) {
     int c;
     unsigned int n=0;
     while ( (c=getchar()) != EOF && c != '\n') {

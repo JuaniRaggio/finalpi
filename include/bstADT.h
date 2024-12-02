@@ -7,9 +7,7 @@ typedef struct bstCDT * bstADT;
 
 typedef struct agencysCDT elemType;
 
-typedef int (*cmp)(const char *, const char *);
-
-bstADT newBST(cmp fx);
+bstADT newBST(void);
 
 // Cambiar
 bool insertBST(bstADT tree, char * agencyName, char * infractionID, char plate[], char * issueDate, size_t amount);
