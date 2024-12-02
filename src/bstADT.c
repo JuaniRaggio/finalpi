@@ -34,7 +34,7 @@ typedef struct LYear {
 typedef struct agency {
     char * agencyName;
     LInfraction * infractionList;
-    size_t maxID;
+    /* size_t maxID; */
     LYear * firstYear;
 } TAgency;
 
