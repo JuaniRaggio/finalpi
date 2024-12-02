@@ -6,7 +6,7 @@
 #include "bstADT.h"
 
 struct node {
-    void * value;
+    elemType * value;
     size_t nodeHeight;
     struct node * left;
     struct node * right;
@@ -14,7 +14,6 @@ struct node {
 
 struct bstCDT {
     struct node * root;
-    size_t sizeValue;
     size_t nodeCounter;
     size_t treeHeight;
     cmp fx;
@@ -22,26 +21,25 @@ struct bstCDT {
 
 // If added returns true
 // else false
-bool insertBST(bstADT bst, const void * elem) {
-    bool added = false;
-    int comparison;
-    for (struct node * current = bst->root, * prev = bst->root, * pivot = bst->root; !added;) {
-        if (prev == NULL) {
-            struct node * newRoot = calloc(1, sizeof(struct node));
-            assert(newRoot == NULL, ENOMEM, false);
-            newRoot->value = malloc(bst->sizeValue);
-            memcpy(newRoot->value, elem, sizeof(void *));
-            added = true;
-        } else if ((comparison = bst->fx(current->value, elem)) > 0) {
-            current = current->left;
-        }
-    }
-}
+/* bool insertBST(bstADT bst, const void * elem) { */
+/*     bool added = false; */
+/*     int comparison; */
+/*     for (struct node * current = bst->root, * prev = bst->root, * pivot = bst->root; !added;) { */
+/*         if (prev == NULL) { */
+/*             struct node * newRoot = calloc(1, sizeof(struct node)); */
+/*             assert(newRoot == NULL, ENOMEM, false); */
+/*             newRoot->value = malloc(bst->sizeValue); */
+/*             memcpy(newRoot->value, elem, sizeof(void *)); */
+/*             added = true; */
+/*         } else if ((comparison = bst->fx(current->value, elem)) > 0) { */
+/*             current = current->left; */
+/*         } */
+/*     } */
+/* } */
 
-bstADT newBST(size_t size, cmp fx) {
+bstADT newBST(cmp fx) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
     assert(newTree == NULL, ENOMEM, NULL);
-    newTree->sizeValue = size;
     newTree->fx = fx;
     return newTree;
 }
