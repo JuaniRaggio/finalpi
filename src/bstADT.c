@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "validIDADT.h"
 #include "errorManagement.h"
-#include "agencysADT.h"
 #include "bstADT.h"
-#include "./validations/validIDADT.h"
 
 // Ver como manejamos los maxdesclen
 #define MAX_DESCRIPTION_LEN 50
@@ -53,7 +52,8 @@ struct bstCDT {
     size_t treeHeight;
 };
 
-TNode * insertAgencyRec(TNode * root, char * agencyName, TInfraction * data) {
+TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data) {
+    return NULL;
 }
 
 // If added returns true
@@ -73,29 +73,29 @@ bool insertInfraction(bstADT agencyBST, validIDADT validIDs, char * agencyName, 
     return added;
 }
 
-void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) {
-    if (root == NULL) return;
-    // 1. copiar el de la izquierda
-    inorderRec(orderedVector, idx, root->left);
-    // 2. copiar el actual
-    orderedVector[(*idx)++] = root->agencyData;
-    // 3. copiar el de la derecha
-    inorderRec(orderedVector, idx, root->right);
-}
+/* void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) { */
+/*     if (root == NULL) return; */
+/*     // 1. copiar el de la izquierda */
+/*     inorderRec(orderedVector, idx, root->left); */
+/*     // 2. copiar el actual */
+/*     orderedVector[(*idx)++] = root->agencyData; */
+/*     // 3. copiar el de la derecha */
+/*     inorderRec(orderedVector, idx, root->right); */
+/* } */
 
 // HAY QUE CAMBIARLO PARA QUE RETORNE ELEMENTO POR ELEMENTO, PODRIAMOS USAR ITERADOR SI ES NECESARIO
 
 // Retorna un vector con los elementos almacenados de acuerdo a un recorrido inorder
 // La cantidad de elementos del vector esta dada por la funcion size
-elemType * inorder(const bstADT bst) {
-    if (bst->agencyCounter == 0) return NULL;
-    elemType * orderedVector = malloc(sizeof(elemType) * bst->agencyCounter);
-    size_t idx = 0;
-    inorderRec(orderedVector, &idx, bst->root);
-    return orderedVector;
-}
+/* elemType * inorder(const bstADT bst) { */
+/*     if (bst->agencyCounter == 0) return NULL; */
+/*     elemType * orderedVector = malloc(sizeof() * bst->agencyCounter); */
+/*     size_t idx = 0; */
+/*     inorderRec(orderedVector, &idx, bst->root); */
+/*     return orderedVector; */
+/* } */
 
-bstADT newBST(cmp fx) {
+bstADT newBST(void) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
     assert(newTree == NULL, ENOMEM, NULL);
     return newTree;
