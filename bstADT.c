@@ -47,23 +47,6 @@ struct bstCDT {
     cmp fx;
 };
 
-// If added returns true
-// else false
-/* bool insertBST(bstADT bst, const void * elem) { */
-/*     bool added = false; */
-/*     int comparison; */
-/*     for (TNode * current = bst->root, * prev = bst->root, * pivot = bst->root; !added;) { */
-/*         if (prev == NULL) { */
-/*             TNode * newRoot = calloc(1, sizeof(TNode)); */
-/*             assert(newRoot == NULL, ENOMEM, false); */
-/*             newRoot->agencyData = malloc(bst->sizeValue); */
-/*             memcpy(newRoot->agencyData, elem, sizeof(void *)); */
-/*             added = true; */
-/*         } else if ((comparison = bst->fx(current->agencyData, elem)) > 0) { */
-/*             current = current->left; */
-/*         } */
-/*     } */
-/* } */
 
 TNode * insertRec(TNode * root, cmp fx, elemType element, int * added, size_t * height) {
     int comparison;
@@ -100,6 +83,8 @@ int insert(bstADT bst, elemType elem) {
 TNode * insertAgencyRec(TNode * root, char * agencyName, TInfraction * data) {
 }
 
+// If added returns true
+// else false
 bool insertInfraction(bstADT agencyBST, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
     bool added = false;
     TInfraction * data = malloc(sizeof(TInfraction));
