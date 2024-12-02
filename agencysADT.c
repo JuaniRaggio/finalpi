@@ -15,10 +15,21 @@ struct agency {
 
 struct agencysCDT {
     struct agency * agencyData;
+    // vector de listas/abroles de infracciones
     size_t minAmount;
     size_t maxAmount;
     size_t tickets;
 };
+
+agencysADT newAgency(char * agencyName) {
+    agencysADT agency = calloc(1, sizeof(struct agencysCDT));
+
+    return agency;
+}
+
+size_t sizeofAgencyCDT(void) {
+    return sizeof(struct agencysCDT);
+}
 
 
 

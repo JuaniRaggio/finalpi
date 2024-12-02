@@ -5,11 +5,14 @@
 
 typedef struct bstCDT * bstADT;
 
+typedef struct agencysCDT elemType;
+
 typedef int (*cmp)(const char *, const char *);
 
-bstADT newBST(size_t size, cmp fx);
+bstADT newBST(cmp fx);
 
-bool insertBST(bstADT tree, const void * elem);
+// Cambiar
+bool insertBST(bstADT tree, char * agencyName, char * infractionID, char plate[], char * issueDate, size_t amount);
 
 #endif
 

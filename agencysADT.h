@@ -10,5 +10,7 @@ agencysADT newAgency(char * agencyName);
 
 bool addTicket(agencysADT agency, char * infractionID, char plate[], char * issueDate, size_t amount);
 
+size_t sizeofAgencyCDT(void);
+
 #endif
 
