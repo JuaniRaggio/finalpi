@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "errorManagement.h"
-#include "lib.h"
+#include "../include/lib.h"
+#include "../include/errorManagement.h"
 
 unsigned int getLine(char s[], unsigned int maxLength) {
     int c;
