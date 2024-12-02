@@ -4,5 +4,6 @@
 
 void reCalloc(void ** ptr, size_t sizePtr, size_t oldSize, size_t newSize);
 unsigned int getLine(char s[], unsigned int maxLength);
+
 #endif
 

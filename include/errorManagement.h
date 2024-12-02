@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 
-int errno;
+#define NOERRORSFOUND 0
 
 #undef assert
 

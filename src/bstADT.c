@@ -63,6 +63,7 @@ bool insertInfraction(bstADT agencyBST, validIDADT validIDs, char * agencyName, 
     // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
     // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
     LInfraction * data = malloc(sizeof(LInfraction));
+    errno = NOERRORSFOUND;
     assert(data == NULL, ENOMEM, false);
     data->ID = infractionID;
     data->amount = amount;
@@ -97,6 +98,7 @@ bool insertInfraction(bstADT agencyBST, validIDADT validIDs, char * agencyName, 
 
 bstADT newBST(void) {
     bstADT newTree = calloc(1, sizeof(struct bstCDT));
+    errno = NOERRORSFOUND;
     assert(newTree == NULL, ENOMEM, NULL);
     return newTree;
 }
