@@ -18,6 +18,7 @@ unsigned int getLine(char s[], unsigned int maxLength) {
 void reCalloc(void ** ptr, size_t sizePtr, size_t oldSize, size_t newSize) {
     if (oldSize >= newSize) return;
     *ptr = realloc(*ptr, sizePtr * newSize);
+    errno = NOERRORSFOUND;
     assert(*ptr == NULL, ENOMEM,);
     memset((char *)*ptr + oldSize * sizePtr, 0, (newSize - oldSize) * sizePtr);
 }

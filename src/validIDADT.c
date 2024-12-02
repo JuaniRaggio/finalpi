@@ -15,6 +15,7 @@ struct validIDCDT {
 
 validIDADT newValidID(void) {
     validIDADT newValidIDs = calloc(1, sizeof(struct validIDCDT));
+    errno = NOERRORSFOUND;
     assert(newValidIDs == NULL, ENOMEM, NULL);
     return newValidIDs;
 }
@@ -26,7 +27,7 @@ static size_t max(unsigned char a, unsigned char b) {
 bool addID(validIDADT validIDs, unsigned char id, char * description) {
     validIDs->maxID = max(validIDs->maxID, id);
     id--;
-    errno = 0;
+    errno = NOERRORSFOUND;
     if (validIDs->space <= id) {
         reCalloc((void **)&validIDs->description, sizeof(char *), validIDs->space, id + BLOCK);
         if (errno == ENOMEM) {
@@ -35,6 +36,7 @@ bool addID(validIDADT validIDs, unsigned char id, char * description) {
         validIDs->space = id + BLOCK;
     }
     validIDs->description[id] = malloc(strlen(description) + 1);
+    errno = NOERRORSFOUND;
     assert(validIDs->description[id] == NULL, ENOMEM, false);
     strcpy(validIDs->description[id], description);
     return true;
