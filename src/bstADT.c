@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "validIDADT.h"
-#include "errorManagement.h"
-#include "bstADT.h"
+#include "../include/validIDADT.h"
+#include "../include/errorManagement.h"
+#include "../include/bstADT.h"
 
 // Ver como manejamos los maxdesclen
 #define MAX_DESCRIPTION_LEN 50
