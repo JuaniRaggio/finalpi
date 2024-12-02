@@ -87,6 +87,9 @@ TNode * insertAgencyRec(TNode * root, char * agencyName, TInfraction * data) {
 // else false
 bool insertInfraction(bstADT agencyBST, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
     bool added = false;
+
+    // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
+    // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
     TInfraction * data = malloc(sizeof(TInfraction));
     assert(data == NULL, ENOMEM, false);
     data->amount = amount;
@@ -94,6 +97,7 @@ bool insertInfraction(bstADT agencyBST, char * agencyName, char * plate, char * 
     data->issueDate = malloc(strlen(issueDate) + 1);
     strcpy(data->issueDate, issueDate);
     strncpy(data->plate, plate, PLATE_LEN + 1);
+
     agencyBST->root = insertAgencyRec(agencyBST->root, agencyName, data);
     agencyBST->treeHeight += added;
     agencyBST->agencyCounter += added;
@@ -109,6 +113,8 @@ void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) {
     // 3. copiar el de la derecha
     inorderRec(orderedVector, idx, root->right);
 }
+
+// HAY QUE CAMBIARLO PARA QUE RETORNE ELEMENTO POR ELEMENTO, PODRIAMOS USAR ITERADOR SI ES NECESARIO
 
 // Retorna un vector con los elementos almacenados de acuerdo a un recorrido inorder
 // La cantidad de elementos del vector esta dada por la funcion size
