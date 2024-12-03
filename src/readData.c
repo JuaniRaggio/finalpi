@@ -1,15 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <time.h>
-#include <errno.h>
-#include "../include/formats.h"
-#include "../include/readData.h"
 #include "../include/processData.h"
-#include "../include/validIDADT.h"
-#include "../include/agencyTreeADT.h"
+#include "../include/readData.h"
 #include "../include/errorManagement.h"
-#include "../include/lib.h"
 
 void readInfractions(const char * infractions, validIDADT readInfractions) {
     FILE * infractionFile = fopen(infractions, "r");
