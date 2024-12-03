@@ -19,7 +19,7 @@ typedef struct LTicket {
 typedef struct LYear {
     size_t yearN;
     size_t collected[MONTHS];
-    struct year * next;
+    struct LYear * next;
 } LYear;
 
 typedef struct agency {
@@ -44,10 +44,27 @@ struct agencyTreeCDT {
 };
 
 static LTicket * addTicket(validIDADT validIDs, LTicket * firstTicket, unsigned char id);
-static LYear * addYear(LYear * firstYear, size_t year, size_t amount);
+
+static LYear * addYear(LYear * firstYear, size_t year, size_t amount, size_t month){
+    if(firstYear == NULL || (year > firstYear->yearN)){
+        LYear * newYear = malloc(sizeof(LYear));
+        newYear->yearN = year;
+        newYear->collected[month-1] = amount;
+        newYear->next = firstYear;
+        return newYear;
+    }
+    if(year == firstYear->yearN){
+        firstYear->collected[month-1] += amount; 
+        return firstYear;
+    }
+    firstYear->next = addYear(firstYear->next,year,amount,month);
+    return firstYear;
+}
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
     return NULL;
+}
+
 static void addHeight( TNode * vec, size_t dim ) {
     while ( dim > 0 ) {
         vec->nodeHeight++;
