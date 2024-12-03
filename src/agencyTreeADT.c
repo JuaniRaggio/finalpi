@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
+#include <ctype.h>
 #include "../include/formats.h"
 #include "../include/validIDADT.h"
 #include "../include/errorManagement.h"
 #include "../include/agencyTreeADT.h"
 #include "../include/lib.h"
-
-#define forro "forro"
 
 typedef struct LTicket {
 	unsigned char id;
@@ -48,6 +48,46 @@ static LYear * addYear(LYear * firstYear, size_t year, size_t amount);
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
     return NULL;
+static void addHeight( TNode * vec, size_t dim ) {
+    while ( dim > 0 ) {
+        vec->nodeHeight++;
+        dim--;
+    }
+}
+
+static int balanceFactor ( TNode * root ) {
+    return root->left->nodeHeight - root->right->nodeHeight;
+} 
+
+TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data, size_t * dim) {
+    TNode * vec[*dim];
+    TNode * toReturn;
+    size_t dimAux = 0, still = 1;
+    while ( root != NULL && still ) {
+        if ( strcmp(root->agencyData->agencyName, agencyName) < 0 ) { 
+            vec[dimAux++] = root;
+            root = root->right;
+        } else if ( strcmp(root->agencyData->agencyName, agencyName) > 0 ) {
+            vec[dimAux++] = root;
+            root = root->left;
+        } else {
+            *toReturn = *root;
+            toReturn->agencyData->infractionList->amount = data->amount;
+            toReturn->agencyData->infractionList->id = data->id;
+            // toReturn->agencyData->infractionList->next a donde apuntaria el next?
+            still = 0;
+        }
+    }
+
+    if ( still ) { // sali porque root es NULL entonces debo crear el nodo y recorro el vec y le sumo height
+        
+        addHeight(vec,dimAux);
+    }
+
+    if ( abs(balanceFactor(root)) >= 2 ) {
+        // balanceo el arbol
+    } 
+    return toReturn;
 }
 
 // If added returns true
@@ -62,7 +102,7 @@ bool insertInfraction(agencyTreeADT agencyBST, char * agencyName, char * plate, 
     data->id = id;
     data->amount = amount;
 
-    agencyBST->root = insertAgencyRec(agencyBST->root, agencyName, data);
+    agencyBST->root = insertAgencyRec(agencyBST->root, agencyName, data); // falta ver que dim le pasa
     agencyBST->treeHeight += added;
     agencyBST->agencyCounter += added;
     return added;
