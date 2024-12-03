@@ -52,3 +52,11 @@ bool isValidID(validIDADT validIDs, unsigned char id) {
     return validIDs->description[id - 1] != NULL;
 }
 
+int compareIDsDescription(validIDADT validIDs, unsigned char id1, unsigned char id2) {
+    if (!isValidID(validIDs, id1) || !isValidID(validIDs, id2)) {
+        return NULL;
+    }
+    id1--, id2--;
+    return strncmp(validIDs->description[id1], validIDs->description[id2], DESCRIPTION_LEN);
+}
+

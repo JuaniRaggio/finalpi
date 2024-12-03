@@ -44,7 +44,7 @@ struct agencyTreeCDT {
 };
 
 static LTicket * addTicket(validIDADT validIDs, LTicket * firstTicket, unsigned char id);
-static LYear * addYear(LYear * firstYear, size_t year, size_t amount);
+static LYear * addYear(LYear * firstYear, size_t year, size_t amount, size_t month);
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
     return NULL;
