@@ -48,6 +48,8 @@ static LYear * addYear(LYear * firstYear, size_t year, size_t amount, size_t mon
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
     return NULL;
+}
+
 static void addHeight( TNode * vec, size_t dim ) {
     while ( dim > 0 ) {
         vec->nodeHeight++;
