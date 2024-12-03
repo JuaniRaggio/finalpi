@@ -10,7 +10,13 @@ typedef struct agencysCDT elemType;
 
 agencyTreeADT newAgencys(void);
 
+unsigned int heightBST(const agencyTreeADT agencys);
+
+unsigned int sizeBST(const agencyTreeADT agencys);
+
 bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t id, size_t amount);
+
+void freeBst(agencyTreeADT agencys);
 
 #endif
 

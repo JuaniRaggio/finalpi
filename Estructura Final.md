@@ -137,4 +137,11 @@ struct diffbstCDT {
 };
 ```
 
+## Archivos restantes
+---
+- [ ] processData.c 
+- [ ] queries.c
+- [ ] agencyTreeADT.c
+- [ ] diffTreeADT.c
+
 

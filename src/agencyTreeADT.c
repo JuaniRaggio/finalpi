@@ -104,6 +104,7 @@ bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agenc
     return added;
 }
 
+
 /* void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) { */
 /*     if (root == NULL) return; */
 /*     // 1. copiar el de la izquierda */
@@ -141,18 +142,18 @@ unsigned int heightBST(const agencyTreeADT agencys) {
     return agencys->treeHeight;
 }
 
-unsigned int nodeHeight(TNode * node) {
+static unsigned int nodeHeight(TNode * node) {
     if (node == NULL) {
         return 0;
     }
     return node->nodeHeight;
 }
 
-int max(int a, int b) {
+static int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
-TNode * rightRotate(TNode *y) {
+static TNode * rightRotate(TNode *y) {
     TNode * x = y->left;
     TNode * T2 = x->right;
     x->right = y;
@@ -162,7 +163,7 @@ TNode * rightRotate(TNode *y) {
     return x;
 }
 
-TNode * leftRotate(TNode *x) {
+static TNode * leftRotate(TNode *x) {
     TNode * y = x->right;
     TNode * T2 = y->left;
     y->left = x;
@@ -173,7 +174,7 @@ TNode * leftRotate(TNode *x) {
 }
 
 
-void freeBstRec(TNode * root) {
+static void freeBstRec(TNode * root) {
     if (root == NULL) return;
     freeBstRec(root->left);
     freeBstRec(root->right);
@@ -184,6 +185,4 @@ void freeBst(agencyTreeADT agencys) {
     freeBstRec(agencys->root);
     free(agencys);
 }
-
-
 
