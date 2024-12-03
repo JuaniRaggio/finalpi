@@ -9,6 +9,12 @@
 #include "../include/errorManagement.h"
 #include "../include/lib.h"
 
+static void insertBothTrees
+(diffTreeADT diffAmount,agencyTreeADT agencyTree, char agecyName[AGENCY_LEN], char plate[PLATE_LEN], char descrption[DESCRIPTION_LEN], size_t amount, unsigned char id) {
+    
+}
+
+
 static void processInfraction(char *line, validIDADT infractions) {
     char * token = strtok(line, SEPARATOR);
     char * fields[INFRACTIONDIM];
