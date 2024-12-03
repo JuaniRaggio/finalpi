@@ -22,4 +22,6 @@ bool addID(validIDADT validIDs, unsigned char id, char * description);
 // @param id: id we want to validate
 bool isValidID(validIDADT validIDs, unsigned char id);
 
+char * getDescription(validIDADT validIDs, unsigned char id);
+
 #endif
