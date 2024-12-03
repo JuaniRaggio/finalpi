@@ -8,10 +8,9 @@ typedef struct agencyTreeCDT * agencyTreeADT;
 
 typedef struct agencysCDT elemType;
 
-agencyTreeADT newBST(void);
+agencyTreeADT newAgencys(void);
 
 bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount);
 
 #endif
-
 
