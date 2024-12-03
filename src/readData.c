@@ -42,6 +42,7 @@ static void processTicket(char *line, validIDADT infractions, agencyTreeADT agen
     }
     // Agregar funcion de diffamount con threads
     insertInfraction(agencys, infractions, fields[AGENCY], fields[PLATE], fields[DATE], (unsigned char)atoi(fields[TID]), (size_t)atoi(fields[AMOUNT]));
+    return;
 }
 
 void readTicketCSV(const char * tickets, validIDADT infractions, agencyTreeADT agencys) {
