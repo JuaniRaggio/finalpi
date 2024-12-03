@@ -2,18 +2,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "../include/formats.h"
 #include "../include/validIDADT.h"
 #include "../include/errorManagement.h"
 #include "../include/agencyTreeADT.h"
 #include "../include/lib.h"
-
-
-typedef struct ticket {
-    char plate[PLATE_LEN];
-    char issueDate[DATE_LEN];
-    size_t infractionID;
-    size_t amount;
-} TTicket;
 
 typedef struct LInfraction {
 	unsigned char ID;
@@ -28,9 +21,8 @@ typedef struct LYear {
 } LYear;
 
 typedef struct agency {
-    char * agencyName;
+    char agencyName[AGENCY_LEN];
     LInfraction * infractionList;
-    /* size_t maxID; */
     LYear * firstYear;
 } TAgency;
 
@@ -92,7 +84,7 @@ bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agenc
 /*     return orderedVector; */
 /* } */
 
-agencyTreeADT newBST(void) {
+agencyTreeADT newAgencys(void) {
     agencyTreeADT newTree = calloc(1, sizeof(struct agencyTreeCDT));
     errno = NOERRORSFOUND;
     assert(newTree == NULL, ENOMEM, NULL);

@@ -102,7 +102,7 @@ typedef struct LYear {
 } LYear;
 
 typedef struct agency {
-    char * agencyName;
+    char agencyName[AGENCY_LEN];
     LInfraction * infractionAmount; // -> Lista de cant infrac emitidas con ID=x por agency
     size_t maxID;
     LYear * firstYear;
@@ -126,7 +126,7 @@ struct bstCDT {
 };
 
 typedef struct diffNode {
-	char * agencyName;
+	char agencyName[AGENCY_LEN];
 	size_t minAmount;
 	size_t maxAmount;
 } TDiff;
