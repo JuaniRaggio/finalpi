@@ -15,11 +15,14 @@ validIDADT newValidID(void);
 // @param description: Description from infraction of id:id
 bool addID(validIDADT validIDs, unsigned char id, char * description);
 
-// POSIBLE CAMBIO: ID Y DESCRIPTION METERLOS EN UN STRUCT
-
 // Validates ID
 // @param validIDs: ADT to store and access validIDs
 // @param id: id we want to validate
 bool isValidID(validIDADT validIDs, unsigned char id);
+
+// Compares the description of two ids
+// @param validIDs: ADT to store and access validIDs
+// @param id1, id2: Will be string compared -> id1.description - id2.description
+int compareIDsDescription(validIDADT validIDs, unsigned char id1, unsigned char id2);
 
 #endif
