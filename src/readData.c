@@ -20,17 +20,6 @@ static void processInfraction(char *line, validIDADT infractions) {
     return;
 }
 
-static void processTicket(char *line, validIDADT infractions, agencyTreeADT agencys) {
-    char * fields[TICKETDIM] = {NULL};
-    char * token = strtok(line, SEPARATOR);
-    for (int i = 0; i < TICKETDIM && token != NULL; ++i) {
-        fields[TICKETORDER[i]] = token;
-        token = strtok(NULL, SEPARATOR);
-    }
-    // Agregar funcion de diffamount con threads
-    insertInfraction(agencys, infractions, fields[AGENCY], fields[PLATE], fields[DATE], (unsigned char)atoi(fields[TID]), (size_t)atoi(fields[AMOUNT]));
-}
-
 void readInfractions(const char * infractions, validIDADT readInfractions) {
     FILE * infractionFile = fopen(infractions, "r");
     errno = NOERRORSFOUND;
@@ -44,8 +33,19 @@ void readInfractions(const char * infractions, validIDADT readInfractions) {
     return;
 }
 
-void readTicketCSV(const char * ticketsFile, validIDADT infractions, agencyTreeADT agencys) {
-    FILE *ticketFile = fopen(ticketsFile, "r");
+static void processTicket(char *line, validIDADT infractions, agencyTreeADT agencys) {
+    char * fields[TICKETDIM] = {NULL};
+    char * token = strtok(line, SEPARATOR);
+    for (int i = 0; i < TICKETDIM && token != NULL; ++i) {
+        fields[TICKETORDER[i]] = token;
+        token = strtok(NULL, SEPARATOR);
+    }
+    // Agregar funcion de diffamount con threads
+    insertInfraction(agencys, infractions, fields[AGENCY], fields[PLATE], fields[DATE], (unsigned char)atoi(fields[TID]), (size_t)atoi(fields[AMOUNT]));
+}
+
+void readTicketCSV(const char * tickets, validIDADT infractions, agencyTreeADT agencys) {
+    FILE *ticketFile = fopen(tickets, "r");
     errno = NOERRORSFOUND;
     assert(ticketFile == NULL, ENOENT,);
     char line[LINE];
