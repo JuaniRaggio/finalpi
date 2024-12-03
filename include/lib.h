@@ -41,8 +41,10 @@ const TICKETFIELDS TICKETORDER[TICKETDIM] = {PLATE, DATE, TID, AMOUNT, AGENCY};
 #define SEPARATOR ";\n"
 #define MONTHS 12
 
-char * myStrcpy(char * target, char * source, char * separators);
+// Copys until a separator is found or targetDim is reached
+char * myStrcpy(char * target, size_t targetDim, char * source, char * separators);
 
+// Resizes pointer and fills with zero
 void reCalloc(void ** ptr, size_t sizePtr, size_t oldSize, size_t newSize);
 
 // Reads line and appends it to s
