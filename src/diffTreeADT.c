@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "../include/formats.h"
 #include "../include/lib.h"
 #include "../include/diffTreeADT.h"
 
@@ -13,4 +14,6 @@ struct diffTreeCDT {
     TDiff * root;
     TDiff * iterator;
 };
+
+diffTreeADT newDiff();
 
