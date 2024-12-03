@@ -10,13 +10,11 @@
 #include "../include/agencyTreeADT.h"
 #include "../include/lib.h"
 
-#define BLOCK 10
-
-typedef struct LInfraction {
+typedef struct LTicket {
 	unsigned char id;
-	size_t amount;
-	struct LInfraction * next;
-} LInfraction;
+	size_t units;
+	struct LTicket * next;
+} LTicket;
 
 typedef struct LYear {
     size_t yearN;
@@ -26,7 +24,7 @@ typedef struct LYear {
 
 typedef struct agency {
     char agencyName[AGENCY_LEN];
-    LInfraction * infractionList;
+    LTicket * ticketList;
     LYear * firstYear;
 } TAgency;
 
@@ -38,12 +36,18 @@ typedef struct node {
 } TNode;
 
 struct agencyTreeCDT {
+    validIDADT validIDs;
     TNode * root;
     TNode * iterator;
     size_t agencyCounter;
     size_t treeHeight;
 };
 
+static LTicket * addTicket(validIDADT validIDs, LTicket * firstTicket, unsigned char id);
+static LYear * addYear(LYear * firstYear, size_t year, size_t amount);
+
+TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
+    return NULL;
 static void addHeight( TNode * vec, size_t dim ) {
     while ( dim > 0 ) {
         vec->nodeHeight++;
@@ -88,11 +92,11 @@ TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data, siz
 
 // If added returns true
 // else false
-bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t id, size_t amount) {
+bool insertInfraction(agencyTreeADT agencyBST, char * agencyName, char * plate, char * issueDate, size_t id, size_t amount) {
     bool added = false;
     // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
     // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
-    LInfraction * data = malloc(sizeof(LInfraction));
+    LTicket * data = malloc(sizeof(LTicket));
     errno = NOERRORSFOUND;
     assert(data == NULL, ENOMEM, false);
     data->id = id;
