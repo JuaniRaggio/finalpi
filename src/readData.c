@@ -27,6 +27,7 @@ static void processTicket(char *line, validIDADT infractions, agencyTreeADT agen
         fields[TICKETORDER[i]] = token;
         token = strtok(NULL, SEPARATOR);
     }
+    // Agregar funcion de diffamount con threads
     insertInfraction(agencys, infractions, fields[AGENCY], fields[PLATE], fields[DATE], (unsigned char)atoi(fields[TID]), (size_t)atoi(fields[AMOUNT]));
 }
 
