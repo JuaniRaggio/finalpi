@@ -40,7 +40,7 @@ const TICKETFIELDS TICKETORDER[TICKETDIM] = {PLATE, DATE, TID, AMOUNT, AGENCY};
 #define LINE 256 
 #define SEPARATOR ";\n"
 #define MONTHS 12
-
+#define THREADS 2
 // Copys until a separator is found or targetDim is reached
 char * myStrcpy(char * target, size_t targetDim, char * source, char * separators);
 
