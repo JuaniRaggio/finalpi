@@ -13,7 +13,6 @@ struct validIDCDT {
     unsigned char space;
 };
 
-// Creates a new ADT to add and ask for valid IDs
 validIDADT newValidID(void) {
     validIDADT newValidIDs = calloc(1, sizeof(struct validIDCDT));
     errno = NOERRORSFOUND;
@@ -25,7 +24,6 @@ static size_t max(unsigned char a, unsigned char b) {
     return a > b ? a:b;
 }
 
-// Adds a valid ID, if the ID is added successfully returns ture else returns false
 bool addID(validIDADT validIDs, unsigned char id, char * description) {
     validIDs->maxID = max(validIDs->maxID, id);
     id--;
@@ -42,11 +40,10 @@ bool addID(validIDADT validIDs, unsigned char id, char * description) {
     validIDs->description[id] = malloc(strlen(description) + 1);
     errno = NOERRORSFOUND;
     assert(validIDs->description[id] == NULL, ENOMEM, false);
-    strcpy(validIDs->description[id], description);
+    myStrcpy(validIDs->description[id], description, SEPARATOR);
     return true;
 }
 
-// Validates ID
 bool isValidID(validIDADT validIDs, unsigned char id) {
     if (validIDs->maxID < id) {
         return false;

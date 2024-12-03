@@ -4,17 +4,13 @@
 #include <string.h>
 #include "../include/validIDADT.h"
 #include "../include/errorManagement.h"
-#include "../include/bstADT.h"
+#include "../include/agencyTreeADT.h"
+#include "../include/lib.h"
 
-// Ver como manejamos los maxdesclen
-#define MAX_DESCRIPTION_LEN 50
-
-#define MONTHS 12
-#define PLATE_LEN 10
 
 typedef struct ticket {
     char plate[PLATE_LEN];
-    char * issueDate;
+    char issueDate[DATE_LEN];
     size_t infractionID;
     size_t amount;
 } TTicket;
@@ -45,7 +41,7 @@ typedef struct node {
     struct node * right;
 } TNode;
 
-struct bstCDT {
+struct agencyTreeCDT {
     TNode * root;
     TNode * iterator;
     size_t agencyCounter;
@@ -58,7 +54,7 @@ TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data) {
 
 // If added returns true
 // else false
-bool insertInfraction(bstADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
+bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
     bool added = false;
     // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
     // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
@@ -88,27 +84,27 @@ bool insertInfraction(bstADT agencyBST, validIDADT validIDs, char * agencyName, 
 
 // Retorna un vector con los elementos almacenados de acuerdo a un recorrido inorder
 // La cantidad de elementos del vector esta dada por la funcion size
-/* elemType * inorder(const bstADT bst) { */
-/*     if (bst->agencyCounter == 0) return NULL; */
-/*     elemType * orderedVector = malloc(sizeof() * bst->agencyCounter); */
+/* elemType * inorder(const agencyTreeADT agencys) { */
+/*     if (agencys->agencyCounter == 0) return NULL; */
+/*     elemType * orderedVector = malloc(sizeof() * agencys->agencyCounter); */
 /*     size_t idx = 0; */
-/*     inorderRec(orderedVector, &idx, bst->root); */
+/*     inorderRec(orderedVector, &idx, agencys->root); */
 /*     return orderedVector; */
 /* } */
 
-bstADT newBST(void) {
-    bstADT newTree = calloc(1, sizeof(struct bstCDT));
+agencyTreeADT newBST(void) {
+    agencyTreeADT newTree = calloc(1, sizeof(struct agencyTreeCDT));
     errno = NOERRORSFOUND;
     assert(newTree == NULL, ENOMEM, NULL);
     return newTree;
 }
 
-unsigned int sizeBST(const bstADT bst) {
-    return bst->agencyCounter;
+unsigned int sizeBST(const agencyTreeADT agencys) {
+    return agencys->agencyCounter;
 }
 
-unsigned int heightBST(const bstADT bst) {
-    return bst->treeHeight;
+unsigned int heightBST(const agencyTreeADT agencys) {
+    return agencys->treeHeight;
 }
 
 unsigned int nodeHeight(TNode * node) {
@@ -150,9 +146,9 @@ void freeBstRec(TNode * root) {
     free(root);
 }
 
-void freeBst(bstADT bst) {
-    freeBstRec(bst->root);
-    free(bst);
+void freeBst(agencyTreeADT agencys) {
+    freeBstRec(agencys->root);
+    free(agencys);
 }
 
 
