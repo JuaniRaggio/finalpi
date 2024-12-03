@@ -14,14 +14,12 @@ void trimWhitespace(char *str) {
     end[1] = '\0';
 }
 
-char * myStrcpy(char * target, char * source, char * separators) {
+char * myStrcpy(char * target, size_t targetDim, char * source, char * separators) {
     int i = 0;
-    for (; source[i] != '\0'; ++i) {
-        for (int j = 0; separators[j] != '\0'; ++j) {
-            if (source[i] == separators[j]) {
-                target[i] = '\0';
-                return target;
-            }
+    for (; source[i] != '\0' && i < targetDim - 1; ++i) {
+        if (strchr(separators, source[i])) {
+            target[i] = '\0';
+            return target;
         }
         target[i] = source[i];
     }
@@ -42,9 +40,11 @@ unsigned int getLine(char s[], unsigned int maxLength) {
 
 void reCalloc(void ** ptr, size_t sizePtr, size_t oldSize, size_t newSize) {
     if (oldSize >= newSize) return;
-    *ptr = realloc(*ptr, sizePtr * newSize);
+    void * tmp = realloc(*ptr, sizePtr * newSize);
     errno = NOERRORSFOUND;
-    assert(*ptr == NULL, ENOMEM,);
+    assert(tmp == NULL, ENOMEM,);
+    *ptr = tmp;
     memset((char *)*ptr + oldSize * sizePtr, 0, (newSize - oldSize) * sizePtr);
+    return;
 }
 

@@ -40,7 +40,7 @@ bool addID(validIDADT validIDs, unsigned char id, char * description) {
     validIDs->description[id] = malloc(strlen(description) + 1);
     errno = NOERRORSFOUND;
     assert(validIDs->description[id] == NULL, ENOMEM, false);
-    myStrcpy(validIDs->description[id], description, SEPARATOR);
+    myStrcpy(validIDs->description[id], DESCRIPTION_LEN, description, SEPARATOR);
     return true;
 }
 
