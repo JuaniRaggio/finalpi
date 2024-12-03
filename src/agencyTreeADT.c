@@ -9,7 +9,7 @@
 #include "../include/lib.h"
 
 typedef struct LInfraction {
-	unsigned char ID;
+	unsigned char id;
 	size_t amount;
 	struct LInfraction * next;
 } LInfraction;
@@ -46,14 +46,14 @@ TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data) {
 
 // If added returns true
 // else false
-bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount) {
+bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t id, size_t amount) {
     bool added = false;
     // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
     // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
     LInfraction * data = malloc(sizeof(LInfraction));
     errno = NOERRORSFOUND;
     assert(data == NULL, ENOMEM, false);
-    data->ID = infractionID;
+    data->id = id;
     data->amount = amount;
 
     agencyBST->root = insertAgencyRec(agencyBST->root, agencyName, data);

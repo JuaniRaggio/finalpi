@@ -4,6 +4,7 @@
 #include "../include/lib.h"
 #include "../include/errorManagement.h"
 #include "../include/validIDADT.h"
+#include "../include/formats.h"
 
 #define BLOCK 69
 

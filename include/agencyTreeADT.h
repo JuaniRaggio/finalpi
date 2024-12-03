@@ -10,7 +10,7 @@ typedef struct agencysCDT elemType;
 
 agencyTreeADT newAgencys(void);
 
-bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t infractionID, size_t amount);
+bool insertInfraction(agencyTreeADT agencyBST, validIDADT validIDs, char * agencyName, char * plate, char * issueDate, size_t id, size_t amount);
 
 #endif
 
