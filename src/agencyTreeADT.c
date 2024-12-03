@@ -8,6 +8,8 @@
 #include "../include/agencyTreeADT.h"
 #include "../include/lib.h"
 
+#define forro "forro"
+
 typedef struct LTicket {
 	unsigned char id;
 	size_t units;
