@@ -43,7 +43,20 @@ struct agencyTreeCDT {
     size_t treeHeight;
 };
 
-static LTicket * addTicket(validIDADT validIDs, LTicket * firstTicket, unsigned char id);
+LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id) {
+    int c;
+    if ( firstTicket == NULL || (c = compareIDsDescription(validIDs,firstTicket->id,id)) < 0 ) {
+        LTicket * new = malloc(sizeof(LTicket));
+        new->id = id;
+        new->next = firstTicket;
+        new->units = 1;
+        return new;
+    } else if ( c > 0 ) {
+        firstTicket->next = addTicketRec(validIDs,firstTicket->next,id);
+    }
+
+    return firstTicket;
+}
 static LYear * addYear(LYear * firstYear, size_t year, size_t amount);
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
