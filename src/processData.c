@@ -17,7 +17,7 @@ void processInfraction(char *line, validIDADT infractions) {
     return;
 }
 
-void processTicket(char *line, validIDADT infractions, agencyTreeADT agencys) {
+void processTicket(char *line, validIDADT infractions, agencyTreeADT agencys, diffTreeADT diffs) {
     char * fields[TICKETDIM] = {NULL};
     char * token = strtok(line, SEPARATOR);
     for (int i = 0; i < TICKETDIM && token != NULL; ++i) {
