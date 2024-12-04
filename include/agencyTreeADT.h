@@ -19,12 +19,14 @@ typedef struct DTicket {
 
 agencyTreeADT newAgencys(validIDADT);
 
-unsigned int heightBST(const agencyTreeADT agencys);
-
 unsigned int sizeBST(const agencyTreeADT agencys);
 
 bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 
+// 1 - Initialize agency with toBeginAgency
+// 2 - Request agencys alphabetically with nextAgency
+// 3 - For each request, use toBeginTicket, nextTicket, toBeginYear and nextYear
+//     to get the data from that Requested agency
 void toBeginAgency(agencyTreeADT agency);
 bool hasNextAgency(agencyTreeADT agency);
 char * nextAgency(agencyTreeADT agency);
@@ -37,7 +39,7 @@ void toBeginYear(agencyTreeADT agency);
 bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
 
-void freeBst(agencyTreeADT agencys);
+void freeAgencys(agencyTreeADT agencys);
 
 #endif
 
