@@ -15,6 +15,16 @@ typedef struct diff {
 
 diffTreeADT newDiff(validIDADT validIDs);
 
+void toBeginDiff(diffTreeADT diffTree);
+
+bool hasNextDiff(diffTreeADT diffTree);
+
+DDiff nextDiff(diffTreeADT diffTree);
+
+bool insertDiff(diffTreeADT diffTree,TTicket * ticket, char * agencyName);
+
+void freeDiff(diffTreeADT diffTree);
+
 #endif
 
 

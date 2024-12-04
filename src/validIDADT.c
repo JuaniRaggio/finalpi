@@ -54,5 +54,7 @@ int compareIDsDescription(validIDADT validIDs, unsigned char id1, unsigned char 
     return strncmp(validIDs->description[--id1], validIDs->description[--id2], DESCRIPTION_LEN);
 }
 
-
+int compareIDvsDescription(validIDADT validIDs, unsigned char id, char * description){
+    return strncmp(validIDs->description[--id], description, DESCRIPTION_LEN);
+}
 

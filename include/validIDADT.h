@@ -25,4 +25,10 @@ bool isValidID(validIDADT validIDs, unsigned char id);
 // @param id1, id2: Will be string compared -> id1.description - id2.description
 int compareIDsDescription(validIDADT validIDs, unsigned char id1, unsigned char id2);
 
+/// Compares an ID with a description. Exxpects valid IDs
+/// @param validIDs: ADT to store and access validIDs 
+/// @param id: Infraction id 
+/// @param description: Infraction description 
+int compareIDvsDescription(validIDADT validIDs, unsigned char id, char * description);
+
 #endif
