@@ -145,3 +145,7 @@ struct diffbstCDT {
 - [ ] diffTreeADT.c
 
 
+## OJO EN ERRORMANAGEMENT
+---
+- *Posible cambio*: Refactor assert
+

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "../include/errorManagement.h"
 #include "../include/lib.h"
 #include "../include/processData.h"
 
@@ -17,7 +18,7 @@ void processInfraction(char *line, validIDADT infractions) {
     return;
 }
 
-void processTicket(char *line, validIDADT infractions, agencyTreeADT agencys, diffTreeADT diffs) {
+void processTicket(char *line, agencyTreeADT agencys, diffTreeADT diffs) {
     char * fields[TICKETDIM] = {NULL};
     char * token = strtok(line, SEPARATOR);
     for (int i = 0; i < TICKETDIM && token != NULL; ++i) {
@@ -26,11 +27,14 @@ void processTicket(char *line, validIDADT infractions, agencyTreeADT agencys, di
     }
     TTicket ticket = {
         .plate = fields[PLATE],
-        .issueDate = fields[DATE],
+        .issueYear = (size_t)atoll(strtok(fields[DATE], DATESEPARATORS)),
+        .issueMonth = (unsigned char)atoi(strtok(NULL, DATESEPARATORS)),
         .infractionID = (size_t)atoll(fields[TID]),
         .amount = (size_t)atoll(fields[AMOUNT]),
     };
     // Agregar funcion de diffamount con threads
-    insertTicket(agencys, infractions, ticket);
+    errno = NOERRORSFOUND;
+    insertAgency(agencys, fields[AGENCY], &ticket);
+    assert(errno != NOERRORSFOUND, errno,);
     return;
 }

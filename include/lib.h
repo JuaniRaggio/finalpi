@@ -10,6 +10,8 @@
 // @param separators
 char * myStrcpy(char * target, size_t targetDim, const char * source, char * separators);
 
+int myStrncmp(const char * target, const char * source, char * separators, size_t n);
+
 // Resizes pointer and fills with zero
 // @param ptr: Pointer to resize
 // @param sizePtr: size of Pointer type
