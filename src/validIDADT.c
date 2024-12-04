@@ -26,6 +26,7 @@ static size_t max(unsigned char a, unsigned char b) {
 }
 
 bool addID(validIDADT validIDs, unsigned char id, char * description) {
+    assert(validIDs == NULL, NULLARG, false);
     validIDs->maxID = max(validIDs->maxID, id);
     id--;
     errno = NOERRORSFOUND;
@@ -46,6 +47,7 @@ bool addID(validIDADT validIDs, unsigned char id, char * description) {
 }
 
 bool isValidID(validIDADT validIDs, unsigned char id) {
+    assert(validIDs == NULL, NULLARG, false);
     if (validIDs->maxID < id) {
         return false;
     }
@@ -53,10 +55,8 @@ bool isValidID(validIDADT validIDs, unsigned char id) {
 }
 
 int compareIDsDescription(validIDADT validIDs, unsigned char id1, unsigned char id2) {
-    if (!isValidID(validIDs, id1) || !isValidID(validIDs, id2)) {
-        return NULL;
-    }
-    id1--, id2--;
-    return strncmp(validIDs->description[id1], validIDs->description[id2], DESCRIPTION_LEN);
+    return strncmp(validIDs->description[--id1], validIDs->description[--id2], DESCRIPTION_LEN);
 }
+
+
 
