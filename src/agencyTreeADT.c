@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <strings.h>
+#include "../include/stackADT.h"
 #include "../include/formats.h"
 #include "../include/validIDADT.h"
 #include "../include/errorManagement.h"
@@ -36,10 +37,10 @@ typedef struct node {
 
 struct agencyTreeCDT {
     validIDADT validIDs;
+    stackADT stack;
     TNode * root;
     TNode * inorderIterator;
     size_t agencyCounter;
-    /* size_t treeHeight; */
 };
 
 static void freeBstRec(TNode * root);
@@ -187,13 +188,31 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     return added;
 }
 
-TNode * inorder();
+void toBeginAgency(agencyTreeADT agency) {
+    agency->stack = newStack(sizeof(TNode *));
+    agency->inorderIterator = agency->root;
+}
 
-void toBeginAgency(agencyTreeADT agency);
-bool hasNextAgency(agencyTreeADT agency);
-// Retorna agencyName
+bool hasNextAgency(agencyTreeADT agency) {
+    return agency->inorderIterator != NULL;
+}
+
 char * nextAgency(agencyTreeADT agency) {
-    nextInorder(agency);
+    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG, NULL);
+    char * retAgency = NULL;
+    while (agency->inorderIterator != NULL) {
+        push(agency->stack, agency->inorderIterator);
+        agency->inorderIterator = agency->inorderIterator->left;
+    }
+    agency->inorderIterator = pop(agency->stack);
+    if (agency->inorderIterator->agencyData != NULL) {
+        retAgency = agency->inorderIterator->agencyData->agencyName;
+    } else {
+        return NULL;
+    }
+    retAgency = agency->inorderIterator->agencyData->agencyName;
+    agency->inorderIterator = agency->inorderIterator->right;
+    return retAgency;
 }
 
 void toBeginTicket(agencyTreeADT agency);
@@ -203,29 +222,6 @@ DTicket nextTicket(agencyTreeADT agency);
 void toBeginYear(agencyTreeADT agency);
 bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
-
-
-/* void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) { */
-/*     if (root == NULL) return; */
-/*     // 1. copiar el de la izquierda */
-/*     inorderRec(orderedVector, idx, root->left); */
-/*     // 2. copiar el actual */
-/*     orderedVector[(*idx)++] = root->agencyData; */
-/*     // 3. copiar el de la derecha */
-/*     inorderRec(orderedVector, idx, root->right); */
-/* } */
-
-// HAY QUE CAMBIARLO PARA QUE RETORNE ELEMENTO POR ELEMENTO, PODRIAMOS USAR ITERADOR SI ES NECESARIO
-
-// Retorna un vector con los elementos almacenados de acuerdo a un recorrido inorder
-// La cantidad de elementos del vector esta dada por la funcion size
-/* elemType * inorder(const agencyTreeADT agencys) { */
-/*     if (agencys->agencyCounter == 0) return NULL; */
-/*     elemType * orderedVector = malloc(sizeof() * agencys->agencyCounter); */
-/*     size_t idx = 0; */
-/*     inorderRec(orderedVector, &idx, agencys->root); */
-/*     return orderedVector; */
-/* } */
 
 agencyTreeADT newAgencys(validIDADT validInfractions) {
     errno = NOERRORSFOUND;
