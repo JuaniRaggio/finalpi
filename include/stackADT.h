@@ -1,29 +1,23 @@
 #include <stdio.h>
 
-typedef int elemType;
-
-// Tipo que define a la funcion de comparacion
-typedef int (*compare)(elemType, elemType);
-
-
-/*
-typedef struct point {
-    double x;
-    double y=;
-} elemType;
-*/
+#ifndef __STACKADT_H__
+#define __STACKADT_H__
 
 typedef struct stackCDT * stackADT;
 
-stackADT newStack(compare fn);
+stackADT newStack(size_t sizeofptr);
 
-void push(stackADT stack, elemType elem);
+void push(stackADT stack, void * elem);
 
-elemType pop(stackADT stack);
+void * pop(stackADT stack);
+
+void * peek(stackADT stack);
 
 void freeStack(stackADT stack);
 
 int isEmpty(const stackADT stack);
 
-// Retorna la cantidad de elementos en la pila
 size_t size(const stackADT stack);
+
+#endif
+

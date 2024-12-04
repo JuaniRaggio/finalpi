@@ -1,43 +1,46 @@
-#include "stackADT.h"
-#include <assert.h>
+#include "../include/stackADT.h"
+#include "../include/errorManagement.h"
 #include <stdlib.h>
+#include <string.h>
 #define BLOCK 20
 
 struct stackCDT {
-     size_t count;   // Cantidad de elementos en la pila
-     elemType * elems;
-     size_t size;    // Cantidad de espacio reservado
-     compare cmp;
+    void ** elems;
+    size_t count;
+    size_t size;
+    size_t sizeofptr;
 };
 
-stackADT newStack(compare cmp) {
-   stackADT ans = calloc(1, sizeof(struct stackCDT));
-   ans->cmp = cmp;
-   return ans;
+stackADT newStack(size_t sizeofptr) {
+    stackADT ans = calloc(1, sizeof(struct stackCDT));
+    assert(ans == NULL, NULLARG, NULL);
+    return ans;
 }
 
-void push(stackADT stack, elemType elem) {
-    // Si no hay lugar lo agrandamos
-    if ( stack->count == stack->size ) {
-       stack->size += BLOCK;
-       stack->elems = realloc(stack->elems, stack->size * sizeof(stack->elems[0]));
+void push(stackADT stack, void * elem) {
+    assert(!isEmpty(stack) || elem == NULL, NULLARG,);
+    if (stack->count == stack->size) {
+        stack->size += BLOCK;
+        void ** tmp = realloc(stack->elems, stack->size * sizeof(void *));
+        assert(tmp == NULL, ENOMEM,);
+        stack->elems = tmp;
     }   
-    stack->elems[stack->count++] = elem;
+    memcpy((char *)stack->elems + stack->sizeofptr * (stack->count++), elem, stack->sizeofptr);
 }
 
-elemType pop(stackADT stack) {
-   assert(!isEmpty(stack));
-   return stack->elems[--stack->count];
+void * pop(stackADT stack) {
+    assert(!isEmpty(stack), NULLARG, NULL);
+    return stack->elems[--stack->count];
+}
 
-   // Variante reusando peek
-   elemType ans =peek(stack);
-   stack->count--;
-   return ans;
+void * peek(stackADT stack) {
+    assert(!isEmpty(stack), NULLARG, NULL);
+    return (char *)stack->elems + (stack->count - 1) * stack->sizeofptr;
 }
 
 void freeStack(stackADT stack){
-   free(stack->elems);
-   free(stack);
+    free(stack->elems);
+    free(stack);
 }
 
 int isEmpty(const stackADT stack) {

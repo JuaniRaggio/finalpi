@@ -150,4 +150,6 @@ struct diffbstCDT {
 ## OJO EN ERRORMANAGEMENT
 ---
 - *Posible cambio*: Refactor assert
+- No es necesario setear errno si usamos nuestro assert ya que va a pisarlo
+- Si es necesario setearlo para checkErrno()
 

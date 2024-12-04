@@ -37,7 +37,6 @@ void toBeginYear(agencyTreeADT agency);
 bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
 
-
 void freeBst(agencyTreeADT agencys);
 
 #endif
