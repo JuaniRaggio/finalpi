@@ -10,21 +10,21 @@
 #include "../include/lib.h"
 
 typedef struct LTicket {
-	unsigned char id;
-	size_t units;
-	struct LTicket * next;
+    DTicket ticketData;
+    struct LTicket * next;
 } LTicket;
 
 typedef struct LYear {
-    size_t yearN;
-    size_t collected[MONTHS];
+    DYear yearData;
     struct LYear * next;
 } LYear;
 
 typedef struct agency {
     char agencyName[AGENCY_LEN];
     LTicket * ticketList;
+    LTicket * ticketIterator;
     LYear * firstYear;
+    LYear * yearIterator;
 } TAgency;
 
 typedef struct node {
@@ -37,9 +37,9 @@ typedef struct node {
 struct agencyTreeCDT {
     validIDADT validIDs;
     TNode * root;
-    TNode * iterator;
+    TNode * inorderIterator;
     size_t agencyCounter;
-    size_t treeHeight;
+    /* size_t treeHeight; */
 };
 
 static void freeBstRec(TNode * root);
@@ -56,11 +56,11 @@ static void freeBstRec(TNode * root);
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
     int c;
-    if ( firstTicket == NULL || (c = compareIDsDescription(validIDs,firstTicket->id,id)) < 0 ) {
+    if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) < 0 ) {
         LTicket * new = malloc(sizeof(LTicket));
-        new->id = id;
+        new->ticketData.id = id;
+        new->ticketData.units = 1;
         new->next = firstTicket;
-        new->units = 1;
         (*added) = true;
         return new;
     } else if (c > 0) {
@@ -82,16 +82,16 @@ static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char
 }
 
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added) {
-    if (firstYear == NULL || (year > firstYear->yearN)) {
+    if (firstYear == NULL || (year > firstYear->yearData.yearN)) {
         LYear * newYear = malloc(sizeof(LYear));
         assert(newYear == NULL, ENOMEM, firstYear);
-        newYear->yearN = year;
-        newYear->collected[month-1] += amount;
+        newYear->yearData.yearN = year;
+        newYear->yearData.collected[month-1] += amount;
         newYear->next = firstYear;
         (*added) = true;
         return newYear;
-    } else if(year == firstYear->yearN){
-        firstYear->collected[month-1] += amount; 
+    } else if(year == firstYear->yearData.yearN){
+        firstYear->yearData.collected[month-1] += amount; 
         (*added) = false;
         return firstYear;
     }
@@ -121,7 +121,7 @@ static int balanceFactor ( TNode * root ) {
     return root->left->nodeHeight - root->right->nodeHeight;
 } 
 
-static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, TTicket * tData) {
+static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, TTicket * tData, bool * newAgency) {
     if (root == NULL) {
         TNode * newNode = malloc(sizeof(TNode));
         assert(newNode == NULL, ENOMEM, NULL);
@@ -133,17 +133,19 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
         newNode->left = newNode->right = NULL;
         newNode->nodeHeight = 1;
         *added = newNode;
+        *newAgency = true;
         return newNode;
     }
     // VER SI LO SACAMOS
     /* assert(root->agencyData == NULL || root->agencyName == NULL, ); */
     int cmp = strncmp(agencyName, root->agencyData->agencyName, AGENCY_LEN);
     if (cmp < 0) {
-        root->left = insertAgencyRec(root->left, added, agencyName, tData);
+        root->left = insertAgencyRec(root->left, added, agencyName, tData, newAgency);
     } else if (cmp > 0) {
-        root->right = insertAgencyRec(root->right, added, agencyName, tData);
+        root->right = insertAgencyRec(root->right, added, agencyName, tData, newAgency);
     } else {
         *added = root;
+        *newAgency = false;
         return root;
     }
     root->nodeHeight = max(nodeHeight(root->left), nodeHeight(root->right)) + 1;
@@ -168,7 +170,7 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     assert(agency == NULL || agencyName == NULL, NULLARG, false);
     bool added = false;
     TNode * addedAgency = NULL;
-    agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData);
+    agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData, &added);
     assert(errno != NOERRORSFOUND, errno, false);
     
     // Thread 1
@@ -184,6 +186,24 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
 
     return added;
 }
+
+TNode * inorder();
+
+void toBeginAgency(agencyTreeADT agency);
+bool hasNextAgency(agencyTreeADT agency);
+// Retorna agencyName
+char * nextAgency(agencyTreeADT agency) {
+    nextInorder(agency);
+}
+
+void toBeginTicket(agencyTreeADT agency);
+bool hasNextTicket(agencyTreeADT agency);
+DTicket nextTicket(agencyTreeADT agency);
+
+void toBeginYear(agencyTreeADT agency);
+bool hasNextYear(agencyTreeADT agency);
+DYear nextYear(agencyTreeADT agency);
+
 
 /* void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) { */
 /*     if (root == NULL) return; */
@@ -220,9 +240,9 @@ unsigned int sizeBST(const agencyTreeADT agencys) {
     return agencys->agencyCounter;
 }
 
-unsigned int heightBST(const agencyTreeADT agencys) {
-    return agencys->treeHeight;
-}
+/* unsigned int heightBST(const agencyTreeADT agencys) { */
+/*     return agencys->treeHeight; */
+/* } */
 
 static unsigned int nodeHeight(TNode * node) {
     if (node == NULL) {

@@ -48,6 +48,8 @@ Lista de Agencias (ordenada) de listas de infracciones
 > - Nombre de infraccion
 > - Cantidad total de multas con esa infraccion por esa agencia (mismo infractionID)
 
+
+
 ## Query 2
 ---
 Lista de Agencias de Lista de años de vectores de meses con el total recaudado
