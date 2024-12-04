@@ -64,13 +64,14 @@ static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsign
         (*added) = true;
         return new;
     } else if (c > 0) {
-        firstTicket->next = addTicketRec(validIDs,firstTicket->next,id);
+        firstTicket->next = addTicketRec(validIDs, firstTicket->next, id, added);
     }
     (*added) = false;
     return firstTicket;
 }
 
 static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id){
+    errno = NOERRORSFOUND;
     assert(validIDs == NULL, NULLARG, false);
     if (!isValidID(validIDs, id)) {
         return false;
@@ -99,6 +100,7 @@ static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t 
 }
 
 static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month) {
+    errno = NOERRORSFOUND;
     assert(firstYear == NULL, NULLARG, false);
     if (amount == 0 || month > MONTHS || month == 0) {
         return false;
@@ -106,11 +108,6 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
     bool added = false;
     *firstYear = addYearRec(*firstYear, year, amount, month, &added);
     return added;
-}
-
-
-TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
-    return NULL;
 }
 
 static void addHeight( TNode * vec, size_t dim ) {
@@ -124,52 +121,69 @@ static int balanceFactor ( TNode * root ) {
     return root->left->nodeHeight - root->right->nodeHeight;
 } 
 
-TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data, size_t * dim) {
-    TNode * vec[*dim];
-    TNode * toReturn;
-    size_t dimAux = 0, still = 1;
-    while ( root != NULL && still ) {
-        if ( strcmp(root->agencyData->agencyName, agencyName) < 0 ) { 
-            vec[dimAux++] = root;
-            root = root->right;
-        } else if ( strcmp(root->agencyData->agencyName, agencyName) > 0 ) {
-            vec[dimAux++] = root;
-            root = root->left;
-        } else {
-            *toReturn = *root;
-            toReturn->agencyData->infractionList->amount = data->amount;
-            toReturn->agencyData->infractionList->id = data->id;
-            // toReturn->agencyData->infractionList->next a donde apuntaria el next?
-            still = 0;
-        }
+static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, TTicket * tData) {
+    if (root == NULL) {
+        TNode * newNode = malloc(sizeof(TNode));
+        assert(newNode == NULL, ENOMEM, NULL);
+        newNode->agencyData = malloc(sizeof(TAgency));
+        assert(newNode->agencyData == NULL, ENOMEM, NULL);
+        myStrcpy(newNode->agencyData->agencyName, AGENCY_LEN, agencyName, SEPARATOR);
+        newNode->agencyData->ticketList = NULL;
+        newNode->agencyData->firstYear = NULL;
+        newNode->left = newNode->right = NULL;
+        newNode->nodeHeight = 1;
+        *added = newNode;
+        return newNode;
     }
-
-    if ( still ) { // sali porque root es NULL entonces debo crear el nodo y recorro el vec y le sumo height
-        
-        addHeight(vec,dimAux);
+    // VER SI LO SACAMOS
+    /* assert(root->agencyData == NULL || root->agencyName == NULL, ); */
+    int cmp = strncmp(agencyName, root->agencyData->agencyName, AGENCY_LEN);
+    if (cmp < 0) {
+        root->left = insertAgencyRec(root->left, added, agencyName, tData);
+    } else if (cmp > 0) {
+        root->right = insertAgencyRec(root->right, added, agencyName, tData);
+    } else {
+        *added = root;
+        return root;
     }
-
-    if ( abs(balanceFactor(root)) >= 2 ) {
-        // balanceo el arbol
-    } 
-    return toReturn;
+    root->nodeHeight = max(nodeHeight(root->left), nodeHeight(root->right)) + 1;
+    int balance = balanceFactor(root);
+    if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData->agencyName) < 0) {
+        return rightRotate(root);
+    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData->agencyName) > 0) {
+        return leftRotate(root);
+    } else if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData->agencyName) > 0) {
+        root->left = leftRotate(root->left);
+        return rightRotate(root);
+    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData->agencyName) < 0) {
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+    return root;
 }
 
-// If added returns true
-// else false
-bool insertTicket(agencyTreeADT agency, char * agencyName, TTicket tData) {
+bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     errno = NOERRORSFOUND;
-    assert(agency == NULL, NULLARG, false);
+    assert(!isValidID(agency->validIDs, tData->infractionID), INVALIDARG, false);
+    assert(agency == NULL || agencyName == NULL, NULLARG, false);
     bool added = false;
-    TTicket * data = malloc(sizeof(TTicket));
-    assert(data == NULL, ENOMEM, false);
-    memcpy(data, &tData, sizeof(TTicket));
-    agency->root = insertTicket();
-    agency->treeHeight += added;
+    TNode * addedAgency = NULL;
+    agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData);
+    assert(errno != NOERRORSFOUND, errno, false);
+    
+    // Thread 1
+    addTicket(agency->validIDs, &addedAgency->agencyData->ticketList, tData->infractionID);
+    assert(errno != NOERRORSFOUND, errno, false);
+
+    // Thread 2
+    addYear(&addedAgency->agencyData->firstYear, tData->issueYear, tData->amount, tData->issueMonth);
+    assert(errno != NOERRORSFOUND, errno, false);
+
+    // ???
     agency->agencyCounter += added;
+
     return added;
 }
-
 
 /* void inorderRec(elemType * orderedVector, size_t * idx, TNode * root) { */
 /*     if (root == NULL) return; */
@@ -193,10 +207,12 @@ bool insertTicket(agencyTreeADT agency, char * agencyName, TTicket tData) {
 /*     return orderedVector; */
 /* } */
 
-agencyTreeADT newAgencys(void) {
-    agencyTreeADT newTree = calloc(1, sizeof(struct agencyTreeCDT));
+agencyTreeADT newAgencys(validIDADT validInfractions) {
     errno = NOERRORSFOUND;
+    assert(validInfractions == NULL, NULLARG, NULL);
+    agencyTreeADT newTree = calloc(1, sizeof(struct agencyTreeCDT));
     assert(newTree == NULL, ENOMEM, NULL);
+    newTree->validIDs = validInfractions;
     return newTree;
 }
 
@@ -215,9 +231,7 @@ static unsigned int nodeHeight(TNode * node) {
     return node->nodeHeight;
 }
 
-
-
-static TNode * rightRotate(TNode *y) {
+TNode * rightRotate(TNode *y) {
     TNode * x = y->left;
     TNode * T2 = x->right;
     x->right = y;
@@ -227,7 +241,7 @@ static TNode * rightRotate(TNode *y) {
     return x;
 }
 
-static TNode * leftRotate(TNode *x) {
+TNode * leftRotate(TNode *x) {
     TNode * y = x->right;
     TNode * T2 = y->left;
     y->left = x;
@@ -236,7 +250,6 @@ static TNode * leftRotate(TNode *x) {
     y->nodeHeight = max(nodeHeight(y->left), nodeHeight(y->right)) + 1;
     return y;
 }
-
 
 static void freeBstRec(TNode * root) {
     if (root == NULL) return;

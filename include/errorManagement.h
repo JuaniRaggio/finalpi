@@ -3,6 +3,7 @@
 
 #define ERRORMSG "Exit with code: %d, function %s, file %s, line %d\n"
 
+#define INVALIDARG 'I'
 #define NOERRORSFOUND 0
 #define NULLARG 'N'
 
@@ -14,6 +15,7 @@
         exit(EXIT_FAILURE); \
     }
 
+// POSIBLE CAMBIO
 #define assert(expr, error, returnValue) \
   if (expr) { \
   }     \

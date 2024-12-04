@@ -17,6 +17,8 @@ typedef enum {DATE = 0, PLATE, AGENCY, TID, AMOUNT} TICKETFIELDS;
 #define INFRACTIONDIM 2
 const INFRACTIONFIELDS INFRACTIONORDER[INFRACTIONDIM] = {ID, DESCRIPTION};
 const TICKETFIELDS TICKETORDER[TICKETDIM] = {DATE, PLATE, AGENCY, TID, AMOUNT};
+#define DATESEPARATORS "-"
+#define PLATE_LEN 10
 #define DESCRIPTION_LEN 50
 #define AGENCY_LEN 13
 #define DATE_LEN 19
@@ -27,23 +29,27 @@ typedef enum {PLATE = 0, DATE, TID, AMOUNT, AGENCY} TICKETFIELDS;
 #define INFRACTIONDIM 2
 const INFRACTIONFIELDS INFRACTIONORDER[INFRACTIONDIM] = {ID, DESCRIPTION};
 const TICKETFIELDS TICKETORDER[TICKETDIM] = {PLATE, DATE, TID, AMOUNT, AGENCY};
+#define DATESEPARATORS "-"
+#define PLATE_LEN 10
 #define DESCRIPTION_LEN 30
 #define AGENCY_LEN 35
 #define DATE_LEN 10
 #endif
 
 // General formats
-#define PLATE_LEN 10
 #define LINE 256 
-#define SEPARATOR ";\n"
+#define SEPARATOR ";\n-"
 #define MONTHS 12
 #define TICKETARG 1
 #define INFRACTIONARG 2
+#define UPPERLIMIT 1
+#define LOWERLIMIT -1
 
 // General structures
 typedef struct ticket {
     char * plate;
-    char * issueDate;
+    unsigned char issueMonth;
+    size_t issueYear;
     size_t infractionID;
     size_t amount;
 } TTicket;

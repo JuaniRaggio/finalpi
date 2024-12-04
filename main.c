@@ -18,7 +18,8 @@ int main(int argc, char ** argv) {
     }
     validIDADT validIDs = createNew((newADT)newValidID);
     readInfractions(argv[INFRACTIONARG], validIDs);
-    agencyTreeADT agencyManagement = createNew((newADT)newAgencys);
+    agencyTreeADT agencyManagement = newAgencys(validIDs);
+    assert(agencyManagement == NULL, errno, ENOMEM);
     diffTreeADT diffAmounts = createNew((newADT)newDiff);
     readTicketCSV(argv[TICKETARG], validIDs, agencyManagement, diffAmounts);
     runMultithreadedQueries(validIDs, diffAmounts, agencyManagement);

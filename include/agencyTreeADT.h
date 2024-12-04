@@ -9,13 +9,13 @@ typedef struct agencyTreeCDT * agencyTreeADT;
 
 /* typedef struct agencysCDT elemType; */
 
-agencyTreeADT newAgencys(void);
+agencyTreeADT newAgencys(validIDADT);
 
 unsigned int heightBST(const agencyTreeADT agencys);
 
 unsigned int sizeBST(const agencyTreeADT agencys);
 
-bool insertTicket(agencyTreeADT agency, char * agencyName, TTicket tData);
+bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 
 void freeBst(agencyTreeADT agencys);
 

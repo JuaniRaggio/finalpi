@@ -21,10 +21,6 @@ validIDADT newValidID(void) {
     return newValidIDs;
 }
 
-static size_t max(unsigned char a, unsigned char b) {
-    return a > b ? a:b;
-}
-
 bool addID(validIDADT validIDs, unsigned char id, char * description) {
     assert(validIDs == NULL, NULLARG, false);
     validIDs->maxID = max(validIDs->maxID, id);
