@@ -44,8 +44,9 @@ struct agencyTreeCDT {
 
 static void freeBstRec(TNode * root);
 static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
-static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month);
-static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id);
+static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
+static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id);
+static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added);
 static void addHeight( TNode * vec, size_t dim );
 static int balanceFactor ( TNode * root );
 static unsigned int nodeHeight(TNode * node);
@@ -53,33 +54,47 @@ static TNode * rightRotate(TNode *y);
 static TNode * leftRotate(TNode *x);
 static void freeBstRec(TNode * root);
 
-static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id) {
+static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs,firstTicket->id,id)) < 0 ) {
         LTicket * new = malloc(sizeof(LTicket));
         new->id = id;
         new->next = firstTicket;
         new->units = 1;
+        (*added) = true;
         return new;
     } else if (c > 0) {
         firstTicket->next = addTicketRec(validIDs,firstTicket->next,id);
     }
+    (*added) = false;
     return firstTicket;
 }
 
-static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month) {
+static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id){
+    assert(validIDs == NULL, NULLARG, false);
+    if (!isValidID(validIDs, id)) {
+        return false;
+    }
+    bool added = false;
+    *firstTicket = addTicketRec(validIDs, *firstTicket, id, &added);
+    return true;
+}
+
+static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added) {
     if (firstYear == NULL || (year > firstYear->yearN)) {
         LYear * newYear = malloc(sizeof(LYear));
         assert(newYear == NULL, ENOMEM, firstYear);
         newYear->yearN = year;
         newYear->collected[month-1] += amount;
         newYear->next = firstYear;
+        (*added) = true;
         return newYear;
     } else if(year == firstYear->yearN){
         firstYear->collected[month-1] += amount; 
+        (*added) = false;
         return firstYear;
     }
-    firstYear->next = addYearRec(firstYear->next,year,amount,month);
+    firstYear->next = addYearRec(firstYear->next,year,amount,month,added);
     return firstYear;
 }
 
@@ -89,7 +104,7 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
         return false;
     }
     bool added = false;
-    *firstYear = addYearRec(*firstYear, year, amount, month);
+    *firstYear = addYearRec(*firstYear, year, amount, month, &added);
     return added;
 }
 
