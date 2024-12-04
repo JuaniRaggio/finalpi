@@ -42,8 +42,8 @@ const TICKETFIELDS TICKETORDER[TICKETDIM] = {PLATE, DATE, TID, AMOUNT, AGENCY};
 
 // General structures
 typedef struct ticket {
-    char plate[PLATE_LEN];
-    char issueDate[DATE_LEN];
+    char * plate;
+    char * issueDate;
     size_t infractionID;
     size_t amount;
 } TTicket;
