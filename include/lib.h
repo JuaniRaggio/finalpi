@@ -8,7 +8,7 @@
 // @param targetDim: target dimension
 // @param source: Copys from source
 // @param separators
-char * myStrcpy(char * target, size_t targetDim,const char * source, char * separators);
+char * myStrcpy(char * target, size_t targetDim, const char * source, char * separators);
 
 // Resizes pointer and fills with zero
 // @param ptr: Pointer to resize
@@ -25,6 +25,8 @@ unsigned int getLine(char s[], unsigned int maxLength);
 // Deletes extra whitespaces
 // @param str: String to trim
 void trimWhitespace(char *str);
+
+int max(int a, int b);
 
 #endif
 

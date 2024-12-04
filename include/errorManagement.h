@@ -2,7 +2,9 @@
 #include <errno.h>
 
 #define ERRORMSG "Exit with code: %d, function %s, file %s, line %d\n"
+
 #define NOERRORSFOUND 0
+#define NULLARG 'N'
 
 #undef assert
 

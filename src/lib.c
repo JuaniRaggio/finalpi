@@ -14,7 +14,11 @@ void trimWhitespace(char *str) {
     end[1] = '\0';
 }
 
-char * myStrcpy(char * target, size_t targetDim, char * source, char * separators) {
+int max(int a, int b) {
+    return a > b ? a:b;
+}
+
+char * myStrcpy(char * target, size_t targetDim, const char * source, char * separators) {
     int i = 0;
     for (; source[i] != '\0' && i < targetDim - 1; ++i) {
         if (strchr(separators, source[i])) {

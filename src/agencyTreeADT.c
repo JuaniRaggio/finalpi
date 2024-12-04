@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <strings.h>
-#include <ctype.h>
 #include "../include/formats.h"
 #include "../include/validIDADT.h"
 #include "../include/errorManagement.h"
@@ -43,7 +42,18 @@ struct agencyTreeCDT {
     size_t treeHeight;
 };
 
-LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id) {
+static void freeBstRec(TNode * root);
+static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
+static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month);
+static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id);
+static void addHeight( TNode * vec, size_t dim );
+static int balanceFactor ( TNode * root );
+static unsigned int nodeHeight(TNode * node);
+static TNode * rightRotate(TNode *y);
+static TNode * leftRotate(TNode *x);
+static void freeBstRec(TNode * root);
+
+static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs,firstTicket->id,id)) < 0 ) {
         LTicket * new = malloc(sizeof(LTicket));
@@ -51,28 +61,38 @@ LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char
         new->next = firstTicket;
         new->units = 1;
         return new;
-    } else if ( c > 0 ) {
+    } else if (c > 0) {
         firstTicket->next = addTicketRec(validIDs,firstTicket->next,id);
     }
-
     return firstTicket;
 }
 
-static LYear * addYear(LYear * firstYear, size_t year, size_t amount, size_t month){
-    if(firstYear == NULL || (year > firstYear->yearN)){
+static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month) {
+    if (firstYear == NULL || (year > firstYear->yearN)) {
         LYear * newYear = malloc(sizeof(LYear));
+        assert(newYear == NULL, ENOMEM, firstYear);
         newYear->yearN = year;
-        newYear->collected[month-1] = amount;
+        newYear->collected[month-1] += amount;
         newYear->next = firstYear;
         return newYear;
-    }
-    if(year == firstYear->yearN){
+    } else if(year == firstYear->yearN){
         firstYear->collected[month-1] += amount; 
         return firstYear;
     }
-    firstYear->next = addYear(firstYear->next,year,amount,month);
+    firstYear->next = addYearRec(firstYear->next,year,amount,month);
     return firstYear;
 }
+
+static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month) {
+    assert(firstYear == NULL, NULLARG, false);
+    if (amount == 0 || month > MONTHS || month == 0) {
+        return false;
+    }
+    bool added = false;
+    *firstYear = addYearRec(*firstYear, year, amount, month);
+    return added;
+}
+
 
 TNode * insertAgencyRec(TNode * root, char * agencyName, LTicket * data) {
     return NULL;
@@ -122,19 +142,16 @@ TNode * insertAgencyRec(TNode * root, char * agencyName, LInfraction * data, siz
 
 // If added returns true
 // else false
-bool insertInfraction(agencyTreeADT agencyBST, char * agencyName, char * plate, char * issueDate, size_t id, size_t amount) {
-    bool added = false;
-    // Dependiendo en como implementemos Q2 y Q3 podriamos evitar alocar memoria
-    // Q1 ya funcionaria con el vector que creamos "infractionAmount" en "TAgency"
-    LTicket * data = malloc(sizeof(LTicket));
+bool insertTicket(agencyTreeADT agency, char * agencyName, TTicket tData) {
     errno = NOERRORSFOUND;
+    assert(agency == NULL, NULLARG, false);
+    bool added = false;
+    TTicket * data = malloc(sizeof(TTicket));
     assert(data == NULL, ENOMEM, false);
-    data->id = id;
-    data->amount = amount;
-
-    agencyBST->root = insertAgencyRec(agencyBST->root, agencyName, data); // falta ver que dim le pasa
-    agencyBST->treeHeight += added;
-    agencyBST->agencyCounter += added;
+    memcpy(data, &tData, sizeof(TTicket));
+    agency->root = insertTicket();
+    agency->treeHeight += added;
+    agency->agencyCounter += added;
     return added;
 }
 
@@ -183,9 +200,7 @@ static unsigned int nodeHeight(TNode * node) {
     return node->nodeHeight;
 }
 
-static int max(int a, int b) {
-    return (a > b) ? a : b;
-}
+
 
 static TNode * rightRotate(TNode *y) {
     TNode * x = y->left;
