@@ -32,8 +32,9 @@ void processTicket(char *line, agencyTreeADT agencys, diffTreeADT diffs) {
         .infractionID = (size_t)atoll(fields[TID]),
         .amount = (size_t)atoll(fields[AMOUNT]),
     };
-    // Agregar funcion de diffamount con threads
     errno = NOERRORSFOUND;
+    insertDiff(diffs, &ticket, fields[AGENCY]);
+    assert(errno != NOERRORSFOUND, errno,);
     insertAgency(agencys, fields[AGENCY], &ticket);
     assert(errno != NOERRORSFOUND, errno,);
     return;

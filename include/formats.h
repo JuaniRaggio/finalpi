@@ -44,6 +44,7 @@ const TICKETFIELDS TICKETORDER[TICKETDIM] = {PLATE, DATE, TID, AMOUNT, AGENCY};
 #define INFRACTIONARG 2
 #define UPPERLIMIT 1
 #define LOWERLIMIT -1
+#define INIT_DIFF 0
 
 // General structures
 typedef struct ticket {
