@@ -1,3 +1,6 @@
+#ifndef __FORMATS_H__
+#define __FORMATS_H__
+
 #include <stdio.h>
 
 // Cities
@@ -74,4 +77,6 @@ typedef struct DTicket {
     ID_TYPE id;
     size_t units;
 } DTicket;
+
+#endif
 

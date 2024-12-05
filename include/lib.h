@@ -1,7 +1,7 @@
-#include <stdio.h>
-
 #ifndef __LIB_H__
 #define __LIB_H__
+
+#include <stdio.h>
 
 // Copys until a separator is found or targetDim is reached
 // @param target: Copys into target

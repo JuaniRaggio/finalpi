@@ -1,9 +1,8 @@
-#include "../include/formats.h"
-#include "../include/validIDADT.h"
-#include <stdio.h>
-
 #ifndef __AGENCYTREEADT_H__
 #define __AGENCYTREEADT_H__
+
+#include "../include/validIDADT.h"
+#include <stdio.h>
 
 typedef struct agencyTreeCDT * agencyTreeADT;
 

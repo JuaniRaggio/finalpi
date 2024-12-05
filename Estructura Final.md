@@ -158,4 +158,4 @@ struct diffbstCDT {
 ### Para ver despues
 ---
 - Ver en validID el caso en el que
-
+![[Pasted image 20241205200636.png]]
