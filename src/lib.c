@@ -5,6 +5,14 @@
 #include "../include/lib.h"
 #include "../include/errorManagement.h"
 
+void freeList(void * list, size_t sizeTillNext) {
+    if (list == NULL) {
+        return;
+    }
+    freeList((void *)((char *)list + sizeTillNext), sizeTillNext);
+    free(list);
+}
+
 // A utility function to get the maximum 
 // value in arr[]
 int getMax(int arr[], int n) {

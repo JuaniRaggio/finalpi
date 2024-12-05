@@ -4,7 +4,6 @@
 #include "include/readData.h"
 #include "include/formats.h"
 #include "include/errorManagement.h"
-#include <cstdio>
 #include <stdlib.h>
 
 #define EXPECTEDARGS 3

@@ -1,11 +1,11 @@
 #include <errno.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <strings.h>
 #include "../include/stackADT.h"
 #include "../include/formats.h"
-#include "../include/validIDADT.h"
 #include "../include/errorManagement.h"
 #include "../include/agencyTreeADT.h"
 #include "../include/lib.h"
@@ -21,6 +21,7 @@ typedef struct LYear {
     DYear yearData;
     struct LYear * next;
 } LYear;
+
 
 // Posible optimizacion: ticketList -> ticketTree
 // firstYear -> tree
@@ -59,7 +60,8 @@ static unsigned int nodeHeight(TNode * node);
 static TNode * rightRotate(TNode *y);
 static TNode * leftRotate(TNode *x);
 static void updateDiff(TNode * root, size_t amount);
-static void freeBstRec(TNode * root);
+static void freeAgencyTreeRec(TNode * root);
+static void freeDiffVector(DDiff ** diffVector);
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
     int c;
@@ -326,15 +328,42 @@ static TNode * leftRotate(TNode *x) {
     return y;
 }
 
-static void freeAgencysRec(TNode * root) {
-    if (root == NULL) return;
-    freeBstRec(root->left);
-    freeBstRec(root->right);
+static void freeYears(LYear * year) {
+    if (year == NULL) {
+        return;
+    }
+    freeYears(year->next);
+    free(year);
+}
+
+static void freeTickets(LTicket * tickets) {
+    if (tickets == NULL) {
+        return;
+    }
+    freeTickets(tickets->next);
+    free(tickets);
+}
+
+static void freeAgencyTreeRec(TNode * root) {
+    if (root == NULL) {
+        return;
+    }
+    freeAgencyTreeRec(root->left);
+    freeAgencyTreeRec(root->right);
+    freeTickets(root->agencyData->ticketList);
+    freeYears(root->agencyData->firstYear);
+    free(root->agencyData);
     free(root);
 }
 
+static void freeDiffVector(DDiff ** diffVector) {
+    free(diffVector);
+}
+
 void freeAgencys(agencyTreeADT agencys) {
-    freeBstRec(agencys->root);
+    freeValidIDs(agencys->validIDs);
+    freeDiffVector(agencys->diffOrder);
+    freeAgencyTreeRec(agencys->root);
     free(agencys);
 }
 

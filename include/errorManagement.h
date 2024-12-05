@@ -1,3 +1,6 @@
+#ifndef __ERRORMANAGEMENT_H__
+#define __ERRORMANAGEMENT_H__
+
 #include <stdio.h>
 #include <errno.h>
 
@@ -24,4 +27,6 @@
       errno = error; \
       return returnValue; \
    }
+
+#endif
 

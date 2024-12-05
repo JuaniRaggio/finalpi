@@ -58,3 +58,11 @@ int compareIDvsDescription(validIDADT validIDs, ID_TYPE id, char * description){
     return strncmp(validIDs->description[--id], description, DESCRIPTION_LEN);
 }
 
+void freeValidIDs(validIDADT validIDs) {
+    for (ID_TYPE i = 0; i <= validIDs->maxID; ++i) {
+        free(validIDs->description[i]);
+    }
+    free(validIDs->description);
+    free(validIDs);
+}
+

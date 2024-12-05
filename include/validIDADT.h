@@ -1,9 +1,9 @@
+#ifndef __VALIDIDADT_H__
+#define __VALIDIDADT_H__
+
 #include <stdio.h>
 #include <stdbool.h>
 #include "../include/formats.h"
-
-#ifndef __VALIDIDADT_H__
-#define __VALIDIDADT_H__
 
 typedef struct validIDCDT * validIDADT;
 
@@ -31,5 +31,8 @@ int compareIDsDescription(validIDADT validIDs, ID_TYPE id1, ID_TYPE id2);
 /// @param id: Infraction id 
 /// @param description: Infraction description 
 int compareIDvsDescription(validIDADT validIDs, ID_TYPE id, char * description);
+
+// Frees resources used by ADT
+void freeValidIDs(validIDADT validIDs);
 
 #endif

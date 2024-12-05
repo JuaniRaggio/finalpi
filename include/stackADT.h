@@ -1,7 +1,7 @@
-#include <stdio.h>
-
 #ifndef __STACKADT_H__
 #define __STACKADT_H__
+
+#include <stdio.h>
 
 typedef struct stackCDT * stackADT;
 
