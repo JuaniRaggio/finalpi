@@ -4,7 +4,6 @@
 #include "../include/readData.h"
 #include "../include/errorManagement.h"
 
-//------------------------- ELMIMINAMOS DIFFTREEADT VER CAMBIOS -------------------------------//
 
 void readInfractions(const char * infractions, validIDADT readInfractions) {
     FILE * infractionFile = fopen(infractions, "r");
@@ -19,14 +18,14 @@ void readInfractions(const char * infractions, validIDADT readInfractions) {
     return;
 }
 
-void readTicketCSV(const char * tickets, validIDADT infractions, agencyTreeADT agencys, diffTreeADT diffs) {
+void readTicketCSV(const char * tickets, agencyTreeADT agencys) {
     FILE *ticketFile = fopen(tickets, "r");
     errno = NOERRORSFOUND;
     assert(ticketFile == NULL, ENOENT,);
     char line[LINE];
     fgets(line, LINE, ticketFile);
     while (fgets(line, LINE, ticketFile)) {
-        processTicket(line, infractions, agencys, diffs);
+        processTicket(line, agencys);
     }
     fclose(ticketFile);
     return;

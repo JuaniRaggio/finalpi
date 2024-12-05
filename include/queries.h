@@ -4,10 +4,10 @@
 #ifndef __QUERIES_H__
 #define __QUERIES_H__
 
-void runMultithreadedQueries(validIDADT, diffTreeADT, agencyTreeADT);
-void runQuery1(validIDADT, agencyTreeADT);
-void runQuery2(validIDADT, agencyTreeADT);
-void runQuery3(validIDADT, diffTreeADT);
+void runMultithreadedQueries(agencyTreeADT);
+void runQuery1(agencyTreeADT);
+void runQuery2(agencyTreeADT);
+void runQuery3(agencyTreeADT);
 
 #endif
 

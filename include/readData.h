@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include "../include/agencyTreeADT.h"
 #include "../include/validIDADT.h"
-#include "diffTreeADT.h"
 
 #ifndef __readData_h_
 #define __readData_h_
@@ -16,7 +15,7 @@ void readInfractions(const char * infractions, validIDADT readInfractions);
 //@param infractions: validIDADT data type where infractions information gets stored.
 //@param agencys: agencyTreeADT data type where information about agencies get stored.
 //param diffs: diffTreeADT data type where information of amounts is going to get stored. 
-void readTicketCSV(const char * ticketsFile, validIDADT infractions, agencyTreeADT agencys, diffTreeADT diffs);
+void readTicketCSV(const char * ticketsFile, agencyTreeADT agencys);
 
 #endif
 

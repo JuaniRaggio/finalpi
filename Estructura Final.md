@@ -48,7 +48,7 @@ Lista de Agencias (ordenada) de listas de infracciones
 > - Nombre de infraccion
 > - Cantidad total de multas con esa infraccion por esa agencia (mismo infractionID)
 
-
+- [ ] ticketList
 
 ## Query 2
 ---
@@ -62,6 +62,8 @@ Lista de Agencias de Lista de años de vectores de meses con el total recaudado
 > - Mes
 > - Recaudacion en ese Año;Mes
 
+- [ ] firstYear
+
 ## Query 3
 ---
 
@@ -72,6 +74,8 @@ Lista de Agencias de Lista de años de vectores de meses con el total recaudado
 > - MinAmount
 > - MaxAmount
 > - DiffAmount
+
+- [ ] Vector diffOrder que lo ordenamos al final
 
 ```c
 typedef struct ticket {
@@ -143,13 +147,15 @@ struct diffbstCDT {
 ---
 - [ ] processData.c 
 - [ ] queries.c
-- [ ] agencyTreeADT.c
-- [ ] diffTreeADT.c
-
+- [x] agencyTreeADT.c
 
 ## OJO EN ERRORMANAGEMENT
 ---
 - *Posible cambio*: Refactor assert
 - No es necesario setear errno si usamos nuestro assert ya que va a pisarlo
 - Si es necesario setearlo para checkErrno()
+
+### Para ver despues
+---
+- Ver en validID el caso en el que
 
