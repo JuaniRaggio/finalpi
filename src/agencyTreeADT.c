@@ -10,8 +10,6 @@
 #include "../include/agencyTreeADT.h"
 #include "../include/lib.h"
 
-#define BLOCK 150
-
 typedef struct LTicket {
     DTicket ticketData;
     struct LTicket * next;
@@ -28,7 +26,6 @@ typedef struct agency {
     LTicket * ticketIterator;
     LYear * firstYear;
     LYear * yearIterator;
-    DDiff amountLimits;
 } TAgency;
 
 typedef struct node {
@@ -43,8 +40,6 @@ struct agencyTreeCDT {
     stackADT stack;
     TNode * root;
     TNode * inorderIterator;
-    DDiff ** diffOrder;
-    size_t diffIterator;
     size_t agencyCounter;
 };
 
@@ -53,11 +48,12 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
 static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id);
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added);
-static int balanceFactor ( TNode * root );
+static void addHeight( TNode * vec, size_t dim );
+/*VER SI LO HACEMOS GENERICO*/
+static int balanceFactor ( TNode * root ); 
 static unsigned int nodeHeight(TNode * node);
 static TNode * rightRotate(TNode *y);
 static TNode * leftRotate(TNode *x);
-static void updateDiff(TNode * root, size_t amount);
 static void freeBstRec(TNode * root);
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
@@ -116,17 +112,16 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
     return added;
 }
 
-static int balanceFactor ( TNode * root ) {
-    return nodeHeight(root->left) - nodeHeight(root->right);
-} 
-
-static void updateDiff(TNode * root, size_t amount){
-    if (root->agencyData->amountLimits.maxAmount < amount){
-        root->agencyData->amountLimits.maxAmount = amount;
-    } else if(root->agencyData->amountLimits.minAmount > amount){
-        root->agencyData->amountLimits.minAmount = amount;
+static void addHeight( TNode * vec, size_t dim ) {
+    while ( dim > 0 ) {
+        vec->nodeHeight++;
+        dim--;
     }
 }
+
+static int balanceFactor ( TNode * root ) {
+    return root->left->nodeHeight - root->right->nodeHeight;
+} 
 
 static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, TTicket * tData, bool * newAgency) {
     if (root == NULL) {
@@ -137,8 +132,6 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
         myStrcpy(newNode->agencyData->agencyName, AGENCY_LEN, agencyName, SEPARATOR);
         newNode->agencyData->ticketList = NULL;
         newNode->agencyData->firstYear = NULL;
-        newNode->agencyData->amountLimits.minAmount = newNode->agencyData->amountLimits.maxAmount = tData->amount;
-        newNode->agencyData->amountLimits.id = tData->infractionID;
         newNode->left = newNode->right = NULL;
         newNode->nodeHeight = 1;
         *added = newNode;
@@ -153,7 +146,6 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
     } else if (cmp > 0) {
         root->right = insertAgencyRec(root->right, added, agencyName, tData, newAgency);
     } else {
-        updateDiff(root, tData->amount);
         *added = root;
         *newAgency = false;
         return root;
@@ -191,17 +183,8 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     addYear(&addedAgency->agencyData->firstYear, tData->issueYear, tData->amount, tData->issueMonth);
     assert(errno != NOERRORSFOUND, errno, false);
 
-    if (added) {
-        agency->agencyCounter++;
-        if ((agency->agencyCounter - 1) % BLOCK == 0) {
-            DDiff ** tmp = realloc(agency->diffOrder, sizeof(DDiff *) * (agency->agencyCounter + BLOCK));
-            assert(tmp == NULL, ENOMEM, false);
-            agency->diffOrder = tmp;
-        }
-        agency->diffOrder[agency->agencyCounter - 1] = &addedAgency->agencyData->amountLimits;
-    }
-
     // ???
+    agency->agencyCounter += added;
 
     return added;
 }
@@ -233,39 +216,27 @@ char * nextAgency(agencyTreeADT agency) {
     return retAgency;
 }
 
-
-void toBeginTicket(agencyTreeADT agency);
-bool hasNextTicket(agencyTreeADT agency);
-DTicket nextTicket(agencyTreeADT agency);
-
-void toBeginYear(agencyTreeADT agency);
-bool hasNextYear(agencyTreeADT agency);
-DYear nextYear(agencyTreeADT agency);
-
-int compareAmounts(DDiff * aData1, DDiff * aData2) {
-    return (aData1->maxAmount - aData1->minAmount) - (aData2->minAmount - aData2->maxAmount);
+void toBeginTicket(agencyTreeADT agency){
+    agency->inorderIterator = agency->root;
+}
+bool hasNextTicket(agencyTreeADT agency){
+    return agency->inorderIterator != NULL;
+}
+DTicket nextTicket(agencyTreeADT agency){
+    assert(!hasNextAgency(agency) == NULL, INVALIDARG, (DTicket){0});
+    return agency->inorderIterator->agencyData->ticketIterator->ticketData;
 }
 
-void toBeginDiff(agencyTreeADT agency) {
-    DDiff ** tmp = realloc(agency->diffOrder, sizeof(DDiff *) * agency->agencyCounter);
-    assert(tmp == NULL, ENOMEM,);
-    agency->diffOrder = tmp;
-    agency->diffIterator = agency->agencyCounter - 1;
-    qsort(agency->diffOrder, agency->agencyCounter, sizeof(DDiff *), (void *)compareAmounts);
+void toBeginYear(agencyTreeADT agency){
+    agency->inorderIterator->agencyData->yearIterator = agency->inorderIterator->agencyData->firstYear;
 }
 
-bool hasNextDiff(agencyTreeADT agency) {
-    return agency->diffIterator < agency->agencyCounter;
+bool hasNextYear(agencyTreeADT agency){
+    return agency->inorderIterator->agencyData->yearIterator != NULL;
 }
-
-DDiff nextDiff(agencyTreeADT agency) {
-    assert(!hasNextDiff(agency), INVALIDARG, (DDiff){0});
-    DDiff retValue = {
-        .maxAmount = agency->diffOrder[agency->diffIterator]->maxAmount,
-        .minAmount = agency->diffOrder[agency->diffIterator]->minAmount,
-        .id = agency->diffOrder[agency->diffIterator++]->id,
-    };
-    return retValue;
+DYear nextYear(agencyTreeADT agency){
+    assert(!hasNextYear(agency) == NULL, INVALIDARG, (DYear){0});
+    return agency->inorderIterator->agencyData->yearIterator->yearData;
 }
 
 agencyTreeADT newAgencys(validIDADT validInfractions) {
