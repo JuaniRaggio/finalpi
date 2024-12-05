@@ -55,4 +55,19 @@ typedef struct ticket {
     size_t amount;
 } TTicket;
 
+typedef struct diff {
+    unsigned char id;
+    size_t minAmount;
+    size_t maxAmount;
+} DDiff;
+
+typedef struct DYear {
+    size_t yearN;
+    size_t collected[MONTHS];
+} DYear;
+
+typedef struct DTicket {
+    unsigned char id;
+    size_t units;
+} DTicket;
 
