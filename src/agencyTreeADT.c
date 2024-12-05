@@ -53,7 +53,8 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
 static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id);
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added);
-static int balanceFactor ( TNode * root );
+/*VER SI LO HACEMOS GENERICO*/
+static int balanceFactor ( TNode * root ); 
 static unsigned int nodeHeight(TNode * node);
 static TNode * rightRotate(TNode *y);
 static TNode * leftRotate(TNode *x);
