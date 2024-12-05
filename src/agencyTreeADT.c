@@ -233,14 +233,31 @@ char * nextAgency(agencyTreeADT agency) {
     return retAgency;
 }
 
+void toBeginYear(agencyTreeADT agency){
+    agency->inorderIterator->agencyData->yearIterator = agency->inorderIterator->agencyData->firstYear;
+}
 
-void toBeginTicket(agencyTreeADT agency);
-bool hasNextTicket(agencyTreeADT agency);
-DTicket nextTicket(agencyTreeADT agency);
+bool hasNextYear(agencyTreeADT agency){
+    return agency->inorderIterator->agencyData->yearIterator != NULL;
+}
 
-void toBeginYear(agencyTreeADT agency);
-bool hasNextYear(agencyTreeADT agency);
-DYear nextYear(agencyTreeADT agency);
+DYear nextYear(agencyTreeADT agency){
+    assert(!hasNextYear(agency), INVALIDARG, (DYear){0});
+    return agency->inorderIterator->agencyData->yearIterator->yearData;
+}
+
+void toBeginTicket(agencyTreeADT agency){
+    agency->inorderIterator = agency->root;
+}
+
+bool hasNextTicket(agencyTreeADT agency){
+    return agency->inorderIterator != NULL;
+}
+
+DTicket nextTicket(agencyTreeADT agency){
+    assert(!hasNextAgency(agency), INVALIDARG, (DTicket){0});
+    return agency->inorderIterator->agencyData->ticketIterator->ticketData;
+}
 
 int compareAmounts(DDiff * aData1, DDiff * aData2) {
     return (aData1->maxAmount - aData1->minAmount) - (aData2->minAmount - aData2->maxAmount);
