@@ -4,6 +4,8 @@
 #include "../include/readData.h"
 #include "../include/errorManagement.h"
 
+//------------------------- ELMIMINAMOS DIFFTREEADT VER CAMBIOS -------------------------------//
+
 void readInfractions(const char * infractions, validIDADT readInfractions) {
     FILE * infractionFile = fopen(infractions, "r");
     errno = NOERRORSFOUND;
