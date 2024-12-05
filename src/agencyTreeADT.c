@@ -22,6 +22,8 @@ typedef struct LYear {
     struct LYear * next;
 } LYear;
 
+// Posible optimizacion: ticketList -> ticketTree
+// firstYear -> tree
 typedef struct agency {
     char agencyName[AGENCY_LEN];
     LTicket * ticketList;
@@ -48,7 +50,6 @@ struct agencyTreeCDT {
     size_t agencyCounter;
 };
 
-static void freeBstRec(TNode * root);
 static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
 static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id);
@@ -183,7 +184,7 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     TNode * addedAgency = NULL;
     agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData, &added);
     assert(errno != NOERRORSFOUND, errno, false);
-    
+
     // Thread 1
     addTicket(agency->validIDs, &addedAgency->agencyData->ticketList, tData->infractionID);
     assert(errno != NOERRORSFOUND, errno, false);
@@ -281,7 +282,7 @@ DDiff nextDiff(agencyTreeADT agency) {
     DDiff retValue = {
         .maxAmount = agency->diffOrder[agency->diffIterator]->maxAmount,
         .minAmount = agency->diffOrder[agency->diffIterator]->minAmount,
-        .id = agency->diffOrder[agency->diffIterator++]->id,
+        .id = agency->diffOrder[agency->diffIterator--]->id,
     };
     return retValue;
 }

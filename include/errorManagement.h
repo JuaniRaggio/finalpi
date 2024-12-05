@@ -9,10 +9,10 @@
 
 #undef assert
 
-#define checkErrno() \
+#define checkErrno(exit_status) \
     if (errno != NOERRORSFOUND) { \
         fprintf(stderr, ERRORMSG, errno, __func__, __FILE__, __LINE__); \
-        exit(EXIT_FAILURE); \
+        (exit_status) = errno; \
     }
 
 // POSIBLE CAMBIO

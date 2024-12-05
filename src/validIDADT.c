@@ -10,8 +10,8 @@
 
 struct validIDCDT {
     char ** description;
-    unsigned char maxID;
-    unsigned char space;
+    ID_TYPE maxID;
+    size_t space;
 };
 
 validIDADT newValidID(void) {
@@ -21,7 +21,7 @@ validIDADT newValidID(void) {
     return newValidIDs;
 }
 
-bool addID(validIDADT validIDs, unsigned char id, char * description) {
+bool addID(validIDADT validIDs, ID_TYPE id, char * description) {
     assert(validIDs == NULL, NULLARG, false);
     validIDs->maxID = max(validIDs->maxID, id);
     id--;
@@ -31,7 +31,7 @@ bool addID(validIDADT validIDs, unsigned char id, char * description) {
         if (errno == ENOMEM) {
             return false;
         }
-        validIDs->space = id + BLOCK;
+        validIDs->space = (unsigned int)id + BLOCK;
     } else if (validIDs->description[id] != NULL) {
         return false;
     }
@@ -42,7 +42,7 @@ bool addID(validIDADT validIDs, unsigned char id, char * description) {
     return true;
 }
 
-bool isValidID(validIDADT validIDs, unsigned char id) {
+bool isValidID(validIDADT validIDs, ID_TYPE id) {
     assert(validIDs == NULL, NULLARG, false);
     if (validIDs->maxID < id) {
         return false;
@@ -50,11 +50,11 @@ bool isValidID(validIDADT validIDs, unsigned char id) {
     return validIDs->description[id - 1] != NULL;
 }
 
-int compareIDsDescription(validIDADT validIDs, unsigned char id1, unsigned char id2) {
+int compareIDsDescription(validIDADT validIDs, ID_TYPE id1, ID_TYPE id2) {
     return strncmp(validIDs->description[--id1], validIDs->description[--id2], DESCRIPTION_LEN);
 }
 
-int compareIDvsDescription(validIDADT validIDs, unsigned char id, char * description){
+int compareIDvsDescription(validIDADT validIDs, ID_TYPE id, char * description){
     return strncmp(validIDs->description[--id], description, DESCRIPTION_LEN);
 }
 

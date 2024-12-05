@@ -22,6 +22,8 @@ const TICKETFIELDS TICKETORDER[TICKETDIM] = {DATE, PLATE, AGENCY, TID, AMOUNT};
 #define DESCRIPTION_LEN 50
 #define AGENCY_LEN 13
 #define DATE_LEN 19
+#define YEAR_LEN 4
+#define ID_TYPE unsigned char
 #elif FORMAT==NY
 typedef enum {ID = 0, DESCRIPTION} INFRACTIONFIELDS;
 typedef enum {PLATE = 0, DATE, TID, AMOUNT, AGENCY} TICKETFIELDS;
@@ -34,6 +36,8 @@ const TICKETFIELDS TICKETORDER[TICKETDIM] = {PLATE, DATE, TID, AMOUNT, AGENCY};
 #define DESCRIPTION_LEN 30
 #define AGENCY_LEN 35
 #define DATE_LEN 10
+#define YEAR_LEN 4
+#define ID_TYPE unsigned char
 #endif
 
 // General formats
@@ -51,12 +55,12 @@ typedef struct ticket {
     char * plate;
     unsigned char issueMonth;
     size_t issueYear;
-    size_t infractionID;
+    ID_TYPE infractionID;
     size_t amount;
 } TTicket;
 
 typedef struct diff {
-    unsigned char id;
+    ID_TYPE id;
     size_t minAmount;
     size_t maxAmount;
 } DDiff;
@@ -67,7 +71,7 @@ typedef struct DYear {
 } DYear;
 
 typedef struct DTicket {
-    unsigned char id;
+    ID_TYPE id;
     size_t units;
 } DTicket;
 

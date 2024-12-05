@@ -7,12 +7,15 @@
 
 typedef struct agencyTreeCDT * agencyTreeADT;
 
-
-
+// Sets errno if needed
 agencyTreeADT newAgencys(validIDADT);
 
 unsigned int sizeBST(const agencyTreeADT agencys);
 
+// Sets errno if needed
+// Adds agency to agencyTreeADT
+// @param agencyName: new agency's name
+// @param tData: data to insert in agency
 bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 
 // 1 - Initialize agency with toBeginAgency

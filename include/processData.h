@@ -1,4 +1,3 @@
-#include "../include/diffTreeADT.h"
 #include "../include/agencyTreeADT.h"
 #include "../include/formats.h"
 
@@ -9,7 +8,7 @@
 // @param diffAmount: ADT of stored diffAmounts
 // @param agencyTree: ADT of stored agencyTree
 // @param data: Ticket to insert
-void insertBothTrees(diffTreeADT diffAmount, agencyTreeADT agencyTree, TTicket data);
+void insertBothTrees(agencyTreeADT agencyTree, TTicket data);
 
 // Makes valid the infraction at line -> Adds it to validIDADT
 // @param line: String which represents a read line
@@ -21,7 +20,7 @@ void processInfraction(char *line, validIDADT infractions);
 // @param infractions: ADT of valid infractions
 // @param agencys: ADT of stored agencys
 // @param diffs: ADT of stored diffAmounts
-void processTicket(char *line, agencyTreeADT agencys, diffTreeADT diffs);
+void processTicket(char *line, agencyTreeADT agencys);
 
 #endif
 

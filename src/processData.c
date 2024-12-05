@@ -4,15 +4,17 @@
 #include "../include/lib.h"
 #include "../include/processData.h"
 
-//------------------------- ELMIMINAMOS DIFFTREEADT VER CAMBIOS -------------------------------//
-
 void processInfraction(char *line, validIDADT infractions) {
     char * token = strtok(line, SEPARATOR);
     char * fields[INFRACTIONDIM];
     for (int i = 0; i < INFRACTIONDIM && token != NULL; ++i) {
+        // fields[i] will end in a separator not a '\0'
         fields[INFRACTIONORDER[i]] = token;
         token = strtok(NULL, SEPARATOR);
     }
+
+    // OJO con el  (unsignec char) atoi
+
     addID(infractions, (unsigned char)atoi(fields[ID]), fields[DESCRIPTION]);
     return;
 }
@@ -26,14 +28,11 @@ void processTicket(char *line, agencyTreeADT agencys) {
     }
     TTicket ticket = {
         .plate = fields[PLATE],
-        .issueYear = (size_t)atoll(strtok(fields[DATE], DATESEPARATORS)),
-        .issueMonth = (unsigned char)atoi(strtok(NULL, DATESEPARATORS)),
-        .infractionID = (size_t)atoll(fields[TID]),
+        .issueYear = (size_t)atoll(fields[DATE]),
+        .issueMonth = (unsigned char)atoi(fields[DATE] + YEAR_LEN + 1),
+        .infractionID = (ID_TYPE)atoll(fields[TID]),
         .amount = (size_t)atoll(fields[AMOUNT]),
     };
-    errno = NOERRORSFOUND;
-    insertDiff(diffs, &ticket, fields[AGENCY]);
-    assert(errno != NOERRORSFOUND, errno,);
     insertAgency(agencys, fields[AGENCY], &ticket);
     assert(errno != NOERRORSFOUND, errno,);
 }
