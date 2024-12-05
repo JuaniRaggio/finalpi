@@ -4,8 +4,7 @@
 #include "../include/lib.h"
 #include "../include/processData.h"
 
-void insertBothTrees (diffTreeADT diffAmount, agencyTreeADT agencyTree, TTicket data) {
-}
+//------------------------- ELMIMINAMOS DIFFTREEADT VER CAMBIOS -------------------------------//
 
 void processInfraction(char *line, validIDADT infractions) {
     char * token = strtok(line, SEPARATOR);
@@ -18,7 +17,7 @@ void processInfraction(char *line, validIDADT infractions) {
     return;
 }
 
-void processTicket(char *line, agencyTreeADT agencys, diffTreeADT diffs) {
+void processTicket(char *line, agencyTreeADT agencys) {
     char * fields[TICKETDIM] = {NULL};
     char * token = strtok(line, SEPARATOR);
     for (int i = 0; i < TICKETDIM && token != NULL; ++i) {
@@ -37,5 +36,4 @@ void processTicket(char *line, agencyTreeADT agencys, diffTreeADT diffs) {
     assert(errno != NOERRORSFOUND, errno,);
     insertAgency(agencys, fields[AGENCY], &ticket);
     assert(errno != NOERRORSFOUND, errno,);
-    return;
 }
