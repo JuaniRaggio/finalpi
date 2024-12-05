@@ -33,7 +33,7 @@ typedef struct agency {
 
 typedef struct node {
     TAgency * agencyData;
-    size_t nodeHeight;
+    unsigned char nodeHeight;
     struct node * left;
     struct node * right;
 } TNode;

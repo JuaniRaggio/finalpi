@@ -23,7 +23,5 @@ void processInfraction(char *line, validIDADT infractions);
 // @param diffs: ADT of stored diffAmounts
 void processTicket(char *line, agencyTreeADT agencys, diffTreeADT diffs);
 
-//test
-void hola(void);
 #endif
 

@@ -32,6 +32,8 @@ void processTicket(char *line, agencyTreeADT agencys) {
         .amount = (size_t)atoll(fields[AMOUNT]),
     };
     errno = NOERRORSFOUND;
+    insertDiff(diffs, &ticket, fields[AGENCY]);
+    assert(errno != NOERRORSFOUND, errno,);
     insertAgency(agencys, fields[AGENCY], &ticket);
     assert(errno != NOERRORSFOUND, errno,);
 }
