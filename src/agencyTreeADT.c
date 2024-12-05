@@ -216,13 +216,28 @@ char * nextAgency(agencyTreeADT agency) {
     return retAgency;
 }
 
-void toBeginTicket(agencyTreeADT agency);
-bool hasNextTicket(agencyTreeADT agency);
-DTicket nextTicket(agencyTreeADT agency);
+void toBeginTicket(agencyTreeADT agency){
+    agency->inorderIterator = agency->root;
+}
+bool hasNextTicket(agencyTreeADT agency){
+    return agency->inorderIterator != NULL;
+}
+DTicket nextTicket(agencyTreeADT agency){
+    assert(!hasNextAgency(agency) == NULL, INVALIDARG, (DTicket){0});
+    return agency->inorderIterator->agencyData->ticketIterator->ticketData;
+}
 
-void toBeginYear(agencyTreeADT agency);
-bool hasNextYear(agencyTreeADT agency);
-DYear nextYear(agencyTreeADT agency);
+void toBeginYear(agencyTreeADT agency){
+    agency->inorderIterator->agencyData->yearIterator = agency->inorderIterator->agencyData->firstYear;
+}
+
+bool hasNextYear(agencyTreeADT agency){
+    return agency->inorderIterator->agencyData->yearIterator != NULL;
+}
+DYear nextYear(agencyTreeADT agency){
+    assert(!hasNextYear(agency) == NULL, INVALIDARG, (DYear){0});
+    return agency->inorderIterator->agencyData->yearIterator->yearData;
+}
 
 agencyTreeADT newAgencys(validIDADT validInfractions) {
     errno = NOERRORSFOUND;

@@ -7,15 +7,7 @@
 
 typedef struct agencyTreeCDT * agencyTreeADT;
 
-typedef struct DYear {
-    size_t yearN;
-    size_t collected[MONTHS];
-} DYear;
 
-typedef struct DTicket {
-    unsigned char id;
-    size_t units;
-} DTicket;
 
 agencyTreeADT newAgencys(validIDADT);
 
@@ -39,6 +31,13 @@ void toBeginYear(agencyTreeADT agency);
 bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
 
+// This iterators are independent from the ones above
+// Used to iterate in diffAmount order
+void toBeginDiff(agencyTreeADT agency);
+bool hasNextDiff(agencyTreeADT agency);
+DDiff nextDiff(agencyTreeADT agency);
+
+// Free resources
 void freeAgencys(agencyTreeADT agencys);
 
 #endif
