@@ -83,7 +83,7 @@ typedef struct DTicket {
     size_t units;
 } DTicket;
 
-// File formats
+// File and query formats
 #define FILENAME 0
 #define HEADER 1
 #define QUERIES 3
