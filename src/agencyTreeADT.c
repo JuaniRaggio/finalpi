@@ -86,8 +86,8 @@ static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t 
         LYear * newYear = malloc(sizeof(LYear));
         assert(newYear == NULL, ENOMEM, firstYear);
         newYear->yearData.yearN = year;
-        newYear->yearData.collected[month-1] += amount;
-        newYear->yearData.totalCollected += amount;
+        newYear->yearData.collected[month-1] = amount;
+        newYear->yearData.totalCollected = amount;
         newYear->next = firstYear;
         (*added) = true;
         return newYear;
@@ -298,7 +298,7 @@ bool hasNextDiff(agencyTreeADT agency) {
 
 nDDiff nextDiff(agencyTreeADT agency) {
     assert(!hasNextDiff(agency), INVALIDARG, (nDDiff){0});
-    nDDiff retValue = agency->diffOrder[agency->diffIterator];
+    nDDiff retValue = agency->diffOrder[agency->diffIterator--];
     return retValue;
 }
 
