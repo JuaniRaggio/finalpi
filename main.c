@@ -1,9 +1,7 @@
 #include "include/agencyTreeADT.h"
-#include "include/validIDADT.h"
-#include "include/queries.h"
 #include "include/readData.h"
-#include "include/formats.h"
 #include "include/errorManagement.h"
+#include "include/runQueries.h"
 #include <stdlib.h>
 
 #define EXPECTEDARGS 3
@@ -28,7 +26,6 @@ int main(int argc, char ** argv) {
     readTicketCSV(argv[TICKETARG], agencyManagement);
     checkErrno(exit_status);
 
-    /* runMultithreadedQueries(agencyManagement); */
     runQueries(agencyManagement);
     checkErrno(exit_status);
 
