@@ -62,7 +62,7 @@ static TNode * rightRotate(TNode *y);
 static TNode * leftRotate(TNode *x);
 static void updateDiff(TNode * root, size_t amount);
 static void freeAgencyTreeRec(TNode * root);
-static void freeDiffVector(DDiff ** diffVector);
+static void freeDiffVector(nDDiff * diffVector);
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
     int c;
@@ -361,7 +361,7 @@ static void freeAgencyTreeRec(TNode * root) {
     free(root);
 }
 
-static void freeDiffVector(DDiff ** diffVector) {
+static void freeDiffVector(nDDiff * diffVector) {
     free(diffVector);
 }
 
