@@ -86,8 +86,8 @@ static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t 
         LYear * newYear = malloc(sizeof(LYear));
         assert(newYear == NULL, ENOMEM, firstYear);
         newYear->yearData.yearN = year;
-        newYear->yearData.collected[month-1] += amount;
-        newYear->yearData.totalCollected += amount;
+        newYear->yearData.collected[month-1] = amount;
+        newYear->yearData.totalCollected = amount;
         newYear->next = firstYear;
         (*added) = true;
         return newYear;
@@ -215,7 +215,7 @@ void toBeginAgency(agencyTreeADT agency) {
     assert(agency == NULL, NULLARG,);
     agency->stack = newStack(sizeof(TNode *));
     assert(agency->stack == NULL, ENOMEM,);
-    agency->inorderIterator = NULL;
+    agency->inorderIterator = agency->root;
     agency->inorderIteratorNext = agency->root;
 }
 
@@ -270,8 +270,17 @@ const char * getDescriptionOfIterator(agencyTreeADT agency) {
     return getDescriptionOfID(agency->validIDs, agency->inorderIterator->agencyData->ticketIterator->ticketData.id);
 }
 
-int compareAmounts(nDDiff aData1, nDDiff aData2) {
-    return (aData1.data->maxAmount - aData1.data->minAmount) - (aData2.data->minAmount - aData2.data->maxAmount);
+int compareAmounts(const void * a, const void * b) { 
+    const nDDiff *aData1 = (const nDDiff *)a;
+    const nDDiff *aData2 = (const nDDiff *)b;
+    long diff1 = aData1->data->maxAmount - aData1->data->minAmount;
+    long diff2 = aData2->data->maxAmount - aData2->data->minAmount;
+    if (diff1 < diff2) {
+        return -1;
+    } else if (diff1 > diff2) {
+        return 1;
+    }
+    return 0;
 }
 
 void toBeginDiff(agencyTreeADT agency) {
@@ -280,7 +289,7 @@ void toBeginDiff(agencyTreeADT agency) {
     assert(tmp == NULL, ENOMEM,);
     agency->diffOrder = tmp;
     agency->diffIterator = agency->agencyCounter - 1;
-    qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), (void *)compareAmounts);
+    qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), compareAmounts);
 }
 
 bool hasNextDiff(agencyTreeADT agency) {
@@ -289,7 +298,7 @@ bool hasNextDiff(agencyTreeADT agency) {
 
 nDDiff nextDiff(agencyTreeADT agency) {
     assert(!hasNextDiff(agency), INVALIDARG, (nDDiff){0});
-    nDDiff retValue = agency->diffOrder[agency->diffIterator];
+    nDDiff retValue = agency->diffOrder[agency->diffIterator--];
     return retValue;
 }
 

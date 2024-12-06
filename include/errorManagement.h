@@ -13,14 +13,16 @@
 #undef assert
 
 #define checkErrno(exit_status) \
-    if (errno != NOERRORSFOUND) { \
+    if (errno == NOERRORSFOUND) { \
+    } \
+    else { \
         fprintf(stderr, ERRORMSG, errno, __func__, __FILE__, __LINE__); \
         (exit_status) = errno; \
     }
 
 // POSIBLE CAMBIO
 #define assert(expr, error, returnValue) \
-  if (expr) { \
+  if (!(expr)) { \
   }     \
   else { \
       fprintf(stderr, "Assertion failed: %s, function %s, file %s, line %d\n", #expr, __func__, __FILE__, __LINE__); \
