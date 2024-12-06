@@ -3,10 +3,11 @@
 
 #include "../include/agencyTreeADT.h"
 
-void runMultithreadedQueries(agencyTreeADT);
-void runQuery1(agencyTreeADT);
-void runQuery2(agencyTreeADT);
-void runQuery3(agencyTreeADT);
+void runQueries(agencyTreeADT agency);
+void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agencys);
+void runQuery1(agencyTreeADT, FILE*);
+void runQuery2(agencyTreeADT, FILE*);
+void runQuery3(agencyTreeADT, FILE*);
 
 #endif
 

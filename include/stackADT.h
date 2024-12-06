@@ -9,6 +9,7 @@ stackADT newStack(size_t sizeofptr);
 
 void push(stackADT stack, void * elem);
 
+// If agency->stack is empty -> pop returns null
 void * pop(stackADT stack);
 
 void * peek(stackADT stack);

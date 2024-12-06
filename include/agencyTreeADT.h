@@ -17,13 +17,17 @@ unsigned int sizeBST(const agencyTreeADT agencys);
 // @param tData: data to insert in agency
 bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 
+// This function initializes correctly all iterators
+// Simplifies work
+void toBeginIterators(agencyTreeADT agency);
+
 // 1 - Initialize agency with toBeginAgency
 // 2 - Request agencys alphabetically with nextAgency
 // 3 - For each request, use toBeginTicket, nextTicket, toBeginYear and nextYear
 //     to get the data from that Requested agency
 void toBeginAgency(agencyTreeADT agency);
 bool hasNextAgency(agencyTreeADT agency);
-char * nextAgency(agencyTreeADT agency);
+void nextAgency(agencyTreeADT agency);
 
 void toBeginTicket(agencyTreeADT agency);
 bool hasNextTicket(agencyTreeADT agency);
@@ -37,7 +41,7 @@ DYear nextYear(agencyTreeADT agency);
 // Used to iterate in diffAmount order
 void toBeginDiff(agencyTreeADT agency);
 bool hasNextDiff(agencyTreeADT agency);
-DDiff nextDiff(agencyTreeADT agency);
+nDDiff nextDiff(agencyTreeADT agency);
 
 // Free resources
 void freeAgencys(agencyTreeADT agencys);

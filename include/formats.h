@@ -68,6 +68,11 @@ typedef struct diff {
     size_t maxAmount;
 } DDiff;
 
+typedef struct diffAndName {
+    const char * agencyName;
+    const DDiff * data;
+} nDDiff;
+
 typedef struct DYear {
     size_t yearN;
     size_t collected[MONTHS];
@@ -77,6 +82,13 @@ typedef struct DTicket {
     ID_TYPE id;
     size_t units;
 } DTicket;
+
+// File formats
+#define FILENAME 0
+#define HEADER 1
+#define QUERIES 3
+#define FH 2
+
 
 #endif
 
