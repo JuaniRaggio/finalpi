@@ -78,5 +78,16 @@ typedef struct DTicket {
     size_t units;
 } DTicket;
 
+// File formats
+#define FILENAME 0
+#define HEADER 1
+#define QUERIES 3
+#define FH 2
+
+const char * fileFormat[QUERIES][FH] = 
+            {{"query1.csv\0", "Agency;Infraction;Tickets\n\0"},
+             {"query2.csv\0", "Agency;Year;Month;YTD\n\0"},
+             {"query3.csv\0", "Agency;MinAmount;MaxAmount;DiffAmount\n\0"}};
+
 #endif
 

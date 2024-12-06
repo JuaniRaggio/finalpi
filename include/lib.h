@@ -2,6 +2,13 @@
 #define __LIB_H__
 
 #include <stdio.h>
+#include "errorManagement.h"
+
+#define newFile(ptr, name, permission, retValue){ \
+    ptr = fopen(name, permission); \
+    assert(ptr == NULL, ENOENT, retValue); \
+}
+
 
 // Copys until a separator is found or targetDim is reached
 // @param target: Copys into target
