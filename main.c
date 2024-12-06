@@ -28,7 +28,8 @@ int main(int argc, char ** argv) {
     readTicketCSV(argv[TICKETARG], agencyManagement);
     checkErrno(exit_status);
 
-    runMultithreadedQueries(agencyManagement);
+    /* runMultithreadedQueries(agencyManagement); */
+    runQueries(agencyManagement);
     checkErrno(exit_status);
 
     return exit_status;

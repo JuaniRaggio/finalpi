@@ -22,7 +22,6 @@ typedef struct LYear {
     struct LYear * next;
 } LYear;
 
-
 // Posible optimizacion: ticketList -> ticketTree
 // firstYear -> tree
 typedef struct agency {
@@ -46,7 +45,8 @@ struct agencyTreeCDT {
     stackADT stack;
     TNode * root;
     TNode * inorderIterator;
-    DDiff ** diffOrder;
+    TNode * inorderIteratorNext;
+    nDDiff * diffOrder;
     size_t diffIterator;
     size_t agencyCounter;
 };
@@ -198,11 +198,12 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     if (added) {
         agency->agencyCounter++;
         if ((agency->agencyCounter - 1) % BLOCK == 0) {
-            DDiff ** tmp = realloc(agency->diffOrder, sizeof(DDiff *) * (agency->agencyCounter + BLOCK));
+            nDDiff * tmp = realloc(agency->diffOrder, sizeof(nDDiff) * (agency->agencyCounter + BLOCK));
             assert(tmp == NULL, ENOMEM, false);
             agency->diffOrder = tmp;
         }
-        agency->diffOrder[agency->agencyCounter - 1] = &addedAgency->agencyData->amountLimits;
+        agency->diffOrder[agency->agencyCounter - 1].data = &addedAgency->agencyData->amountLimits;
+        agency->diffOrder[agency->agencyCounter - 1].agencyName = addedAgency->agencyData->agencyName;
     }
 
     // ???
@@ -210,34 +211,39 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     return added;
 }
 
+void toBeginIterators(agencyTreeADT agency) {
+    assert(agency == NULL, NULLARG,);
+    toBeginAgency(agency);
+    toBeginYear(agency);
+    toBeginDiff(agency);
+    toBeginTicket(agency);
+}
+
 void toBeginAgency(agencyTreeADT agency) {
+    assert(agency == NULL, NULLARG,);
     agency->stack = newStack(sizeof(TNode *));
-    agency->inorderIterator = agency->root;
+    assert(agency->stack == NULL, ENOMEM,);
+    agency->inorderIterator = NULL;
+    agency->inorderIteratorNext = agency->root;
 }
 
 bool hasNextAgency(agencyTreeADT agency) {
-    return agency->inorderIterator != NULL;
+    return agency->inorderIteratorNext != NULL;
 }
 
-char * nextAgency(agencyTreeADT agency) {
-    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG, NULL);
-    char * retAgency = NULL;
-    while (agency->inorderIterator != NULL) {
-        push(agency->stack, agency->inorderIterator);
-        agency->inorderIterator = agency->inorderIterator->left;
+void nextAgency(agencyTreeADT agency) {
+    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG,);
+    while (agency->inorderIteratorNext != NULL) {
+        push(agency->stack, agency->inorderIteratorNext);
+        agency->inorderIteratorNext = agency->inorderIteratorNext->left;
     }
+    // If agency->stack is empty -> pop returns null
     agency->inorderIterator = pop(agency->stack);
-    if (agency->inorderIterator->agencyData != NULL) {
-        retAgency = agency->inorderIterator->agencyData->agencyName;
-    } else {
-        return NULL;
-    }
-    retAgency = agency->inorderIterator->agencyData->agencyName;
-    agency->inorderIterator = agency->inorderIterator->right;
-    return retAgency;
+    agency->inorderIteratorNext = agency->inorderIterator->right;
 }
 
 void toBeginYear(agencyTreeADT agency){
+    assert(agency == NULL, NULLARG,);
     agency->inorderIterator->agencyData->yearIterator = agency->inorderIterator->agencyData->firstYear;
 }
 
@@ -251,6 +257,7 @@ DYear nextYear(agencyTreeADT agency){
 }
 
 void toBeginTicket(agencyTreeADT agency){
+    assert(agency == NULL, NULLARG,);
     agency->inorderIterator = agency->root;
 }
 
@@ -263,29 +270,26 @@ DTicket nextTicket(agencyTreeADT agency){
     return agency->inorderIterator->agencyData->ticketIterator->ticketData;
 }
 
-int compareAmounts(DDiff * aData1, DDiff * aData2) {
-    return (aData1->maxAmount - aData1->minAmount) - (aData2->minAmount - aData2->maxAmount);
+int compareAmounts(nDDiff aData1, nDDiff aData2) {
+    return (aData1.data->maxAmount - aData1.data->minAmount) - (aData2.data->minAmount - aData2.data->maxAmount);
 }
 
 void toBeginDiff(agencyTreeADT agency) {
-    DDiff ** tmp = realloc(agency->diffOrder, sizeof(DDiff *) * agency->agencyCounter);
+    assert(agency == NULL, NULLARG,);
+    nDDiff * tmp = realloc(agency->diffOrder, sizeof(nDDiff) * agency->agencyCounter);
     assert(tmp == NULL, ENOMEM,);
     agency->diffOrder = tmp;
     agency->diffIterator = agency->agencyCounter - 1;
-    qsort(agency->diffOrder, agency->agencyCounter, sizeof(DDiff *), (void *)compareAmounts);
+    qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), (void *)compareAmounts);
 }
 
 bool hasNextDiff(agencyTreeADT agency) {
     return agency->diffIterator < agency->agencyCounter;
 }
 
-DDiff nextDiff(agencyTreeADT agency) {
-    assert(!hasNextDiff(agency), INVALIDARG, (DDiff){0});
-    DDiff retValue = {
-        .maxAmount = agency->diffOrder[agency->diffIterator]->maxAmount,
-        .minAmount = agency->diffOrder[agency->diffIterator]->minAmount,
-        .id = agency->diffOrder[agency->diffIterator--]->id,
-    };
+nDDiff nextDiff(agencyTreeADT agency) {
+    assert(!hasNextDiff(agency), INVALIDARG, (nDDiff){0});
+    nDDiff retValue = agency->diffOrder[agency->diffIterator];
     return retValue;
 }
 

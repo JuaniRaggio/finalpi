@@ -68,6 +68,11 @@ typedef struct diff {
     size_t maxAmount;
 } DDiff;
 
+typedef struct diffAndName {
+    const char * agencyName;
+    const DDiff * data;
+} nDDiff;
+
 typedef struct DYear {
     size_t yearN;
     size_t collected[MONTHS];
@@ -84,10 +89,6 @@ typedef struct DTicket {
 #define QUERIES 3
 #define FH 2
 
-const char * fileFormat[QUERIES][FH] = 
-            {{"query1.csv\0", "Agency;Infraction;Tickets\n\0"},
-             {"query2.csv\0", "Agency;Year;Month;YTD\n\0"},
-             {"query3.csv\0", "Agency;MinAmount;MaxAmount;DiffAmount\n\0"}};
 
 #endif
 
