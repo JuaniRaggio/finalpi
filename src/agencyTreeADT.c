@@ -215,7 +215,7 @@ void toBeginAgency(agencyTreeADT agency) {
     assert(agency == NULL, NULLARG,);
     agency->stack = newStack(sizeof(TNode *));
     assert(agency->stack == NULL, ENOMEM,);
-    agency->inorderIterator = NULL;
+    agency->inorderIterator = agency->root;
     agency->inorderIteratorNext = agency->root;
 }
 

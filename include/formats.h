@@ -44,7 +44,7 @@ extern const TICKETFIELDS TICKETORDER[TICKETDIM];
 
 // General formats
 #define LINE 256 
-#define SEPARATOR ";\n-"
+#define SEPARATOR ";\n"
 #define MONTHS 12
 #define TICKETARG 1
 #define INFRACTIONARG 2
