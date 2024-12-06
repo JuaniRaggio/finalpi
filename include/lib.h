@@ -1,6 +1,9 @@
 #ifndef __LIB_H__
 #define __LIB_H__
 
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include "errorManagement.h"
 

@@ -2,8 +2,13 @@
 #define __VALIDIDADT_H__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include "../include/formats.h"
+#include <errno.h>
+#include <string.h>
+#include "formats.h"
+#include "lib.h"
+#include "errorManagement.h"
 
 typedef struct validIDCDT * validIDADT;
 
@@ -25,6 +30,8 @@ bool isValidID(validIDADT validIDs, ID_TYPE id);
 // @param validIDs: ADT to store and access validIDs
 // @param id1, id2: Will be string compared -> id1.description - id2.description
 int compareIDsDescription(validIDADT validIDs, ID_TYPE id1, ID_TYPE id2);
+
+const char * getDescriptionOfID(validIDADT, ID_TYPE);
 
 /// Compares an ID with a description. Exxpects valid IDs
 /// @param validIDs: ADT to store and access validIDs 

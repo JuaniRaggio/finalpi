@@ -1,8 +1,18 @@
 #ifndef __AGENCYTREEADT_H__
 #define __AGENCYTREEADT_H__
 
-#include "../include/validIDADT.h"
+#include <errno.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <strings.h>
 #include <stdio.h>
+#include "lib.h"
+#include "stackADT.h"
+#include "formats.h"
+#include "errorManagement.h"
+#include "validIDADT.h"
 
 typedef struct agencyTreeCDT * agencyTreeADT;
 
@@ -36,6 +46,9 @@ DTicket nextTicket(agencyTreeADT agency);
 void toBeginYear(agencyTreeADT agency);
 bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
+
+const char * getNameOfIterator(agencyTreeADT agency);
+const char * getDescriptionOfIterator(agencyTreeADT agency);
 
 // This iterators are independent from the ones above
 // Used to iterate in diffAmount order
