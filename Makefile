@@ -3,7 +3,7 @@ COMPILER = gcc
 OUTPUT_FILE = main #creo que main es el output 
 CFLAGS = -Wall -pedantic -std=c99 -fsanitize=address -g
 FRONT = main.c
-OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o stackADT.o validId.o 
+OBJ = src/agencyTreeADT.o src/formats.o src/lib.o src/processData.o src/processQueries.o src/readData.o src/runQueries.o src/stackADT.o src/validIDADT.o 
 
 # Regla principal
 .PHONY: all clean run
@@ -14,7 +14,7 @@ $(OUTPUT_FILE): $(FRONT) $(OBJ)
 	$(COMPILER) $(CFLAGS) $(FRONT) $(OBJ) -o $(OUTPUT_FILE)
 
 # Regla genérica para compilar archivos .o
-%.o: %.c
+%.o: src/%.c
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
 # Dependencias específicas
@@ -38,7 +38,7 @@ validId.o: validId.c validId.h formats.h lib.h
 
 # Limpieza
 clean:
-	rm -f *.o $(OUTPUT_FILE)
+	rm -f src/*.o $(OUTPUT_FILE)
 
 # Ejecutar
 run: $(OUTPUT_FILE)
