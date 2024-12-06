@@ -16,7 +16,7 @@ stackADT newStack(size_t sizeofptr) {
 }
 
 void push(stackADT stack, void * elem) {
-    assert(!isEmpty(stack) || elem == NULL, NULLARG,);
+    assert(!isEmpty(stack) && elem == NULL, NULLARG,);
     if (stack->count == stack->size) {
         stack->size += BLOCK;
         void ** tmp = realloc(stack->elems, stack->size * sizeof(void *));
@@ -27,12 +27,12 @@ void push(stackADT stack, void * elem) {
 }
 
 void * pop(stackADT stack) {
-    assert(!isEmpty(stack), NULLARG, NULL);
+    assert(isEmpty(stack), NULLARG, NULL);
     return stack->elems[--stack->count];
 }
 
 void * peek(stackADT stack) {
-    assert(!isEmpty(stack), NULLARG, NULL);
+    assert(isEmpty(stack), NULLARG, NULL);
     return (char *)stack->elems + (stack->count - 1) * stack->sizeofptr;
 }
 
