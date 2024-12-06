@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-#include "../include/errorManagement.h"
 #include "../include/processData.h"
 
 void processInfraction(char *line, validIDADT infractions) {

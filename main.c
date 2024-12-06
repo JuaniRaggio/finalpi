@@ -32,6 +32,8 @@ int main(int argc, char ** argv) {
     runQueries(agencyManagement);
     checkErrno(exit_status);
 
+    freeAgencys(agencyManagement);
+
     return exit_status;
 }
 

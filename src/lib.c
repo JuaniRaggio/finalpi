@@ -1,9 +1,4 @@
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "../include/lib.h"
-#include "../include/errorManagement.h"
 
 void freeList(void * list, size_t sizeTillNext) {
     if (list == NULL) {
