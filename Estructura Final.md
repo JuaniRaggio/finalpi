@@ -159,3 +159,14 @@ struct diffbstCDT {
 ---
 - Ver en validID el caso en el que
 ![[Pasted image 20241205200636.png]]
+
+
+
+## Posibles cambios
+---
+
+> [!NOTE] Const char vs copia
+> - Que la primera vez que se cree diffamount, se haga una copia del nombre de la agencia
+> - Que getAgencyName retorne una copia del nombre de la agencia
+
+

@@ -1,14 +1,4 @@
-#include <errno.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <strings.h>
-#include "../include/stackADT.h"
-#include "../include/formats.h"
-#include "../include/errorManagement.h"
 #include "../include/agencyTreeADT.h"
-#include "../include/lib.h"
 
 #define BLOCK 150
 
@@ -97,11 +87,13 @@ static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t 
         assert(newYear == NULL, ENOMEM, firstYear);
         newYear->yearData.yearN = year;
         newYear->yearData.collected[month-1] += amount;
+        newYear->yearData.totalCollected += amount;
         newYear->next = firstYear;
         (*added) = true;
         return newYear;
     } else if(year == firstYear->yearData.yearN){
         firstYear->yearData.collected[month-1] += amount; 
+        firstYear->yearData.totalCollected += amount;
         (*added) = false;
         return firstYear;
     }
@@ -270,6 +262,14 @@ DTicket nextTicket(agencyTreeADT agency){
     return agency->inorderIterator->agencyData->ticketIterator->ticketData;
 }
 
+const char * getNameOfIterator(agencyTreeADT agency) {
+    return agency->inorderIterator->agencyData->agencyName;
+}
+
+const char * getDescriptionOfIterator(agencyTreeADT agency) {
+    return getDescriptionOfID(agency->validIDs, agency->inorderIterator->agencyData->ticketIterator->ticketData.id);
+}
+
 int compareAmounts(nDDiff aData1, nDDiff aData2) {
     return (aData1.data->maxAmount - aData1.data->minAmount) - (aData2.data->minAmount - aData2.data->maxAmount);
 }
@@ -368,6 +368,7 @@ static void freeDiffVector(nDDiff * diffVector) {
 void freeAgencys(agencyTreeADT agencys) {
     freeValidIDs(agencys->validIDs);
     freeDiffVector(agencys->diffOrder);
+    freeStack(agencys->stack);
     freeAgencyTreeRec(agencys->root);
     free(agencys);
 }

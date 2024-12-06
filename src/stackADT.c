@@ -1,7 +1,5 @@
 #include "../include/stackADT.h"
-#include "../include/errorManagement.h"
-#include <stdlib.h>
-#include <string.h>
+
 #define BLOCK 20
 
 struct stackCDT {

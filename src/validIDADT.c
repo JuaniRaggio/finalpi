@@ -1,10 +1,4 @@
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include "../include/lib.h"
-#include "../include/errorManagement.h"
 #include "../include/validIDADT.h"
-#include "../include/formats.h"
 
 #define BLOCK 69
 
@@ -19,6 +13,10 @@ validIDADT newValidID(void) {
     errno = NOERRORSFOUND;
     assert(newValidIDs == NULL, ENOMEM, NULL);
     return newValidIDs;
+}
+
+const char * getDescriptionOfID(validIDADT validIDs, ID_TYPE id) {
+    return validIDs->description[--id];
 }
 
 bool addID(validIDADT validIDs, ID_TYPE id, char * description) {
