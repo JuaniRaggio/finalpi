@@ -1,8 +1,11 @@
 #ifndef __PROCESSDATA_H__
 #define __PROCESSDATA_H__
 
-#include "../include/agencyTreeADT.h"
-#include "../include/formats.h"
+#include <stdlib.h>
+#include <string.h>
+#include "errorManagement.h"
+#include "agencyTreeADT.h"
+#include "formats.h"
 
 // Inserts at diffAmount and agencyTree a valid Ticket
 // @param diffAmount: ADT of stored diffAmounts

@@ -2,6 +2,9 @@
 #define __STACKADT_H__
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "errorManagement.h"
 
 typedef struct stackCDT * stackADT;
 

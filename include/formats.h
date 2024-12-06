@@ -75,6 +75,7 @@ typedef struct diffAndName {
 
 typedef struct DYear {
     size_t yearN;
+    size_t totalCollected;
     size_t collected[MONTHS];
 } DYear;
 

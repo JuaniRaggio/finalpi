@@ -1,9 +1,13 @@
 #ifndef __readData_h_
 #define __readData_h_
 
+#include <stdio.h>
+#include <string.h>
 #include <stdbool.h>
-#include "../include/agencyTreeADT.h"
-#include "../include/validIDADT.h"
+#include "agencyTreeADT.h"
+#include "validIDADT.h"
+#include "processData.h"
+#include "errorManagement.h"
 
 // Reads line form infractions file and makes it valid
 //@param infractions: argument that contains infractions to process.
