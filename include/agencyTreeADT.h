@@ -32,7 +32,7 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 //     to get the data from that Requested agency
 void toBeginAgency(agencyTreeADT agency);
 bool hasNextAgency(agencyTreeADT agency);
-void nextAgency(agencyTreeADT agency);
+bool nextAgency(agencyTreeADT agency);
 
 void toBeginTicket(agencyTreeADT agency);
 bool hasNextTicket(agencyTreeADT agency);

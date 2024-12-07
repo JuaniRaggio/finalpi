@@ -14,11 +14,13 @@ void runQuery2(agencyTreeADT agency, const char * agencyName, FILE * q2File) {
     toBeginYear(agency);
     while (hasNextYear(agency)) {
         DYear yearData = nextYear(agency);
-        if (yearData.totalCollected != NULLAMOUNT) {
-            printf("Entro al if -> totalCollected no es 0\n");
-            for (unsigned char month = 0; month < MONTHS; ++month) {
-                fprintf(q2File, "%s;%lu;%u;%lu\n", agencyName, yearData.yearN, month + 1, yearData.collected[month]);
-                printf("%s;%lu;%u;%lu\n", agencyName, yearData.yearN, month + 1, yearData.collected[month]);
+        /* printf("Entro al if -> totalCollected no es 0\n"); */
+        size_t tillMonthx = 0;
+        for (unsigned char month = 0; month < MONTHS; ++month) {
+            if (yearData.collected[month] != NULLAMOUNT) {
+                tillMonthx += yearData.collected[month];
+                fprintf(q2File, "%s;%lu;%u;%lu\n", agencyName, yearData.yearN, month + 1, tillMonthx);
+                /* printf("%s;%lu;%u;%lu\n", agencyName, yearData.yearN, month + 1, yearData.collected[month]); */
             }
         }
     }
