@@ -190,9 +190,7 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
         *newAgency = true;
         return newNode;
     }
-    // VER SI LO SACAMOS
-    /* assert(root->agencyData == NULL || root->agencyName == NULL, ); */
-    int cmp = strncmp(agencyName, root->agencyData.agencyName, AGENCY_LEN);
+    int cmp = strcmp(agencyName, root->agencyData.agencyName);
     if (cmp < 0) {
         root->left = insertAgencyRec(root->left, added, agencyName, tData, newAgency);
     } else if (cmp > 0) {
@@ -246,9 +244,8 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
         agency->diffOrder[agency->agencyCounter - 1].data = &addedAgency->agencyData.amountLimits;
         agency->diffOrder[agency->agencyCounter - 1].agencyName = addedAgency->agencyData.agencyName;
     }
-
-    // ???
-
+    static size_t i = 0;
+    printf("Llamado nro: %lu a insertAgency, agencyCounter: %lu\n", i++, agency->agencyCounter);
     return added;
 }
 
