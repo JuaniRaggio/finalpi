@@ -14,6 +14,7 @@
 #include "validIDADT.h"
 
 typedef struct agencyTreeCDT * agencyTreeADT;
+
 // Sets errno if needed
 agencyTreeADT newAgencys(validIDADT);
 
