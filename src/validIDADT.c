@@ -16,7 +16,8 @@ validIDADT newValidID(void) {
 }
 
 const char * getDescriptionOfID(validIDADT validIDs, ID_TYPE id) {
-    return validIDs->description[--id];
+    assert(!isValidID(validIDs, id), INVALIDARG, NULL);
+    return validIDs->description[id - 1];
 }
 
 bool addID(validIDADT validIDs, ID_TYPE id, char * description) {
