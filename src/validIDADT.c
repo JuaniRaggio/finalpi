@@ -36,7 +36,7 @@ bool addID(validIDADT validIDs, ID_TYPE id, char * description) {
     validIDs->description[id] = malloc(strlen(description) + 1);
     errno = NOERRORSFOUND;
     assert(validIDs->description[id] == NULL, ENOMEM, false);
-    myStrcpy(validIDs->description[id], DESCRIPTION_LEN, description, SEPARATOR);
+    strcpy(validIDs->description[id], description);
     return true;
 }
 

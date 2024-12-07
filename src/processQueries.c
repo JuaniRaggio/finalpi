@@ -26,7 +26,7 @@ void runQuery3(agencyTreeADT agency, FILE * q3File) {
     while (hasNextDiff(agency)) {
         nDDiff diffData = nextDiff(agency);
         fprintf(q3File, "%s;%lu;%lu;%lu\n",
-                diffData.agencyName, diffData.data->minAmount, diffData.data->maxAmount, diffData.data->minAmount - diffData.data->maxAmount);
+                diffData.agencyName, diffData.data->minAmount, diffData.data->maxAmount, diffData.data->maxAmount - diffData.data->minAmount);
         nextDiff(agency);
     }
 }

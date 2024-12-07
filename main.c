@@ -23,6 +23,8 @@ int main(int argc, char ** argv) {
     agencyTreeADT agencyManagement = newAgencys(validIDs);
     checkErrno(exit_status);
 
+    // Hasta aca todo ok
+
     readTicketCSV(argv[TICKETARG], agencyManagement);
     checkErrno(exit_status);
 
