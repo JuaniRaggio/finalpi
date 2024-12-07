@@ -220,18 +220,20 @@ void toBeginAgency(agencyTreeADT agency) {
 }
 
 bool hasNextAgency(agencyTreeADT agency) {
-    return agency->inorderIteratorNext != NULL;
+    return agency->inorderIteratorNext != NULL && isEmpty(agency->stack);
 }
 
 void nextAgency(agencyTreeADT agency) {
-    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG,);
+    assert(agency == NULL || agency->stack == NULL || !hasNextAgency(agency), NULLARG,);
     while (agency->inorderIteratorNext != NULL) {
         push(agency->stack, agency->inorderIteratorNext);
         agency->inorderIteratorNext = agency->inorderIteratorNext->left;
     }
     // If agency->stack is empty -> pop returns null
     agency->inorderIterator = pop(agency->stack);
-    agency->inorderIteratorNext = agency->inorderIterator->right;
+    if (agency->inorderIterator != NULL) {
+        agency->inorderIteratorNext = agency->inorderIterator->right;
+    }
 }
 
 void toBeginYear(agencyTreeADT agency){
