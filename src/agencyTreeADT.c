@@ -337,7 +337,7 @@ void toBeginDiff(agencyTreeADT agency) {
     assert(tmp == NULL, ENOMEM,);
     agency->diffOrder = tmp;
     agency->diffIterator = agency->agencyCounter - 1;
-    /* qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), compareAmounts); */
+    qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), compareAmounts);
 }
 
 bool hasNextDiff(agencyTreeADT agency) {
@@ -346,7 +346,7 @@ bool hasNextDiff(agencyTreeADT agency) {
 
 nDDiff nextDiff(agencyTreeADT agency) {
     assert(!hasNextDiff(agency), INVALIDARG, (nDDiff){0});
-    nDDiff retValue = agency->diffOrder[agency->diffIterator--];
+    nDDiff retValue = agency->diffOrder[(agency->diffIterator)--];
     return retValue;
 }
 
