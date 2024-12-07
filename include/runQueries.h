@@ -4,6 +4,7 @@
 #include "agencyTreeADT.h"
 #include "processQueries.h"
 #include "lib.h"
+#include "formats.h"
 
 void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency);
 
