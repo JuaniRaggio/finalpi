@@ -18,7 +18,7 @@ typedef enum {ID = 0, DESCRIPTION} INFRACTIONFIELDS;
 typedef enum {DATE = 0, PLATE, AGENCY, TID, AMOUNT} TICKETFIELDS;
 #define TICKETDIM 5
 #define INFRACTIONDIM 2
-#define DATESEPARATORS "-"
+#define DATESEPARATORS "-\0"
 #define PLATE_LEN 10
 #define DESCRIPTION_LEN 50
 #define AGENCY_LEN 13
@@ -30,7 +30,7 @@ typedef enum {ID = 0, DESCRIPTION} INFRACTIONFIELDS;
 typedef enum {PLATE = 0, DATE, TID, AMOUNT, AGENCY} TICKETFIELDS;
 #define TICKETDIM 5
 #define INFRACTIONDIM 2
-#define DATESEPARATORS "-"
+#define DATESEPARATORS "-\0"
 #define PLATE_LEN 10
 #define DESCRIPTION_LEN 30
 #define AGENCY_LEN 35
@@ -44,7 +44,7 @@ extern const TICKETFIELDS TICKETORDER[TICKETDIM];
 
 // General formats
 #define LINE 256 
-#define SEPARATOR ";\n"
+#define SEPARATOR ";\n\0"
 #define MONTHS 12
 #define TICKETARG 1
 #define INFRACTIONARG 2

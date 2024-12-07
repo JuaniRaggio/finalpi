@@ -18,7 +18,7 @@
 // @param targetDim: target dimension
 // @param source: Copys from source
 // @param separators
-char * myStrcpy(char * target, size_t targetDim, const char * source, char * separators);
+int myStrcpy(char * target, size_t targetDim, const char * source, char * separators);
 
 int myStrncmp(const char * target, const char * source, char * separators, size_t n);
 

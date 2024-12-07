@@ -84,17 +84,17 @@ int max(int a, int b) {
     return a > b ? a:b;
 }
 
-char * myStrcpy(char * target, size_t targetDim, const char * source, char * separators) {
+int myStrcpy(char * target, size_t targetDim, const char * source, char * separators) {
     int i = 0;
     for (; source[i] != '\0' && i < targetDim - 1; ++i) {
-        if (strchr(separators, source[i])) {
+        if (strchr(separators, source[i]) != NULL) {
             target[i] = '\0';
-            return target;
+            return i;
         }
         target[i] = source[i];
     }
     target[i] = '\0';
-    return target;
+    return i;
 }
 
 unsigned int getLine(char s[], unsigned int maxLength) {

@@ -25,8 +25,9 @@ typedef struct agency {
     DDiff amountLimits;
 } TAgency;
 
+// Posible cambio: agencyData Type: TAgency * -> TAgency
 typedef struct node {
-    TAgency * agencyData;
+    TAgency agencyData;
     unsigned char nodeHeight;
     struct node * left;
     struct node * right;
@@ -51,8 +52,8 @@ struct stackCDT {
 
 static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
-static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id);
-static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added);
+static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id);
+static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added);
 /*VER SI LO HACEMOS GENERICO*/
 static int balanceFactor ( TNode * root ); 
 static unsigned int nodeHeight(TNode * node);
@@ -65,10 +66,9 @@ static stackADT newStack(void);
 static void push(stackADT stack, TNode * elem);
 // If agency->stack is empty -> pop returns null
 static TNode * pop(stackADT stack);
-static TNode * peek(stackADT stack);
+/* static TNode * peek(stackADT stack); */
 static void freeStack(stackADT stack);
 static int isEmpty(const stackADT stack);
-static size_t sizeOfStack(const stackADT stack);
 
 static stackADT newStack(void) {
     stackADT ans = calloc(1, sizeof(struct stackCDT));
@@ -81,7 +81,7 @@ static void push(stackADT stack, TNode * elem) {
     // Si no hay lugar lo agrandamos
     if ( stack->count == stack->size ) {
         stack->size += BLOCK;
-        stack->elems = realloc(stack->elems, stack->size * sizeof(stack->elems[0]));
+        stack->elems = realloc(stack->elems, stack->size * sizeof(TNode));
     }
     stack->elems[stack->count++] = elem;
 }
@@ -100,12 +100,12 @@ static int isEmpty(const stackADT stack) {
     return stack->count==0;
 }
 
-static TNode * peek(const stackADT stack) {
-    assert(isEmpty(stack), NULLARG, NULL);
-    return stack->elems[stack->count-1];
-}
+/* static TNode * peek(const stackADT stack) { */
+/*     assert(isEmpty(stack), NULLARG, NULL); */
+/*     return stack->elems[stack->count-1]; */
+/* } */
 
-static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
+static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) < 0 ) {
         LTicket * new = malloc(sizeof(LTicket));
@@ -121,7 +121,7 @@ static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsign
     return firstTicket;
 }
 
-static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id){
+static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id){
     errno = NOERRORSFOUND;
     assert(validIDs == NULL, NULLARG, false);
     if (!isValidID(validIDs, id)) {
@@ -168,10 +168,10 @@ static int balanceFactor ( TNode * root ) {
 } 
 
 static void updateDiff(TNode * root, size_t amount){
-    if (root->agencyData->amountLimits.maxAmount < amount){
-        root->agencyData->amountLimits.maxAmount = amount;
-    } else if(root->agencyData->amountLimits.minAmount > amount){
-        root->agencyData->amountLimits.minAmount = amount;
+    if (root->agencyData.amountLimits.maxAmount < amount){
+        root->agencyData.amountLimits.maxAmount = amount;
+    } else if(root->agencyData.amountLimits.minAmount > amount){
+        root->agencyData.amountLimits.minAmount = amount;
     }
 }
 
@@ -179,15 +179,12 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
     if (root == NULL) {
         TNode * newNode = malloc(sizeof(TNode));
         assert(newNode == NULL, ENOMEM, NULL);
-        newNode->agencyData = malloc(sizeof(TAgency));
-        assert(newNode->agencyData == NULL, ENOMEM, NULL);
-        myStrcpy(newNode->agencyData->agencyName, AGENCY_LEN, agencyName, SEPARATOR);
-        newNode->agencyData->ticketList = NULL;
-        newNode->agencyData->firstYear = NULL;
-        newNode->agencyData->amountLimits.minAmount = newNode->agencyData->amountLimits.maxAmount = tData->amount;
-        newNode->agencyData->amountLimits.id = tData->infractionID;
-        newNode->left = NULL;
-        newNode->right = NULL;
+        myStrcpy(newNode->agencyData.agencyName, AGENCY_LEN, agencyName, SEPARATOR);
+        newNode->agencyData.ticketList = newNode->agencyData.ticketIterator = NULL;
+        newNode->agencyData.firstYear = newNode->agencyData.yearIterator = NULL;
+        newNode->left = newNode->right = NULL;
+        newNode->agencyData.amountLimits.minAmount = newNode->agencyData.amountLimits.maxAmount = tData->amount;
+        newNode->agencyData.amountLimits.id = tData->infractionID;
         newNode->nodeHeight = 1;
         *added = newNode;
         *newAgency = true;
@@ -195,7 +192,7 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
     }
     // VER SI LO SACAMOS
     /* assert(root->agencyData == NULL || root->agencyName == NULL, ); */
-    int cmp = strncmp(agencyName, root->agencyData->agencyName, AGENCY_LEN);
+    int cmp = strncmp(agencyName, root->agencyData.agencyName, AGENCY_LEN);
     if (cmp < 0) {
         root->left = insertAgencyRec(root->left, added, agencyName, tData, newAgency);
     } else if (cmp > 0) {
@@ -208,14 +205,14 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
     }
     root->nodeHeight = max(nodeHeight(root->left), nodeHeight(root->right)) + 1;
     int balance = balanceFactor(root);
-    if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData->agencyName) < 0) {
+    if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData.agencyName) < 0) {
         return rightRotate(root);
-    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData->agencyName) > 0) {
+    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData.agencyName) > 0) {
         return leftRotate(root);
-    } else if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData->agencyName) > 0) {
+    } else if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData.agencyName) > 0) {
         root->left = leftRotate(root->left);
         return rightRotate(root);
-    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData->agencyName) < 0) {
+    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData.agencyName) < 0) {
         root->right = rightRotate(root->right);
         return leftRotate(root);
     }
@@ -232,11 +229,11 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     assert(errno != NOERRORSFOUND, errno, false);
 
     // Thread 1
-    addTicket(agency->validIDs, &addedAgency->agencyData->ticketList, tData->infractionID);
+    addTicket(agency->validIDs, &addedAgency->agencyData.ticketList, tData->infractionID);
     assert(errno != NOERRORSFOUND, errno, false);
 
     // Thread 2
-    addYear(&addedAgency->agencyData->firstYear, tData->issueYear, tData->amount, tData->issueMonth);
+    addYear(&addedAgency->agencyData.firstYear, tData->issueYear, tData->amount, tData->issueMonth);
     assert(errno != NOERRORSFOUND, errno, false);
 
     if (added) {
@@ -246,8 +243,8 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
             assert(tmp == NULL, ENOMEM, false);
             agency->diffOrder = tmp;
         }
-        agency->diffOrder[agency->agencyCounter - 1].data = &addedAgency->agencyData->amountLimits;
-        agency->diffOrder[agency->agencyCounter - 1].agencyName = addedAgency->agencyData->agencyName;
+        agency->diffOrder[agency->agencyCounter - 1].data = &addedAgency->agencyData.amountLimits;
+        agency->diffOrder[agency->agencyCounter - 1].agencyName = addedAgency->agencyData.agencyName;
     }
 
     // ???
@@ -292,16 +289,16 @@ void nextAgency(agencyTreeADT agency) {
 
 void toBeginYear(agencyTreeADT agency){
     assert(agency == NULL, NULLARG,);
-    agency->inorderIterator->agencyData->yearIterator = agency->inorderIterator->agencyData->firstYear;
+    agency->inorderIterator->agencyData.yearIterator = agency->inorderIterator->agencyData.firstYear;
 }
 
 bool hasNextYear(agencyTreeADT agency){
-    return agency->inorderIterator->agencyData->yearIterator != NULL;
+    return agency->inorderIterator->agencyData.yearIterator != NULL;
 }
 
 DYear nextYear(agencyTreeADT agency){
     assert(!hasNextYear(agency), INVALIDARG, (DYear){0});
-    return agency->inorderIterator->agencyData->yearIterator->yearData;
+    return agency->inorderIterator->agencyData.yearIterator->yearData;
 }
 
 void toBeginTicket(agencyTreeADT agency){
@@ -315,15 +312,15 @@ bool hasNextTicket(agencyTreeADT agency){
 
 DTicket nextTicket(agencyTreeADT agency){
     assert(!hasNextAgency(agency), INVALIDARG, (DTicket){0});
-    return agency->inorderIterator->agencyData->ticketIterator->ticketData;
+    return agency->inorderIterator->agencyData.ticketIterator->ticketData;
 }
 
 const char * getNameOfIterator(agencyTreeADT agency) {
-    return agency->inorderIterator->agencyData->agencyName;
+    return agency->inorderIterator->agencyData.agencyName;
 }
 
 const char * getDescriptionOfIterator(agencyTreeADT agency) {
-    return getDescriptionOfID(agency->validIDs, agency->inorderIterator->agencyData->ticketIterator->ticketData.id);
+    return getDescriptionOfID(agency->validIDs, agency->inorderIterator->agencyData.ticketIterator->ticketData.id);
 }
 
 int compareAmounts(const void * a, const void * b) { 
@@ -420,9 +417,8 @@ static void freeAgencyTreeRec(TNode * root) {
     }
     freeAgencyTreeRec(root->left);
     freeAgencyTreeRec(root->right);
-    freeTickets(root->agencyData->ticketList);
-    freeYears(root->agencyData->firstYear);
-    free(root->agencyData);
+    freeTickets(root->agencyData.ticketList);
+    freeYears(root->agencyData.firstYear);
     free(root);
 }
 

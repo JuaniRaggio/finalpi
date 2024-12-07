@@ -18,7 +18,6 @@ void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency){
         agencyName = getNameOfIterator(agency);
         runQuery1(agency, agencyName, queries[Q1]);
         runQuery2(agency, agencyName, queries[Q2]);
-
         toBeginTicket(agency);
         toBeginYear(agency);
     }
