@@ -9,13 +9,11 @@
 #include <strings.h>
 #include <stdio.h>
 #include "lib.h"
-#include "stackADT.h"
 #include "formats.h"
 #include "errorManagement.h"
 #include "validIDADT.h"
 
 typedef struct agencyTreeCDT * agencyTreeADT;
-
 // Sets errno if needed
 agencyTreeADT newAgencys(validIDADT);
 

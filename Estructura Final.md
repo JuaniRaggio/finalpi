@@ -170,3 +170,7 @@ struct diffbstCDT {
 > - Que getAgencyName retorne una copia del nombre de la agencia
 
 
+## Posibles bugs
+---
+- Puede ser que en vez de que agencyData sea un puntero, que sea una variable
+
