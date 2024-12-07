@@ -26,10 +26,6 @@ unsigned int sizeBST(const agencyTreeADT agencys);
 // @param tData: data to insert in agency
 bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 
-// This function initializes correctly all iterators
-// Simplifies work
-void toBeginIterators(agencyTreeADT agency);
-
 // 1 - Initialize agency with toBeginAgency
 // 2 - Request agencys alphabetically with nextAgency
 // 3 - For each request, use toBeginTicket, nextTicket, toBeginYear and nextYear

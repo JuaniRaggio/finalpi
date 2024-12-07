@@ -117,6 +117,7 @@ static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYP
     } else if (c > 0) {
         firstTicket->next = addTicketRec(validIDs, firstTicket->next, id, added);
     }
+    firstTicket->ticketData.units++;
     (*added) = false;
     return firstTicket;
 }
@@ -247,14 +248,6 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     return added;
 }
 
-void toBeginIterators(agencyTreeADT agency) {
-    assert(agency == NULL, NULLARG,);
-    toBeginAgency(agency);
-    toBeginYear(agency);
-    toBeginDiff(agency);
-    toBeginTicket(agency);
-}
-
 void toBeginAgency(agencyTreeADT agency) {
     assert(agency == NULL, NULLARG,);
     agency->stack = newStack();
@@ -264,7 +257,7 @@ void toBeginAgency(agencyTreeADT agency) {
 }
 
 bool hasNextAgency(agencyTreeADT agency) {
-    return agency->inorderIterator != NULL && isEmpty(agency->stack);
+    return agency->inorderIterator != NULL;
 }
 
 void nextAgency(agencyTreeADT agency) {
@@ -288,12 +281,14 @@ void toBeginYear(agencyTreeADT agency){
 }
 
 bool hasNextYear(agencyTreeADT agency){
-    return hasNextAgency(agency) && agency->inorderIterator->agencyData.yearIterator != NULL;
+    return agency->inorderIterator->agencyData.yearIterator != NULL;
 }
 
 DYear nextYear(agencyTreeADT agency){
     assert(!hasNextYear(agency), INVALIDARG, (DYear){0});
-    return agency->inorderIterator->agencyData.yearIterator->yearData;
+    DYear yData = agency->inorderIterator->agencyData.yearIterator->yearData;
+    agency->inorderIterator->agencyData.yearIterator = agency->inorderIterator->agencyData.yearIterator->next;
+    return yData;
 }
 
 void toBeginTicket(agencyTreeADT agency){
@@ -302,33 +297,37 @@ void toBeginTicket(agencyTreeADT agency){
 }
 
 bool hasNextTicket(agencyTreeADT agency){
-    return hasNextAgency(agency) && agency->inorderIterator->agencyData.ticketIterator != NULL;
+    return agency->inorderIterator->agencyData.ticketIterator != NULL;
 }
 
 DTicket nextTicket(agencyTreeADT agency){
     assert(!hasNextTicket(agency), INVALIDARG, (DTicket){0});
-    return agency->inorderIterator->agencyData.ticketIterator->ticketData;
+    DTicket tData = agency->inorderIterator->agencyData.ticketIterator->ticketData;
+    agency->inorderIterator->agencyData.ticketIterator = agency->inorderIterator->agencyData.ticketIterator->next;
+    return tData;
 }
 
 const char * getNameOfIterator(agencyTreeADT agency) {
+    assert(!hasNextAgency(agency), INVALIDARG, NULL);
     return agency->inorderIterator->agencyData.agencyName;
 }
 
 const char * getDescriptionOfIterator(agencyTreeADT agency) {
+    assert(!hasNextTicket(agency), INVALIDARG, NULL);
     return getDescriptionOfID(agency->validIDs, agency->inorderIterator->agencyData.ticketIterator->ticketData.id);
 }
 
 int compareAmounts(const void * a, const void * b) { 
-    const nDDiff *aData1 = (const nDDiff *)a;
-    const nDDiff *aData2 = (const nDDiff *)b;
-    long diff1 = aData1->data->maxAmount - aData1->data->minAmount;
-    long diff2 = aData2->data->maxAmount - aData2->data->minAmount;
+    const nDDiff * aData1 = (const nDDiff *)a;
+    const nDDiff * aData2 = (const nDDiff *)b;
+    size_t diff1 = aData1->data->maxAmount - aData1->data->minAmount;
+    size_t diff2 = aData2->data->maxAmount - aData2->data->minAmount;
     if (diff1 < diff2) {
         return -1;
     } else if (diff1 > diff2) {
         return 1;
     }
-    return 0;
+    return strcasecmp(aData2->agencyName, aData1->agencyName);
 }
 
 void toBeginDiff(agencyTreeADT agency) {

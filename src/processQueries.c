@@ -3,6 +3,7 @@
 #define NULLAMOUNT 0
 
 void runQuery1(agencyTreeADT agency, const char * agencyName, FILE * q1File) {
+    toBeginTicket(agency);
     while (hasNextTicket(agency)) {
         DTicket ticketData = nextTicket(agency);
         fprintf(q1File, "%s;%s;%lu\n", agencyName, getDescriptionOfIterator(agency), ticketData.units);
@@ -10,6 +11,7 @@ void runQuery1(agencyTreeADT agency, const char * agencyName, FILE * q1File) {
 }
 
 void runQuery2(agencyTreeADT agency, const char * agencyName, FILE * q2File) {
+    toBeginYear(agency);
     while (hasNextYear(agency)) {
         DYear yearData = nextYear(agency);
         if (yearData.totalCollected != NULLAMOUNT) {
@@ -22,13 +24,11 @@ void runQuery2(agencyTreeADT agency, const char * agencyName, FILE * q2File) {
     }
 }
 
-// El problma debe estar en counterAgencys
 void runQuery3(agencyTreeADT agency, FILE * q3File) {
     while (hasNextDiff(agency)) {
         nDDiff diffData = nextDiff(agency);
         fprintf(q3File, "%s;%lu;%lu;%lu\n",
                 diffData.agencyName, diffData.data->minAmount, diffData.data->maxAmount, diffData.data->maxAmount - diffData.data->minAmount);
-        nextDiff(agency);
     }
 }
 
