@@ -293,7 +293,7 @@ void toBeginYear(agencyTreeADT agency){
 }
 
 bool hasNextYear(agencyTreeADT agency){
-    return agency->inorderIterator->agencyData.yearIterator != NULL;
+    return hasNextAgency(agency) && agency->inorderIterator->agencyData.yearIterator != NULL;
 }
 
 DYear nextYear(agencyTreeADT agency){
@@ -303,15 +303,15 @@ DYear nextYear(agencyTreeADT agency){
 
 void toBeginTicket(agencyTreeADT agency){
     assert(agency == NULL, NULLARG,);
-    agency->inorderIterator = agency->root;
+    agency->inorderIterator->agencyData.ticketIterator = agency->inorderIterator->agencyData.ticketList;
 }
 
 bool hasNextTicket(agencyTreeADT agency){
-    return agency->inorderIterator != NULL;
+    return hasNextAgency(agency) && agency->inorderIterator->agencyData.ticketIterator != NULL;
 }
 
 DTicket nextTicket(agencyTreeADT agency){
-    assert(!hasNextAgency(agency), INVALIDARG, (DTicket){0});
+    assert(!hasNextTicket(agency), INVALIDARG, (DTicket){0});
     return agency->inorderIterator->agencyData.ticketIterator->ticketData;
 }
 
