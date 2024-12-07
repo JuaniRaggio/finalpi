@@ -15,7 +15,9 @@ void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency){
     // Query3 is independent from agencys Iterator
     runQuery3(agency, queries[Q3]);
     while(hasNextAgency(agency)) {
-        nextAgency(agency);
+        if (!nextAgency(agency)) {
+            return;
+        }
         agencyName = getNameOfIterator(agency);
         runQuery1(agency, agencyName, queries[Q1]);
         runQuery2(agency, agencyName, queries[Q2]);

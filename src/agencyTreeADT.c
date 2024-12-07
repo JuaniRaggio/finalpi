@@ -87,8 +87,7 @@ static void push(stackADT stack, TNode * elem) {
 }
 
 static TNode * pop(stackADT stack) {
-    assert(isEmpty(stack), NULLARG, NULL);
-    return stack->elems[--stack->count];
+    return isEmpty(stack) ? NULL:stack->elems[--stack->count];
 }
 
 static void freeStack(stackADT stack){
@@ -107,15 +106,16 @@ static int isEmpty(const stackADT stack) {
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
-    if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) < 0 ) {
-        LTicket * new = malloc(sizeof(LTicket));
+    if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) > 0 ) {
+        LTicket * new = calloc(1, sizeof(LTicket));
         new->ticketData.id = id;
         new->ticketData.units = 1;
         new->next = firstTicket;
         (*added) = true;
         return new;
-    } else if (c > 0) {
+    } else if (c < 0) {
         firstTicket->next = addTicketRec(validIDs, firstTicket->next, id, added);
+        return firstTicket;
     }
     firstTicket->ticketData.units++;
     (*added) = false;
@@ -134,8 +134,8 @@ static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id){
 }
 
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added) {
-    if (firstYear == NULL || (year > firstYear->yearData.yearN)) {
-        LYear * newYear = malloc(sizeof(LYear));
+    if (firstYear == NULL || (year < firstYear->yearData.yearN)) {
+        LYear * newYear = calloc(1, sizeof(LYear));
         assert(newYear == NULL, ENOMEM, firstYear);
         newYear->yearData.yearN = year;
         newYear->yearData.collected[month-1] = amount;
@@ -260,8 +260,10 @@ bool hasNextAgency(agencyTreeADT agency) {
     return agency->inorderIterator != NULL;
 }
 
-void nextAgency(agencyTreeADT agency) {
-    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG,);
+// if true -> there's data saved in iterator
+// else -> no data left
+bool nextAgency(agencyTreeADT agency) {
+    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG, false);
     while (agency->inorderIteratorNext != NULL) {
         push(agency->stack, agency->inorderIteratorNext);
         agency->inorderIteratorNext = agency->inorderIteratorNext->left;
@@ -270,9 +272,10 @@ void nextAgency(agencyTreeADT agency) {
     agency->inorderIterator = pop(agency->stack);
     if (agency->inorderIterator != NULL) {
         agency->inorderIteratorNext = agency->inorderIterator->right;
-    } else {
-        agency->inorderIteratorNext = NULL;
+        return true;
     }
+    agency->inorderIteratorNext = NULL;
+    return false;
 }
 
 void toBeginYear(agencyTreeADT agency){
