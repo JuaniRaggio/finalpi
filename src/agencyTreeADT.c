@@ -2,6 +2,8 @@
 
 #define BLOCK 150
 
+typedef struct stackCDT * stackADT;
+
 typedef struct LTicket {
     DTicket ticketData;
     struct LTicket * next;
@@ -41,6 +43,12 @@ struct agencyTreeCDT {
     size_t agencyCounter;
 };
 
+struct stackCDT {
+    TNode ** elems;
+    size_t size;
+    size_t count;
+};
+
 static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
 static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, unsigned char id);
@@ -53,6 +61,49 @@ static TNode * leftRotate(TNode *x);
 static void updateDiff(TNode * root, size_t amount);
 static void freeAgencyTreeRec(TNode * root);
 static void freeDiffVector(nDDiff * diffVector);
+static stackADT newStack(void);
+static void push(stackADT stack, TNode * elem);
+// If agency->stack is empty -> pop returns null
+static TNode * pop(stackADT stack);
+static TNode * peek(stackADT stack);
+static void freeStack(stackADT stack);
+static int isEmpty(const stackADT stack);
+static size_t sizeOfStack(const stackADT stack);
+
+static stackADT newStack(void) {
+    stackADT ans = calloc(1, sizeof(struct stackCDT));
+    assert(ans == NULL, NULLARG, NULL);
+    return ans;
+}
+
+static void push(stackADT stack, TNode * elem) {
+    assert(elem == NULL, NULLARG,);
+    // Si no hay lugar lo agrandamos
+    if ( stack->count == stack->size ) {
+        stack->size += BLOCK;
+        stack->elems = realloc(stack->elems, stack->size * sizeof(stack->elems[0]));
+    }
+    stack->elems[stack->count++] = elem;
+}
+
+static TNode * pop(stackADT stack) {
+    assert(isEmpty(stack), NULLARG, NULL);
+    return stack->elems[--stack->count];
+}
+
+static void freeStack(stackADT stack){
+    free(stack->elems);
+    free(stack);
+}
+
+static int isEmpty(const stackADT stack) {
+    return stack->count==0;
+}
+
+static TNode * peek(const stackADT stack) {
+    assert(isEmpty(stack), NULLARG, NULL);
+    return stack->elems[stack->count-1];
+}
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, unsigned char id, bool * added) {
     int c;
@@ -135,7 +186,8 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
         newNode->agencyData->firstYear = NULL;
         newNode->agencyData->amountLimits.minAmount = newNode->agencyData->amountLimits.maxAmount = tData->amount;
         newNode->agencyData->amountLimits.id = tData->infractionID;
-        newNode->left = newNode->right = NULL;
+        newNode->left = NULL;
+        newNode->right = NULL;
         newNode->nodeHeight = 1;
         *added = newNode;
         *newAgency = true;
@@ -213,25 +265,29 @@ void toBeginIterators(agencyTreeADT agency) {
 
 void toBeginAgency(agencyTreeADT agency) {
     assert(agency == NULL, NULLARG,);
-    agency->stack = newStack(sizeof(TNode *));
+    agency->stack = newStack();
     assert(agency->stack == NULL, ENOMEM,);
     agency->inorderIterator = agency->root;
     agency->inorderIteratorNext = agency->root;
 }
 
 bool hasNextAgency(agencyTreeADT agency) {
-    return agency->inorderIteratorNext != NULL;
+    return agency->inorderIterator != NULL && isEmpty(agency->stack);
 }
 
 void nextAgency(agencyTreeADT agency) {
-    assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG,);
+    assert(agency == NULL || agency->stack == NULL || !hasNextAgency(agency), NULLARG,);
     while (agency->inorderIteratorNext != NULL) {
         push(agency->stack, agency->inorderIteratorNext);
         agency->inorderIteratorNext = agency->inorderIteratorNext->left;
     }
     // If agency->stack is empty -> pop returns null
     agency->inorderIterator = pop(agency->stack);
-    agency->inorderIteratorNext = agency->inorderIterator->right;
+    if (agency->inorderIterator != NULL) {
+        agency->inorderIteratorNext = agency->inorderIterator->right;
+    } else {
+        agency->inorderIteratorNext = NULL;
+    }
 }
 
 void toBeginYear(agencyTreeADT agency){

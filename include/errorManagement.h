@@ -20,7 +20,7 @@
         (exit_status) = errno; \
     }
 
-// POSIBLE CAMBIO
+// if expr == true => sets errno
 #define assert(expr, error, returnValue) \
   if (!(expr)) { \
   }     \
