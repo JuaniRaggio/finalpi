@@ -319,16 +319,16 @@ const char * getDescriptionOfIterator(agencyTreeADT agency) {
 }
 
 int compareAmounts(const void * a, const void * b) { 
-    const nDDiff *aData1 = (const nDDiff *)a;
-    const nDDiff *aData2 = (const nDDiff *)b;
-    long diff1 = aData1->data->maxAmount - aData1->data->minAmount;
-    long diff2 = aData2->data->maxAmount - aData2->data->minAmount;
+    const nDDiff * aData1 = (const nDDiff *)a;
+    const nDDiff * aData2 = (const nDDiff *)b;
+    size_t diff1 = aData1->data->maxAmount - aData1->data->minAmount;
+    size_t diff2 = aData2->data->maxAmount - aData2->data->minAmount;
     if (diff1 < diff2) {
         return -1;
     } else if (diff1 > diff2) {
         return 1;
     }
-    return 0;
+    return strcasecmp(aData2->agencyName, aData1->agencyName);
 }
 
 void toBeginDiff(agencyTreeADT agency) {
