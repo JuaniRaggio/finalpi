@@ -247,14 +247,6 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     return added;
 }
 
-void toBeginIterators(agencyTreeADT agency) {
-    assert(agency == NULL, NULLARG,);
-    toBeginAgency(agency);
-    toBeginYear(agency);
-    toBeginDiff(agency);
-    toBeginTicket(agency);
-}
-
 void toBeginAgency(agencyTreeADT agency) {
     assert(agency == NULL, NULLARG,);
     agency->stack = newStack();
@@ -293,7 +285,9 @@ bool hasNextYear(agencyTreeADT agency){
 
 DYear nextYear(agencyTreeADT agency){
     assert(!hasNextYear(agency), INVALIDARG, (DYear){0});
-    return agency->inorderIterator->agencyData.yearIterator->yearData;
+    DYear yData = agency->inorderIterator->agencyData.yearIterator->yearData;
+    agency->inorderIterator->agencyData.yearIterator = agency->inorderIterator->agencyData.yearIterator->next;
+    return yData;
 }
 
 void toBeginTicket(agencyTreeADT agency){
@@ -307,7 +301,9 @@ bool hasNextTicket(agencyTreeADT agency){
 
 DTicket nextTicket(agencyTreeADT agency){
     assert(!hasNextTicket(agency), INVALIDARG, (DTicket){0});
-    return agency->inorderIterator->agencyData.ticketIterator->ticketData;
+    DTicket tData = agency->inorderIterator->agencyData.ticketIterator->ticketData;
+    agency->inorderIterator->agencyData.ticketIterator = agency->inorderIterator->agencyData.ticketIterator->next;
+    return tData;
 }
 
 const char * getNameOfIterator(agencyTreeADT agency) {

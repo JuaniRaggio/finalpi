@@ -3,6 +3,7 @@
 #define NULLAMOUNT 0
 
 void runQuery1(agencyTreeADT agency, const char * agencyName, FILE * q1File) {
+    toBeginTicket(agency);
     while (hasNextTicket(agency)) {
         DTicket ticketData = nextTicket(agency);
         fprintf(q1File, "%s;%s;%lu\n", agencyName, getDescriptionOfIterator(agency), ticketData.units);
@@ -10,6 +11,7 @@ void runQuery1(agencyTreeADT agency, const char * agencyName, FILE * q1File) {
 }
 
 void runQuery2(agencyTreeADT agency, const char * agencyName, FILE * q2File) {
+    toBeginYear(agency);
     while (hasNextYear(agency)) {
         DYear yearData = nextYear(agency);
         if (yearData.totalCollected != NULLAMOUNT) {

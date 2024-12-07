@@ -9,7 +9,8 @@ const char * fileFormat[QUERIES][FH] =
 
 
 void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency){
-    toBeginIterators(agency);
+    toBeginAgency(agency);
+    toBeginDiff(agency);
     const char * agencyName;
     // Query3 is independent from agencys Iterator
     runQuery3(agency, queries[Q3]);
@@ -18,8 +19,6 @@ void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency){
         agencyName = getNameOfIterator(agency);
         runQuery1(agency, agencyName, queries[Q1]);
         runQuery2(agency, agencyName, queries[Q2]);
-        toBeginTicket(agency);
-        toBeginYear(agency);
     }
 }
 

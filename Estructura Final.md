@@ -170,6 +170,13 @@ struct diffbstCDT {
 > - Que getAgencyName retorne una copia del nombre de la agencia
 
 
+
+> [!NOTE] En toBegin de iteradores y con el tema de preguntar si un ADT es null
+> Decidir si preguntamos por ADT == NULL.
+> Ver si en un iterador de ticket preguntamos si hay next de Agency
+
+
+
 ## Posibles bugs
 ---
 - Puede ser que en vez de que agencyData sea un puntero, que sea una variable
