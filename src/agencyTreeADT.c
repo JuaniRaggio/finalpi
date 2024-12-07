@@ -17,7 +17,7 @@ typedef struct LYear {
 // Posible optimizacion: ticketList -> ticketTree
 // firstYear -> tree
 typedef struct agency {
-    char agencyName[AGENCY_LEN];
+    char agencyName[AGENCY_LEN + 1];
     LTicket * ticketList;
     LTicket * ticketIterator;
     LYear * firstYear;
@@ -179,7 +179,7 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
     if (root == NULL) {
         TNode * newNode = malloc(sizeof(TNode));
         assert(newNode == NULL, ENOMEM, NULL);
-        myStrcpy(newNode->agencyData.agencyName, AGENCY_LEN, agencyName, SEPARATOR);
+        myStrcpy(newNode->agencyData.agencyName, AGENCY_LEN + 1, agencyName, SEPARATOR);
         newNode->agencyData.ticketList = newNode->agencyData.ticketIterator = NULL;
         newNode->agencyData.firstYear = newNode->agencyData.yearIterator = NULL;
         newNode->left = newNode->right = NULL;
@@ -190,27 +190,27 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
         *newAgency = true;
         return newNode;
     }
-    int cmp = strcmp(agencyName, root->agencyData.agencyName);
-    if (cmp < 0) {
-        root->left = insertAgencyRec(root->left, added, agencyName, tData, newAgency);
-    } else if (cmp > 0) {
-        root->right = insertAgencyRec(root->right, added, agencyName, tData, newAgency);
-    } else {
+    int cmp = strcasecmp(agencyName, root->agencyData.agencyName);
+    if (cmp == 0) {
         updateDiff(root, tData->amount);
         *added = root;
         *newAgency = false;
         return root;
+    } else if (cmp < 0) {
+        root->left = insertAgencyRec(root->left, added, agencyName, tData, newAgency);
+    } else if (cmp > 0) {
+        root->right = insertAgencyRec(root->right, added, agencyName, tData, newAgency);
     }
     root->nodeHeight = max(nodeHeight(root->left), nodeHeight(root->right)) + 1;
     int balance = balanceFactor(root);
-    if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData.agencyName) < 0) {
+    if (balance > UPPERLIMIT && strcasecmp(agencyName, root->left->agencyData.agencyName) < 0) {
         return rightRotate(root);
-    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData.agencyName) > 0) {
+    } else if (balance < LOWERLIMIT && strcasecmp(agencyName, root->right->agencyData.agencyName) > 0) {
         return leftRotate(root);
-    } else if (balance > UPPERLIMIT && strcmp(agencyName, root->left->agencyData.agencyName) > 0) {
+    } else if (balance > UPPERLIMIT && strcasecmp(agencyName, root->left->agencyData.agencyName) > 0) {
         root->left = leftRotate(root->left);
         return rightRotate(root);
-    } else if (balance < LOWERLIMIT && strcmp(agencyName, root->right->agencyData.agencyName) < 0) {
+    } else if (balance < LOWERLIMIT && strcasecmp(agencyName, root->right->agencyData.agencyName) < 0) {
         root->right = rightRotate(root->right);
         return leftRotate(root);
     }
@@ -244,8 +244,6 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
         agency->diffOrder[agency->agencyCounter - 1].data = &addedAgency->agencyData.amountLimits;
         agency->diffOrder[agency->agencyCounter - 1].agencyName = addedAgency->agencyData.agencyName;
     }
-    static size_t i = 0;
-    printf("Llamado nro: %lu a insertAgency, agencyCounter: %lu\n", i++, agency->agencyCounter);
     return added;
 }
 
@@ -339,7 +337,7 @@ void toBeginDiff(agencyTreeADT agency) {
     assert(tmp == NULL, ENOMEM,);
     agency->diffOrder = tmp;
     agency->diffIterator = agency->agencyCounter - 1;
-    qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), compareAmounts);
+    /* qsort(agency->diffOrder, agency->agencyCounter, sizeof(nDDiff), compareAmounts); */
 }
 
 bool hasNextDiff(agencyTreeADT agency) {
