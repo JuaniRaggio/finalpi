@@ -16,8 +16,12 @@
 typedef struct agencyTreeCDT * agencyTreeADT;
 
 // Sets errno if needed
-agencyTreeADT newAgencys(validIDADT);
+/// Creates new agencies.
+/// @param validInfractions: ADT of valid infractions
+agencyTreeADT newAgencys(validIDADT validInfractions);
 
+/// Returns the size of agencyTree.
+/// @param agencys: ADT of stored agencies.
 unsigned int sizeBST(const agencyTreeADT agencys);
 
 // Sets errno if needed
@@ -42,7 +46,14 @@ void toBeginYear(agencyTreeADT agency);
 bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
 
+
+/// Returns name of current agency pointer by the iterator
+/// @param agency: ADT of stored agencys 
 const char * getNameOfIterator(agencyTreeADT agency);
+
+/// Gets the description associated with a given id
+/// @param agency: ADT of stored agencies.
+/// @param id: ID_TYPE data type that represents the id.
 const char * getDescriptionOfidAtAgency(agencyTreeADT agency, ID_TYPE id);
 
 // This iterators are independent from the ones above

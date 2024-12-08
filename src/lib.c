@@ -1,4 +1,4 @@
-#include "../include/lib.h"
+#include "lib.h"
 
 void freeList(void * list, size_t sizeTillNext) {
     if (list == NULL) {

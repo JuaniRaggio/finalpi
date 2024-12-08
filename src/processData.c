@@ -1,4 +1,4 @@
-#include "../include/processData.h"
+#include "processData.h"
 
 void processInfraction(char *line, validIDADT infractions) {
     char * token = strtok(line, SEPARATOR);

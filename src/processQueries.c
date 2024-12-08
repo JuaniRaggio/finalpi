@@ -1,4 +1,4 @@
-#include "../include/processQueries.h"
+#include "processQueries.h"
 
 #define NULLAMOUNT 0
 
