@@ -2,4 +2,6 @@ a.out*
 'Estructura\ Final.md'
 tests
 *.csv
+*.zip
+*.log
 

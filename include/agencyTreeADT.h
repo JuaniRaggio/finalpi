@@ -43,7 +43,7 @@ bool hasNextYear(agencyTreeADT agency);
 DYear nextYear(agencyTreeADT agency);
 
 const char * getNameOfIterator(agencyTreeADT agency);
-const char * getDescriptionOfIterator(agencyTreeADT agency);
+const char * getDescriptionOfidAtAgency(agencyTreeADT agency, ID_TYPE id);
 
 // This iterators are independent from the ones above
 // Used to iterate in diffAmount order
