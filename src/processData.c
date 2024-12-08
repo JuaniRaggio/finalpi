@@ -24,9 +24,9 @@ void processTicket(char *line, agencyTreeADT agencys) {
     }
     TTicket ticket = {
         .plate = fields[PLATE],
-        .issueYear = (size_t)atoll(fields[DATE]),
+        .issueYear = (size_t)atoi(fields[DATE]),
         .issueMonth = (unsigned char)atoi(fields[DATE] + YEAR_LEN + 1),
-        .infractionID = (ID_TYPE)atoll(fields[TID]),
+        .infractionID = (ID_TYPE)atoi(fields[TID]),
         .amount = (size_t)atoll(fields[AMOUNT]),
     };
     insertAgency(agencys, fields[AGENCY], &ticket);

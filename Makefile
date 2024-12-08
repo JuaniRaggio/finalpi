@@ -1,24 +1,20 @@
-# Variables
 COMPILER = gcc
 OUTPUT_FILE = main #creo que main es el output 
-CFLAGS = -Wall -pedantic -std=c99 -fsanitize=address -g
+CFLAGS = -Iinclude -Wall -pedantic -std=c99 -fsanitize=address -g
 FRONT = main.c
-OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o stackADT.o validId.o 
+SRC_DIR = src
+OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o validId.o 
 
-# Regla principal
-.PHONY: all clean run
+.PHONY: all clean
 all: $(OUTPUT_FILE)
 
-# Regla para construir el ejecutable
 $(OUTPUT_FILE): $(FRONT) $(OBJ)
 	$(COMPILER) $(CFLAGS) $(FRONT) $(OBJ) -o $(OUTPUT_FILE)
 
-# Regla genérica para compilar archivos .o
-%.o: %.c
+%.o: $(SRC_DIR)/%.c
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
-# Dependencias específicas
-agencyTreeADT.o: agencyTreeADT.c agencyTreeADT.h formats.h lib.h validId.h stackADT.h errorManagement.h
+agencyTreeADT.o: agencyTreeADT.c agencyTreeADT.h formats.h lib.h validId.h errorManagement.h
 
 formats.o: formats.c formats.h 
 
@@ -32,17 +28,11 @@ readData.o: readData.c readData.h agencyTreeADT.h validId.h processData.h errorM
 
 runQueries.o: runQueries.c runQueries.h agencyTreeADT.h processQueries.h
 
-stackADT.o: stackADT.c stackADT.h errorManagement.h
-
 validId.o: validId.c validId.h formats.h lib.h
 
-# Limpieza
 clean:
 	rm -f *.o $(OUTPUT_FILE)
 
-# Ejecutar
-run: $(OUTPUT_FILE)
-	./$(OUTPUT_FILE)
-
-
-#con make compila, make run ejecuta, make clean limpia los archivos despues de usarlos creo que los elimina si no entendi mal
+# # Ejecutar
+# run: $(OUTPUT_FILE)
+# 	./$(OUTPUT_FILE) $@

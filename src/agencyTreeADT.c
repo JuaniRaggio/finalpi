@@ -315,9 +315,8 @@ const char * getNameOfIterator(agencyTreeADT agency) {
     return agency->inorderIterator->agencyData.agencyName;
 }
 
-const char * getDescriptionOfIterator(agencyTreeADT agency) {
-    assert(!hasNextTicket(agency), INVALIDARG, NULL);
-    return getDescriptionOfID(agency->validIDs, agency->inorderIterator->agencyData.ticketIterator->ticketData.id);
+const char * getDescriptionOfidAtAgency(agencyTreeADT agency, ID_TYPE id) {
+    return getDescriptionOfID(agency->validIDs, id);
 }
 
 int compareAmounts(const void * a, const void * b) { 
