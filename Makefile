@@ -1,11 +1,25 @@
 COMPILER = gcc
-OUTPUT_FILE = main #creo que main es el output 
-CFLAGS = -Iinclude -Wall -pedantic -std=c99 -fsanitize=address -g
 FRONT = main.c
+HEADERS_DIR = include
 SRC_DIR = src
-OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o validId.o 
+CFLAGS = -I$(HEADERS_DIR) -Wall -pedantic -std=c99 -fsanitize=address -g
+OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o validIDADT.o 
 
-.PHONY: all clean
+ifeq ($(FORMAT), CHI)
+OUTPUT_FILE = queriesForChicago
+INPUT_FILE_TICKETS = ticketsCHI.csv
+INPUT_FILE_INFRACTIONS = infractionsCHI.csv
+else ifeq ($(FORMAT), NYC)
+OUTPUT_FILE = queriesForNYC
+INPUT_FILE_TICKETS = ticketsNYC.csv
+INPUT_FILE_INFRACTIONS = infractionsNYC.csv
+else
+OUTPUT_FILE = queriesForChicago
+INPUT_FILE_TICKETS = ticketsCHI.csv
+INPUT_FILE_INFRACTIONS = infractionsCHI.csv
+endif
+
+.PHONY: all clean run
 all: $(OUTPUT_FILE)
 
 $(OUTPUT_FILE): $(FRONT) $(OBJ)
@@ -14,25 +28,25 @@ $(OUTPUT_FILE): $(FRONT) $(OBJ)
 %.o: $(SRC_DIR)/%.c
 	$(COMPILER) $(CFLAGS) -c $< -o $@
 
-agencyTreeADT.o: agencyTreeADT.c agencyTreeADT.h formats.h lib.h validId.h errorManagement.h
+agencyTreeADT.o: $(SRC_DIR)/agencyTreeADT.c $(HEADERS_DIR)/agencyTreeADT.h $(HEADERS_DIR)/formats.h $(HEADERS_DIR)/lib.h $(HEADERS_DIR)/validIDADT.h $(HEADERS_DIR)/errorManagement.h
 
-formats.o: formats.c formats.h 
+formats.o: $(SRC_DIR)/formats.c $(HEADERS_DIR)/formats.h 
 
-lib.o: lib.c lib.h errorManagement.h
+lib.o: $(SRC_DIR)/lib.c $(HEADERS_DIR)/lib.h $(HEADERS_DIR)/errorManagement.h
 
-processData.o: processData.c processData.h agencyTreeADT.h formats.h
+processData.o: $(SRC_DIR)/processData.c $(HEADERS_DIR)/processData.h $(HEADERS_DIR)/agencyTreeADT.h $(HEADERS_DIR)/formats.h
 
-processQueries.o: processQueries.c processQueries.h agencyTreeADT.h
+processQueries.o: $(SRC_DIR)/processQueries.c $(HEADERS_DIR)/processQueries.h $(HEADERS_DIR)/agencyTreeADT.h
 
-readData.o: readData.c readData.h agencyTreeADT.h validId.h processData.h errorManagement.h
+readData.o: $(SRC_DIR)/readData.c $(HEADERS_DIR)/readData.h $(HEADERS_DIR)/agencyTreeADT.h $(HEADERS_DIR)/validIDADT.h $(HEADERS_DIR)/processData.h $(HEADERS_DIR)/errorManagement.h
 
-runQueries.o: runQueries.c runQueries.h agencyTreeADT.h processQueries.h
+runQueries.o: $(SRC_DIR)/runQueries.c $(HEADERS_DIR)/runQueries.h $(HEADERS_DIR)/agencyTreeADT.h $(HEADERS_DIR)/processQueries.h
 
-validId.o: validId.c validId.h formats.h lib.h
+validIDADT.o: $(SRC_DIR)/validIDADT.c $(HEADERS_DIR)/validIDADT.h $(HEADERS_DIR)/formats.h $(HEADERS_DIR)/lib.h
 
 clean:
-	rm -f *.o $(OUTPUT_FILE)
+	rm -r *.o $(OUTPUT_FILE) *.dSYM
 
-# # Ejecutar
-# run: $(OUTPUT_FILE)
-# 	./$(OUTPUT_FILE) $@
+run: $(OUTPUT_FILE)
+	time ./$(OUTPUT_FILE) $(INPUT_FILE_TICKETS) $(INPUT_FILE_INFRACTIONS)
+
