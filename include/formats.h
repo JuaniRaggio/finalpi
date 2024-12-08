@@ -7,13 +7,6 @@
 #define CHI 0
 #define NYC 1
 
-// Default format
-#ifndef FORMAT
-#define FORMAT CHI
-#else
-#define FORMAT NYC
-#endif
-
 // Assign format
 #if FORMAT==CHI
 typedef enum {ID = 0, DESCRIPTION} INFRACTIONFIELDS;
