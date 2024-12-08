@@ -1,6 +1,7 @@
 #ifndef __RUNQUERIES_H__
 #define __RUNQUERIES_H__
 
+#include <pthread.h>
 #include "agencyTreeADT.h"
 #include "processQueries.h"
 #include "lib.h"
