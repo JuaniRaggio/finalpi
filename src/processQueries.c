@@ -7,7 +7,7 @@ void runQuery1(agencyTreeADT agency, const char * agencyName, FILE * q1File) {
     while (hasNextTicket(agency)) {
         DTicket ticketData = nextTicket(agency);
         const char * desc = getDescriptionOfidAtAgency(agency, ticketData.id);
-        if (desc == NULL) printf("El nombre de la descripcion del iterador es NULL, cuando el nombre de la agencia es: %s y el id es:%u \n", agencyName, ticketData.id);
+        /* if (desc == NULL) printf("El nombre de la descripcion del iterador es NULL, cuando el nombre de la agencia es: %s y el id es:%u \n", agencyName, ticketData.id); */
         fprintf(q1File, "%s;%s;%lu\n", agencyName, desc, ticketData.units);
     }
 }
