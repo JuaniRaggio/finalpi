@@ -25,7 +25,6 @@ typedef struct agency {
     DDiff amountLimits;
 } TAgency;
 
-// Posible cambio: agencyData Type: TAgency * -> TAgency
 typedef struct node {
     TAgency agencyData;
     unsigned char nodeHeight;
@@ -50,24 +49,37 @@ struct stackCDT {
     size_t count;
 };
 
+// Adds to the list @param firstYear a ticket of @param year, @param amount, @param month
+// If added -> sets @param added = true
 static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
 static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
+// Adds to the list @param firstTicket a ticket of @param id
+// The order of the list is given by the description of each id so the function needs
+// @param validIDs to look for it
 static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id);
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added);
-/*VER SI LO HACEMOS GENERICO*/
-static int balanceFactor ( TNode * root ); 
+// Calculates the balance factor of @param root
+static int balanceFactor(TNode * root); 
+// Returns @param node 's height
 static unsigned int nodeHeight(TNode * node);
-static TNode * rightRotate(TNode *y);
-static TNode * leftRotate(TNode *x);
+// Rotations for AVL tree
+static TNode * rightRotate(TNode * y);
+static TNode * leftRotate(TNode * x);
+// Updates @param root 's amountLimits
 static void updateDiff(TNode * root, size_t amount);
+// Frees @param root -> First element in Agency tree
 static void freeAgencyTreeRec(TNode * root);
+// Frees @param diffVector 's resources
 static void freeDiffVector(nDDiff * diffVector);
+// Creates a new empty stack
 static stackADT newStack(void);
+// Push @param elem into the top of the stack
 static void push(stackADT stack, TNode * elem);
-// If agency->stack is empty -> pop returns null
+// Pops first element in stack. If agency->stack is empty -> pop returns null
 static TNode * pop(stackADT stack);
-/* static TNode * peek(stackADT stack); */
+// Frees stack's resources
 static void freeStack(stackADT stack);
+// True if stack is empty
 static int isEmpty(const stackADT stack);
 
 static stackADT newStack(void) {
@@ -78,7 +90,6 @@ static stackADT newStack(void) {
 
 static void push(stackADT stack, TNode * elem) {
     assert(elem == NULL, NULLARG,);
-    // Si no hay lugar lo agrandamos
     if ( stack->count == stack->size ) {
         stack->size += BLOCK;
         stack->elems = realloc(stack->elems, stack->size * sizeof(TNode));
@@ -159,7 +170,7 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
     return added;
 }
 
-static int balanceFactor ( TNode * root ) {
+static int balanceFactor(TNode * root) {
     return nodeHeight(root->left) - nodeHeight(root->right);
 } 
 
@@ -364,7 +375,7 @@ static unsigned int nodeHeight(TNode * node) {
     return node->nodeHeight;
 }
 
-static TNode * rightRotate(TNode *y) {
+static TNode * rightRotate(TNode * y) {
     TNode * x = y->left;
     TNode * T2 = x->right;
     x->right = y;
@@ -374,7 +385,7 @@ static TNode * rightRotate(TNode *y) {
     return x;
 }
 
-static TNode * leftRotate(TNode *x) {
+static TNode * leftRotate(TNode * x) {
     TNode * y = x->right;
     TNode * T2 = y->left;
     y->left = x;
