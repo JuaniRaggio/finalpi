@@ -99,11 +99,6 @@ static int isEmpty(const stackADT stack) {
     return stack->count==0;
 }
 
-/* static TNode * peek(const stackADT stack) { */
-/*     assert(isEmpty(stack), NULLARG, NULL); */
-/*     return stack->elems[stack->count-1]; */
-/* } */
-
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) > 0 ) {
