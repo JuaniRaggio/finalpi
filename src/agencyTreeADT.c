@@ -260,8 +260,6 @@ bool hasNextAgency(agencyTreeADT agency) {
     return agency->inorderIterator != NULL;
 }
 
-// if true -> there's data saved in iterator
-// else -> no data left
 bool nextAgency(agencyTreeADT agency) {
     assert(agency == NULL || agency->stack == NULL || (!hasNextAgency(agency) && isEmpty(agency->stack)), NULLARG, false);
     while (agency->inorderIteratorNext != NULL) {
