@@ -22,6 +22,8 @@ unsigned int sizeBST(const agencyTreeADT agencys);
 
 // Sets errno if needed
 // Adds agency to agencyTreeADT
+// if true -> there's data saved in iterator
+// else -> no data left
 // @param agencyName: new agency's name
 // @param tData: data to insert in agency
 bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);

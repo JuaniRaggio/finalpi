@@ -5,11 +5,13 @@
 
 // Cities
 #define CHI 0
-#define NY 1
+#define NYC 1
 
 // Default format
 #ifndef FORMAT
 #define FORMAT CHI
+#else
+#define FORMAT NYC
 #endif
 
 // Assign format
@@ -25,7 +27,7 @@ typedef enum {DATE = 0, PLATE, AGENCY, TID, AMOUNT} TICKETFIELDS;
 #define DATE_LEN 19
 #define YEAR_LEN 4
 #define ID_TYPE unsigned char
-#elif FORMAT==NY
+#elif FORMAT==NYC
 typedef enum {ID = 0, DESCRIPTION} INFRACTIONFIELDS;
 typedef enum {PLATE = 0, DATE, TID, AMOUNT, AGENCY} TICKETFIELDS;
 #define TICKETDIM 5
