@@ -1,13 +1,8 @@
 #ifndef __AGENCYTREEADT_H__
 #define __AGENCYTREEADT_H__
 
-#include <errno.h>
 #include <stddef.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
-#include <strings.h>
-#include <stdio.h>
 #include "genericStackADT.h"
 #include "lib.h"
 #include "formats.h"

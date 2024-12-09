@@ -1,11 +1,7 @@
 #ifndef __VALIDIDADT_H__
 #define __VALIDIDADT_H__
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <errno.h>
-#include <string.h>
 #include "formats.h"
 #include "lib.h"
 #include "errorManagement.h"

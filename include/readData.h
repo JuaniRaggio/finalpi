@@ -1,9 +1,6 @@
 #ifndef __readData_h_
 #define __readData_h_
 
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
 #include "agencyTreeADT.h"
 #include "validIDADT.h"
 #include "processData.h"

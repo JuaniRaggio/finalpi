@@ -2,9 +2,8 @@
 #define __GENERICSTACKADT_H__
 
 #include <stdbool.h>
-#include <stdlib.h>
-#include "../include/errorManagement.h"
-#include "../include/lib.h"
+#include "errorManagement.h"
+#include "lib.h"
 
 typedef struct genericStackCDT * genericStackADT;
 
