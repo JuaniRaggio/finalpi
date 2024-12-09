@@ -12,7 +12,6 @@ int main(int argc, char ** argv) {
         fprintf(stderr, "Invalid arguments, expected: %d, recieved: %d", EXPECTEDARGS, argc);
         exit(EXIT_FAILURE);
     }
-
     errno = NOERRORSFOUND;
     validIDADT validIDs = newValidID();
     checkErrno(exit_status);
@@ -25,8 +24,6 @@ int main(int argc, char ** argv) {
 
     readTicketCSV(argv[TICKETARG], agencyManagement);
     checkErrno(exit_status);
-
-    // Hasta aca todo ok Menos el AgencyCounter
   
     runQueries(agencyManagement);
     checkErrno(exit_status);

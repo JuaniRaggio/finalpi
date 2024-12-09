@@ -1,6 +1,8 @@
 #include "../include/genericStackADT.h"
 
-#define STACKBLOCK 20
+#ifndef STACKBLOCK
+#define STACKBLOCK 5
+#endif
 #define NOELEMENTSLEFT 0
 
 struct genericStackCDT {
