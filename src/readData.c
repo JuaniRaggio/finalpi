@@ -1,4 +1,4 @@
-#include "readData.h"
+#include "../include/readData.h"
 
 void readInfractions(const char * infractions, validIDADT readInfractions) {
     FILE * infractionFile = fopen(infractions, "r");

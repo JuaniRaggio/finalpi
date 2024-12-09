@@ -9,7 +9,7 @@ FRONT = main.c
 HEADERS_DIR = include
 SRC_DIR = src
 CFLAGS = -I$(HEADERS_DIR) -Wall -pedantic -std=c99 -fsanitize=address -O2 -g -DFORMAT=$(FORMAT)
-OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o validIDADT.o 
+OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o validIDADT.o genericStackADT.o
 
 .PHONY: all clean run
 all: $(OUTPUT_FILE)
@@ -22,6 +22,7 @@ $(OUTPUT_FILE): $(FRONT) $(OBJ)
 
 agencyTreeADT.o: $(SRC_DIR)/agencyTreeADT.c $(HEADERS_DIR)/agencyTreeADT.h $(HEADERS_DIR)/formats.h $(HEADERS_DIR)/lib.h $(HEADERS_DIR)/validIDADT.h $(HEADERS_DIR)/errorManagement.h
 formats.o: $(SRC_DIR)/formats.c $(HEADERS_DIR)/formats.h 
+genericStackADT.o: $(SRC_DIR)/genericStackADT.c $(HEADERS_DIR)/genericStackADT.h 
 lib.o: $(SRC_DIR)/lib.c $(HEADERS_DIR)/lib.h $(HEADERS_DIR)/errorManagement.h
 processData.o: $(SRC_DIR)/processData.c $(HEADERS_DIR)/processData.h $(HEADERS_DIR)/agencyTreeADT.h $(HEADERS_DIR)/formats.h
 processQueries.o: $(SRC_DIR)/processQueries.c $(HEADERS_DIR)/processQueries.h $(HEADERS_DIR)/agencyTreeADT.h

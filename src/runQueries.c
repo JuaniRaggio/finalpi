@@ -1,4 +1,4 @@
-#include "runQueries.h"
+#include "../include/runQueries.h"
 
 typedef enum {Q1 = 0, Q2 = 1, Q3 = 2} nQueries;
 
