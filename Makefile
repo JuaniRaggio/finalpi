@@ -8,7 +8,7 @@ COMPILER = gcc
 FRONT = main.c
 HEADERS_DIR = include
 SRC_DIR = src
-CFLAGS = -I$(HEADERS_DIR) -Wall -pedantic -std=c99 -fsanitize=address -O2 -g -DFORMAT=$(FORMAT)
+CFLAGS = -I$(HEADERS_DIR) -Wall -pedantic -std=c99 -fsanitize=address -g -DFORMAT=$(FORMAT)
 OBJ = agencyTreeADT.o formats.o lib.o processData.o processQueries.o readData.o runQueries.o validIDADT.o genericStackADT.o
 
 .PHONY: all clean run
