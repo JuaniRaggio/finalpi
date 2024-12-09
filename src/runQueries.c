@@ -31,7 +31,7 @@ void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency) {
     pthread_create(&thread, NULL, thread_runQuery3, &query3Arguments);
     while(hasNextAgency(agency) && nextAgency(agency)) {
         agencyName = getNameOfIterator(agency);
-        runQuery1(agency, agencyName, queries[Q1]);
+        /* runQuery1(agency, agencyName, queries[Q1]); */
         runQuery2(agency, agencyName, queries[Q2]);
     }
     pthread_join(thread, NULL);
