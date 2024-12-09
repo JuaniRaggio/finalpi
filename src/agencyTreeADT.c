@@ -528,6 +528,8 @@ static void freeAgencyTreeRec(TNode * root) {
     freeAgencyTreeRec(root->right);
     freeTickets(root->agencyData.rootTicket);
     freeYears(root->agencyData.rootYear);
+    freeStack(root->agencyData.stackT);
+    freeStack(root->agencyData.stackY);
     free(root);
 }
 
