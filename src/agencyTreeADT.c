@@ -64,17 +64,6 @@ static void freeAgencyTreeRec(TNode * root);
 // Frees @param diffVector 's resources
 static void freeDiffVector(nDDiff * diffVector);
 
-/* // Creates a new empty stack */
-/* static stackADT newStack(void); */
-/* // Push @param elem into the top of the stack */
-/* static void push(stackADT stack, TNode * elem); */
-/* // Pops first element in stack. If agency->stack is empty -> pop returns null */
-/* static TNode * pop(stackADT stack); */
-/* // Frees stack's resources */
-/* static void freeStack(stackADT stack); */
-/* // True if stack is empty */
-/* static int isEmpty(const stackADT stack); */
-
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) > 0 ) {
@@ -198,11 +187,9 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData, &added);
     assert(errno != NOERRORSFOUND, errno, false);
 
-    // Thread 1
     addTicket(agency->validIDs, &addedAgency->agencyData.ticketList, tData->infractionID);
     assert(errno != NOERRORSFOUND, errno, false);
 
-    // Thread 2
     addYear(&addedAgency->agencyData.firstYear, tData->issueYear, tData->amount, tData->issueMonth);
     assert(errno != NOERRORSFOUND, errno, false);
 
