@@ -1,8 +1,6 @@
 #ifndef __PROCESSDATA_H__
 #define __PROCESSDATA_H__
 
-#include <stdlib.h>
-#include <string.h>
 #include "errorManagement.h"
 #include "agencyTreeADT.h"
 #include "formats.h"
