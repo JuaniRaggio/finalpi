@@ -2,6 +2,7 @@
 #define __AGENCYTREEADT_H__
 
 #include <stddef.h>
+#include <string.h>
 #include <stdbool.h>
 #include "genericStackADT.h"
 #include "lib.h"
