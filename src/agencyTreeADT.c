@@ -106,14 +106,16 @@ static RTicket * insertTicketRec(validIDADT validIDs, RTicket * root, ID_TYPE id
     } 
     root->nodeHeight = max(nodeHeightTicket(root->left), nodeHeightTicket(root->right)) + 1;
     int balance = balanceFactorTicket(root);
-    if (balance > UPPERLIMIT && c < 0) {
+    if (balance > UPPERLIMIT && (c < 0)) {
+        if (c < 0) {
+            return rightRotateTicket(root);
+        }
+        root->left=leftRotateTicket(root->left);
         return rightRotateTicket(root);
-    } else if (balance < LOWERLIMIT && c > 0) {
-        return leftRotateTicket(root);
-    } else if (balance > UPPERLIMIT && c > 0) {
-        root->left = leftRotateTicket(root->left);
-        return rightRotateTicket(root);
-    } else if (balance < LOWERLIMIT && c < 0) {
+    } else if (balance < LOWERLIMIT && (c > 0)) {
+        if (c > 0) {
+            return leftRotateTicket(root);
+        }
         root->right = rightRotateTicket(root->right);
         return leftRotateTicket(root);
     }
