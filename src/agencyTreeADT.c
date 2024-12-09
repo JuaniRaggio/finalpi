@@ -1,8 +1,6 @@
-#include "agencyTreeADT.h"
+#include "../include/agencyTreeADT.h"
 
 #define BLOCK 150
-
-typedef struct stackCDT * stackADT;
 
 typedef struct LTicket {
     DTicket ticketData;
@@ -34,19 +32,13 @@ typedef struct node {
 
 struct agencyTreeCDT {
     validIDADT validIDs;
-    stackADT stack;
+    genericStackADT stack;
     TNode * root;
     TNode * inorderIterator;
     TNode * inorderIteratorNext;
     nDDiff * diffOrder;
     size_t diffIterator;
     size_t agencyCounter;
-};
-
-struct stackCDT {
-    TNode ** elems;
-    size_t size;
-    size_t count;
 };
 
 // Adds to the list @param firstYear a ticket of @param year, @param amount, @param month
@@ -71,44 +63,17 @@ static void updateDiff(TNode * root, size_t amount);
 static void freeAgencyTreeRec(TNode * root);
 // Frees @param diffVector 's resources
 static void freeDiffVector(nDDiff * diffVector);
-// Creates a new empty stack
-static stackADT newStack(void);
-// Push @param elem into the top of the stack
-static void push(stackADT stack, TNode * elem);
-// Pops first element in stack. If agency->stack is empty -> pop returns null
-static TNode * pop(stackADT stack);
-// Frees stack's resources
-static void freeStack(stackADT stack);
-// True if stack is empty
-static int isEmpty(const stackADT stack);
 
-static stackADT newStack(void) {
-    stackADT ans = calloc(1, sizeof(struct stackCDT));
-    assert(ans == NULL, NULLARG, NULL);
-    return ans;
-}
-
-static void push(stackADT stack, TNode * elem) {
-    assert(elem == NULL, NULLARG,);
-    if ( stack->count == stack->size ) {
-        stack->size += BLOCK;
-        stack->elems = realloc(stack->elems, stack->size * sizeof(TNode));
-    }
-    stack->elems[stack->count++] = elem;
-}
-
-static TNode * pop(stackADT stack) {
-    return isEmpty(stack) ? NULL:stack->elems[--stack->count];
-}
-
-static void freeStack(stackADT stack){
-    free(stack->elems);
-    free(stack);
-}
-
-static int isEmpty(const stackADT stack) {
-    return stack->count==0;
-}
+/* // Creates a new empty stack */
+/* static stackADT newStack(void); */
+/* // Push @param elem into the top of the stack */
+/* static void push(stackADT stack, TNode * elem); */
+/* // Pops first element in stack. If agency->stack is empty -> pop returns null */
+/* static TNode * pop(stackADT stack); */
+/* // Frees stack's resources */
+/* static void freeStack(stackADT stack); */
+/* // True if stack is empty */
+/* static int isEmpty(const stackADT stack); */
 
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
@@ -273,7 +238,7 @@ bool nextAgency(agencyTreeADT agency) {
         agency->inorderIteratorNext = agency->inorderIteratorNext->left;
     }
     // If agency->stack is empty -> pop returns null
-    agency->inorderIterator = pop(agency->stack);
+    agency->inorderIterator = (TNode *)pop(agency->stack);
     if (agency->inorderIterator != NULL) {
         agency->inorderIteratorNext = agency->inorderIterator->right;
         return true;

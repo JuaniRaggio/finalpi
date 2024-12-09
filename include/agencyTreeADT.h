@@ -8,6 +8,7 @@
 #include <string.h>
 #include <strings.h>
 #include <stdio.h>
+#include "genericStackADT.h"
 #include "lib.h"
 #include "formats.h"
 #include "errorManagement.h"
