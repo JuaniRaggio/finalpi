@@ -64,6 +64,7 @@ static void freeAgencyTreeRec(TNode * root);
 // Frees @param diffVector 's resources
 static void freeDiffVector(nDDiff * diffVector);
 
+// Cambiar para el arbol
 static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) > 0 ) {

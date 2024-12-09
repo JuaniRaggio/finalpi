@@ -1,15 +1,16 @@
-#include "genericStackADT.c"
+#include "../include/genericAVLTreeADT.h"
 
-struct  {
-    TNode ** elems;
-    size_t size;
-    size_t count;
+struct genericAVLTreeCDT {
 };
 
-
-addElem();
 static TNode * rightRotate(TNode * y);
 static TNode * leftRotate(TNode * x);
-static void freeAgencyTreeRec(TNode * root);
-static void updateDiff(TNode * root, size_t amount);
+static unsigned int nodeHeight(TNode * node);
+static int balanceFactor(TNode * root); 
+
+addElem();
+TNode * rightRotate(TNode * y);
+TNode * leftRotate(TNode * x);
+void freeAgencyTreeRec(TNode * root);
+void updateDiff(TNode * root, size_t amount);
 
