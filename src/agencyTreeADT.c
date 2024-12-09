@@ -1,25 +1,34 @@
 #include "../include/agencyTreeADT.h"
 
-#define BLOCK 150
+#ifndef BLOCK
+#define BLOCK 8
+#endif
 
-typedef struct LTicket {
+typedef struct RTicket {
     DTicket ticketData;
-    struct LTicket * next;
-} LTicket;
+    unsigned char nodeHeight;
+    struct RTicket * left;
+    struct RTicket * right;
+} RTicket;
 
-typedef struct LYear {
+typedef struct RYear {
     DYear yearData;
-    struct LYear * next;
-} LYear;
+    unsigned char nodeHeight;
+    struct RYear * left;
+    struct RYear * right;
+} RYear;
 
 // Posible optimizacion: ticketList -> ticketTree
 // firstYear -> tree
 typedef struct agency {
     char agencyName[AGENCY_LEN + 1];
-    LTicket * ticketList;
-    LTicket * ticketIterator;
-    LYear * firstYear;
-    LYear * yearIterator;
+    genericStackADT stack;
+    RTicket * rootTicket;
+    RTicket * ticketIterator;
+    RTicket * ticketIteratorNext;
+    RYear * rootYear;
+    RYear * yearIterator;
+    RYear * yearIteratorNext;
     DDiff amountLimits;
 } TAgency;
 
@@ -43,13 +52,13 @@ struct agencyTreeCDT {
 
 // Adds to the list @param firstYear a ticket of @param year, @param amount, @param month
 // If added -> sets @param added = true
-static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month);
-static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
+static bool addYear(RYear ** firstYear, size_t year, size_t amount, size_t month);
+static RYear * addYearRec(RYear * firstYear, size_t year, size_t amount, size_t month, bool * added);
 // Adds to the list @param firstTicket a ticket of @param id
 // The order of the list is given by the description of each id so the function needs
 // @param validIDs to look for it
-static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id);
-static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added);
+static bool addTicket(validIDADT validIDs, RTicket ** firstTicket, ID_TYPE id);
+static RTicket * addTicketRec(validIDADT validIDs, RTicket * firstTicket, ID_TYPE id, bool * added);
 // Calculates the balance factor of @param root
 static int balanceFactor(TNode * root); 
 // Returns @param node 's height
@@ -65,10 +74,10 @@ static void freeAgencyTreeRec(TNode * root);
 static void freeDiffVector(nDDiff * diffVector);
 
 // Cambiar para el arbol
-static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYPE id, bool * added) {
+static RTicket * addTicketRec(validIDADT validIDs, RTicket * firstTicket, ID_TYPE id, bool * added) {
     int c;
     if ( firstTicket == NULL || (c = compareIDsDescription(validIDs, firstTicket->ticketData.id, id)) > 0 ) {
-        LTicket * new = calloc(1, sizeof(LTicket));
+        RTicket * new = calloc(1, sizeof(RTicket));
         new->ticketData.id = id;
         new->ticketData.units = 1;
         new->next = firstTicket;
@@ -83,7 +92,7 @@ static LTicket * addTicketRec(validIDADT validIDs, LTicket * firstTicket, ID_TYP
     return firstTicket;
 }
 
-static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id){
+static bool addTicket(validIDADT validIDs, RTicket ** firstTicket, ID_TYPE id){
     errno = NOERRORSFOUND;
     assert(validIDs == NULL, NULLARG, false);
     if (!isValidID(validIDs, id)) {
@@ -94,14 +103,16 @@ static bool addTicket(validIDADT validIDs, LTicket ** firstTicket, ID_TYPE id){
     return true;
 }
 
-static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t month, bool * added) {
+static RYear * addYearRec(RYear * firstYear, size_t year, size_t amount, size_t month, bool * added) {
     if (firstYear == NULL || (year < firstYear->yearData.yearN)) {
-        LYear * newYear = calloc(1, sizeof(LYear));
+        RYear * newYear = calloc(1, sizeof(RYear));
         assert(newYear == NULL, ENOMEM, firstYear);
+
         newYear->yearData.yearN = year;
         newYear->yearData.collected[month-1] = amount;
         newYear->yearData.totalCollected = amount;
         newYear->next = firstYear;
+
         (*added) = true;
         return newYear;
     } else if(year == firstYear->yearData.yearN){
@@ -114,7 +125,7 @@ static LYear * addYearRec(LYear * firstYear, size_t year, size_t amount, size_t 
     return firstYear;
 }
 
-static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month) {
+static bool addYear(RYear ** firstYear, size_t year, size_t amount, size_t month) {
     errno = NOERRORSFOUND;
     assert(firstYear == NULL, NULLARG, false);
     if (amount == 0 || month > MONTHS || month == 0) {
@@ -125,9 +136,6 @@ static bool addYear(LYear ** firstYear, size_t year, size_t amount, size_t month
     return added;
 }
 
-static int balanceFactor(TNode * root) {
-    return nodeHeight(root->left) - nodeHeight(root->right);
-} 
 
 static void updateDiff(TNode * root, size_t amount){
     if (root->agencyData.amountLimits.maxAmount < amount){
@@ -137,16 +145,23 @@ static void updateDiff(TNode * root, size_t amount){
     }
 }
 
+void updateAgencyNode(const void * root, const void * agencyData) {
+    TTicket * data = (TTicket *)agencyData;
+    updateDiff((TNode *)root, data->amount);
+}
+
 static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, TTicket * tData, bool * newAgency) {
     if (root == NULL) {
         TNode * newNode = malloc(sizeof(TNode));
         assert(newNode == NULL, ENOMEM, NULL);
+
         myStrcpy(newNode->agencyData.agencyName, AGENCY_LEN + 1, agencyName, SEPARATOR);
-        newNode->agencyData.ticketList = newNode->agencyData.ticketIterator = NULL;
-        newNode->agencyData.firstYear = newNode->agencyData.yearIterator = NULL;
-        newNode->left = newNode->right = NULL;
+        newNode->agencyData.rootTicket = newNode->agencyData.ticketIterator = NULL;
+        newNode->agencyData.rootYear = newNode->agencyData.yearIterator = NULL;
         newNode->agencyData.amountLimits.minAmount = newNode->agencyData.amountLimits.maxAmount = tData->amount;
         newNode->agencyData.amountLimits.id = tData->infractionID;
+
+        newNode->left = newNode->right = NULL;
         newNode->nodeHeight = 1;
         *added = newNode;
         *newAgency = true;
@@ -188,10 +203,10 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData, &added);
     assert(errno != NOERRORSFOUND, errno, false);
 
-    addTicket(agency->validIDs, &addedAgency->agencyData.ticketList, tData->infractionID);
+    addTicket(agency->validIDs, &addedAgency->agencyData.rootTicket, tData->infractionID);
     assert(errno != NOERRORSFOUND, errno, false);
 
-    addYear(&addedAgency->agencyData.firstYear, tData->issueYear, tData->amount, tData->issueMonth);
+    addYear(&addedAgency->agencyData.rootYear, tData->issueYear, tData->amount, tData->issueMonth);
     assert(errno != NOERRORSFOUND, errno, false);
 
     if (added) {
@@ -321,11 +336,65 @@ unsigned int sizeBST(const agencyTreeADT agencys) {
     return agencys->agencyCounter;
 }
 
+static unsigned int nodeHeightTicket(RTicket * node) {
+    if (node == NULL) {
+        return 0;
+    }
+    return node->nodeHeight;
+}
+
+static unsigned int nodeHeightYear(RYear * node) {
+    if (node == NULL) {
+        return 0;
+    }
+    return node->nodeHeight;
+}
+
 static unsigned int nodeHeight(TNode * node) {
     if (node == NULL) {
         return 0;
     }
     return node->nodeHeight;
+}
+
+static RTicket * rightRotateTicket(RTicket * y) {
+    RTicket * x = y->left;
+    RTicket * T2 = x->right;
+    x->right = y;
+    y->left = T2;
+    y->nodeHeight = max(nodeHeightTicket(y->left), nodeHeightTicket(y->right)) + 1;
+    x->nodeHeight = max(nodeHeightTicket(x->left), nodeHeightTicket(x->right)) + 1;
+    return x;
+}
+
+static RTicket * leftRotateTicket(RTicket * x) {
+    RTicket * y = x->right;
+    RTicket * T2 = y->left;
+    y->left = x;
+    x->right = T2;
+    x->nodeHeight = max(nodeHeightTicket(x->left), nodeHeightTicket(x->right)) + 1;
+    y->nodeHeight = max(nodeHeightTicket(y->left), nodeHeightTicket(y->right)) + 1;
+    return y;
+}
+
+static RYear * rightRotateYear(RYear * y) {
+    RYear * x = y->left;
+    RYear * T2 = x->right;
+    x->right = y;
+    y->left = T2;
+    y->nodeHeight = max(nodeHeightYear(y->left), nodeHeightYear(y->right)) + 1;
+    x->nodeHeight = max(nodeHeightYear(x->left), nodeHeightYear(x->right)) + 1;
+    return x;
+}
+
+static RYear * leftRotateYear(RYear * x) {
+    RYear * y = x->right;
+    RYear * T2 = y->left;
+    y->left = x;
+    x->right = T2;
+    x->nodeHeight = max(nodeHeightYear(x->left), nodeHeightYear(x->right)) + 1;
+    y->nodeHeight = max(nodeHeightYear(y->left), nodeHeightYear(y->right)) + 1;
+    return y;
 }
 
 static TNode * rightRotate(TNode * y) {
@@ -348,20 +417,23 @@ static TNode * leftRotate(TNode * x) {
     return y;
 }
 
-static void freeYears(LYear * year) {
-    if (year == NULL) {
-        return;
-    }
-    freeYears(year->next);
-    free(year);
+static int balanceFactorYear(RYear * root) {
+    return nodeHeightYear(root->left) - nodeHeightYear(root->right);
+} 
+
+static int balanceFactorTicket(RTicket * root) {
+    return nodeHeightTicket(root->left) - nodeHeightTicket(root->right);
+} 
+
+static int balanceFactor(TNode * root) {
+    return nodeHeight(root->left) - nodeHeight(root->right);
+} 
+
+static void freeYears(RYear * year) {
+    
 }
 
-static void freeTickets(LTicket * tickets) {
-    if (tickets == NULL) {
-        return;
-    }
-    freeTickets(tickets->next);
-    free(tickets);
+static void freeTickets(RTicket * tickets) {
 }
 
 static void freeAgencyTreeRec(TNode * root) {
@@ -370,8 +442,8 @@ static void freeAgencyTreeRec(TNode * root) {
     }
     freeAgencyTreeRec(root->left);
     freeAgencyTreeRec(root->right);
-    freeTickets(root->agencyData.ticketList);
-    freeYears(root->agencyData.firstYear);
+    freeTickets(root->agencyData.rootTicket);
+    freeYears(root->agencyData.rootYear);
     free(root);
 }
 
