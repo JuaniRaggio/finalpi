@@ -158,19 +158,20 @@ static RYear * insertYearRec(RYear * root, size_t year, size_t amount, size_t mo
     }
     root->nodeHeight = max(nodeHeightYear(root->left), nodeHeightYear(root->right)) + 1;
     int balance = balanceFactorYear(root);
-    if (balance > UPPERLIMIT && cmp < 0) {
+    if (balance > UPPERLIMIT && (cmp < 0)) {
+        if (cmp < 0) {
+            return rightRotateYear(root);
+        }
+        root->left=leftRotateYear(root->left);
         return rightRotateYear(root);
-    } else if (balance < LOWERLIMIT && cmp > 0) {
-        return leftRotateYear(root);
-    } else if (balance > UPPERLIMIT && cmp > 0) {
-        root->left = leftRotateYear(root->left);
-        return rightRotateYear(root);
-    } else if (balance < LOWERLIMIT && cmp < 0) {
+    } else if (balance < LOWERLIMIT && (cmp > 0)) {
+        if (cmp > 0) {
+            return leftRotateYear(root);
+        }
         root->right = rightRotateYear(root->right);
         return leftRotateYear(root);
     }
     return root;
-
 }
 
 static bool insertYear(RYear ** firstYear, size_t year, size_t amount, size_t month) {
@@ -200,6 +201,7 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
         return newNode;
     }
     int cmp = strcasecmp(agencyName, root->agencyData.agencyName);
+
     if (cmp == 0) {
         updateDiff(root, tData->amount);
         *added = root;
@@ -212,14 +214,16 @@ static TNode * insertAgencyRec(TNode * root, TNode ** added, char * agencyName, 
     }
     root->nodeHeight = max(nodeHeight(root->left), nodeHeight(root->right)) + 1;
     int balance = balanceFactor(root);
-    if (balance > UPPERLIMIT && cmp < 0) {
-        return rightRotate(root);
-    } else if (balance < LOWERLIMIT && cmp > 0) {
-        return leftRotate(root);
-    } else if (balance > UPPERLIMIT && cmp > 0) {
+    if (balance > UPPERLIMIT && (cmp < 0)) {
+        if (cmp < 0) {
+            return rightRotate(root);
+        }
         root->left = leftRotate(root->left);
         return rightRotate(root);
-    } else if (balance < LOWERLIMIT && cmp < 0) {
+    } else if (balance < LOWERLIMIT && (cmp > 0)) {
+        if (cmp > 0) {
+            return leftRotate(root);
+        }
         root->right = rightRotate(root->right);
         return leftRotate(root);
     }
