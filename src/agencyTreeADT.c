@@ -16,8 +16,6 @@ typedef struct RYear {
     struct RYear * right;
 } RYear;
 
-// Posible optimizacion: ticketList -> ticketTree
-// firstYear -> tree
 typedef struct agency {
     char agencyName[AGENCY_LEN + 1];
     genericStackADT stackT;
@@ -84,7 +82,6 @@ static void freeDiffVector(nDDiff * diffVector);
 static void freeYears(RYear * year);
 static void freeTickets(RTicket * year);
 
-// Cambiar para el arbol
 static RTicket * insertTicketRec(validIDADT validIDs, RTicket * root, ID_TYPE id, bool * added) {
     if (root == NULL) {
         RTicket * new = calloc(1, sizeof(RTicket));
