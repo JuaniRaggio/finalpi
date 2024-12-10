@@ -1,7 +1,7 @@
 ifndef $(FORMAT)
 	FORMAT = NYC
 endif
-OUTPUT_FILE = queryFor$(FORMAT).out
+OUTPUT_FILE = parkingTickets$(FORMAT).out
 INPUT_FILE_TICKETS = tickets$(FORMAT).csv
 INPUT_FILE_INFRACTIONS = infractions$(FORMAT).csv
 COMPILER = gcc
