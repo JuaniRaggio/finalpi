@@ -6,6 +6,7 @@ const char * fileFormat[QUERIES][FH] =
              {{"query1.csv", "Agency;Infraction;Tickets\n"},
              {"query2.csv", "Agency;Year;Month;YTD\n"},
              {"query3.csv", "Agency;MinAmount;MaxAmount;DiffAmount\n"}};
+
 #define NULLAMOUNT 0
 
 // Returns true if a is (DYear){0}
