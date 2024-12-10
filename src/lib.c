@@ -12,14 +12,16 @@ void freeList(void * list, size_t sizeTillNext) {
 // value in arr[]
 int getMax(int arr[], int n) {
     int mx = arr[0];
-    for (int i = 1; i < n; i++)
-        if (arr[i] > mx)
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > mx) {
             mx = arr[i];
+        }    
+    }       
     return mx;
 }
 
 int max(int a, int b) {
-    return a > b ? a:b;
+    return (a > b) ? a:b;
 }
 
 int myStrcpy(char * target, size_t targetDim, const char * source, char * separators) {
@@ -39,15 +41,18 @@ unsigned int getLine(char s[], unsigned int maxLength) {
     int c;
     unsigned int n=0;
     while ( (c=getchar()) != EOF && c != '\n') {
-        if (n < maxLength)
+        if (n < maxLength) {
             s[n++] = c;
+        }    
     }
     s[n] = 0;
     return n;
 }
 
 void reCalloc(void ** ptr, size_t sizePtr, size_t oldSize, size_t newSize) {
-    if (oldSize >= newSize) return;
+    if (oldSize >= newSize) {
+        return;
+    }
     void * tmp = realloc(*ptr, sizePtr * newSize);
     errno = NOERRORSFOUND;
     assert(tmp == NULL, ENOMEM,);
