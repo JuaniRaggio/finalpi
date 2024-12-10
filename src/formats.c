@@ -1,4 +1,4 @@
-#include "../include/formats.h"
+#include "formats.h"
 
 #if FORMAT == CHI
 const INFRACTIONFIELDS INFRACTIONORDER[INFRACTIONDIM] = {ID, DESCRIPTION};
