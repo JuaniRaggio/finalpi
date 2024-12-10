@@ -8,9 +8,6 @@ void processInfraction(char *line, validIDADT infractions) {
         fields[INFRACTIONORDER[i]] = token;
         token = strtok(NULL, SEPARATOR);
     }
-
-    // OJO con el  (unsignec char) atoi
-
     addID(infractions, (unsigned char)atoi(fields[ID]), fields[DESCRIPTION]);
     return;
 }
