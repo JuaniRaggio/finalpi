@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <strings.h>
 #include <stdbool.h>
 #include "genericStackADT.h"
 #include "lib.h"
@@ -32,7 +33,8 @@ bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData);
 // 1 - Initialize agency with toBeginAgency
 // 2 - Request agencys alphabetically with nextAgency
 // 3 - For each request, use toBeginTicket, nextTicket, toBeginYear and nextYear
-//     to get the data from that Requested agency
+//     to get the data from that Requested agency. hasNext is used inside next but it can be
+//     used before next for double check
 void toBeginAgency(agencyTreeADT agency);
 bool hasNextAgency(agencyTreeADT agency);
 bool nextAgency(agencyTreeADT agency);

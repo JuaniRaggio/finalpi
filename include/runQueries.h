@@ -1,16 +1,27 @@
 #ifndef __RUNQUERIES_H__
 #define __RUNQUERIES_H__
 
-#include <pthread.h>
 #include "agencyTreeADT.h"
-#include "processQueries.h"
 #include "lib.h"
 #include "formats.h"
 
-/// Executes multiple queries 
-/// @param queries: array of file pointers where information of queires is going to get stored
+/// Function that stores all the generated information of query 1 in a .csv file
 /// @param agency: ADT of stored agencies
-void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency);
+/// @param agencyName: agency name 
+/// @param q1File: file where processed information is going to be stored
+void runQuery1(agencyTreeADT agency, const char * agencyName, FILE * q1File);
+
+/// Function that stores all the generated information of query 2 in a .csv file
+/// @param agency: ADT of stored agencies
+/// @param agencyName: agency name 
+/// @param q2File: file where processed information is going to be stored
+void runQuery2(agencyTreeADT agency, const char * agencyName, FILE * q2File);
+
+/// Function that stores all the generated information of query 3 in a .csv file
+/// @param agency: ADT of stored agencies
+/// @param agencyName: agency name 
+/// @param q3File: file where processed information is going to be stored
+void runQuery3(agencyTreeADT agency, FILE * q3File);
 
 /// Executes queries on an agency tree and writes the results in corresponding files
 /// @param agency: ADT of stored agencies  

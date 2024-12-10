@@ -5,12 +5,6 @@
 #include "agencyTreeADT.h"
 #include "formats.h"
 
-/// Inserts at diffAmount and agencyTree a valid Ticket
-/// @param diffAmount: ADT of stored diffAmounts
-/// @param agencyTree: ADT of stored agencyTree
-/// @param data: Ticket to insert
-void insertBothTrees(agencyTreeADT agencyTree, TTicket data);
-
 /// Makes valid the infraction at line -> Adds it to validIDADT
 /// @param line: String which represents a read line
 /// @param infractions: ADT of valid infractions

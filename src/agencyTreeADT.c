@@ -244,8 +244,8 @@ void updateAgencyNode(const void * root, const void * agencyData) {
 
 bool insertAgency(agencyTreeADT agency, char * agencyName, TTicket * tData) {
     errno = NOERRORSFOUND;
-    assert(!isValidID(agency->validIDs, tData->infractionID), INVALIDARG, false);
     assert(agency == NULL || agencyName == NULL, NULLARG, false);
+    assert(!isValidID(agency->validIDs, tData->infractionID), INVALIDARG, false);
     bool added = false;
     TNode * addedAgency = NULL;
     agency->root = insertAgencyRec(agency->root, &addedAgency, agencyName, tData, &added);
@@ -279,7 +279,7 @@ void toBeginAgency(agencyTreeADT agency) {
 }
 
 bool hasNextAgency(agencyTreeADT agency) {
-    return agency->inorderIterator != NULL;
+    return agency != NULL && agency->inorderIterator != NULL;
 }
 
 bool nextAgency(agencyTreeADT agency) {
@@ -299,7 +299,7 @@ bool nextAgency(agencyTreeADT agency) {
 }
 
 void toBeginYear(agencyTreeADT agency){
-    assert(agency == NULL, NULLARG,);
+    assert(agency == NULL || !hasNextAgency(agency), NULLARG,);
     agency->inorderIterator->agencyData.stackY = newStack();
     assert(agency->stack == NULL, ENOMEM,);
     agency->inorderIterator->agencyData.yearIterator = agency->inorderIterator->agencyData.rootYear;
@@ -360,6 +360,7 @@ const char * getNameOfIterator(agencyTreeADT agency) {
 }
 
 const char * getDescriptionOfidAtAgency(agencyTreeADT agency, ID_TYPE id) {
+    assert(agency == NULL, NULLARG, NULL);
     return getDescriptionOfID(agency->validIDs, id);
 }
 
@@ -386,6 +387,7 @@ void toBeginDiff(agencyTreeADT agency) {
 }
 
 bool hasNextDiff(agencyTreeADT agency) {
+    assert(agency == NULL, NULLARG, false);
     return agency->diffIterator < agency->agencyCounter;
 }
 
@@ -402,10 +404,6 @@ agencyTreeADT newAgencys(validIDADT validInfractions) {
     assert(newTree == NULL, ENOMEM, NULL);
     newTree->validIDs = validInfractions;
     return newTree;
-}
-
-unsigned int sizeBST(const agencyTreeADT agencys) {
-    return agencys->agencyCounter;
 }
 
 static unsigned int nodeHeightTicket(RTicket * node) {
