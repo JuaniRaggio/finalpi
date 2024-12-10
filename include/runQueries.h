@@ -13,7 +13,7 @@
 void runMultithreadedQueries(FILE * queries[QUERIES], agencyTreeADT agency);
 
 /// Executes queries on an agency tree and writes the results in corresponding files
-/// @param agency 
+/// @param agency: ADT of stored agencies  
 void runQueries(agencyTreeADT agency);
 
 #endif
