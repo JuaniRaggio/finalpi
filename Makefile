@@ -31,7 +31,7 @@ runQueries.o: $(SRC_DIR)/runQueries.c $(HEADERS_DIR)/runQueries.h $(HEADERS_DIR)
 validIDADT.o: $(SRC_DIR)/validIDADT.c $(HEADERS_DIR)/validIDADT.h $(HEADERS_DIR)/formats.h $(HEADERS_DIR)/lib.h
 
 clean: $(OUTPUT_FILE)
-	@rm -f $(OBJ) $(OUTPUT_FILE)
+	rm -rf $(OBJ) *.dSYM
 
 run: $(OUTPUT_FILE)
 	@rm -f $(OBJ)
