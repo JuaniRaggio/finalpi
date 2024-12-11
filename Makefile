@@ -16,6 +16,7 @@ all: $(OUTPUT_FILE)
 
 $(OUTPUT_FILE): $(FRONT) $(OBJ)
 	$(COMPILER) $(CFLAGS) $(FRONT) $(OBJ) -o $(OUTPUT_FILE)
+	@rm -f $(OBJ)
 
 %.o: $(SRC_DIR)/%.c
 	$(COMPILER) $(CFLAGS) -c $< -o $@
