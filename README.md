@@ -45,12 +45,12 @@ Subdirectorio que contiene archivos de encabezado que contiene las declaraciones
 Subdirectorio que contiene los archivos de implementación del programa.
 
 ## Compilación
-Para compilar el programa, usar el comando 'make' con el formato indicado
-Si se desea una compilacion limpia sin archivos objeto, usar el comando 'make clean' con el formato indicado
-Si se desea compilar y ejecutar el programa, usar el comando 'make run' con el formato indicado
-Todos los comandos deben estar seguidos de una especificacion con el formato de ciudad:
-- 'commando' FORMAT=CHI para el formato de Chicago.
-- 'commando' FORMAT=NYC para el formato de Nueva York.
+1. Para compilar el programa, usar el comando 'make' con el formato indicado
+2. Si se desea una compilacion limpia sin archivos objeto, usar el comando 'make clean' con el formato indicado
+3. Si se desea compilar y ejecutar el programa, usar el comando 'make run' con el formato indicado
+*Todos los comandos deben estar seguidos de una especificacion con el formato de ciudad:*
+- *'commando'* FORMAT=CHI para el formato de Chicago.
+- *'commando'* FORMAT=NYC para el formato de Nueva York.
 
 Siendo 'commando' alguna de las opciones mencionadas anteriormente
 
