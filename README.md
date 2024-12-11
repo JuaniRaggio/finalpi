@@ -49,9 +49,10 @@ Para compilar el programa, usar el comando 'make' con el formato indicado
 Si se desea una compilacion limpia sin archivos objeto, usar el comando 'make clean' con el formato indicado
 Si se desea compilar y ejecutar el programa, usar el comando 'make run' con el formato indicado
 Todos los comandos deben estar seguidos de una especificacion con el formato de ciudad:
-- <commando> FORMAT=CHI para el formato de Chicago.
-- <commando> FORMAT=NYC para el formato de Nueva York.
-Siendo <commando> alguna de las opciones mencionadas anteriormente
+- 'commando' FORMAT=CHI para el formato de Chicago.
+- 'commando' FORMAT=NYC para el formato de Nueva York.
+
+Siendo 'commando' alguna de las opciones mencionadas anteriormente
 
 ## Ejecución
 Para la ejecución del programa en caso de solo haberlo compilado, utilizar el comando ./nombreDelEjecutable tickets.csv infractions.csv, donde tickets.csv contiene información de multas e infractions.csv contiene información de infracciones (en caso de querer modificar cantidad de parámetros, modificar la constante simbólica del main.c "EXPECTEDARGS"). Las funciones de lectura esperan que se pasen los parametros con los formatos acordes y que se utilicen los archivos con el formato correspondiente.
