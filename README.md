@@ -45,12 +45,16 @@ Subdirectorio que contiene archivos de encabezado que contiene las declaraciones
 Subdirectorio que contiene los archivos de implementación del programa.
 
 ## Compilación
-Para compilar el programa, usar el comando 'make' especificando el formato de ciudad:
-make FORMAT=CHI para el formato de Chicago.
-make FORMAT=NYC para el formato de Nueva York.
+Para compilar el programa, usar el comando 'make' con el formato indicado
+Si se desea una compilacion limpia sin archivos objeto, usar el comando 'make clean' con el formato indicado
+Si se desea compilar y ejecutar el programa, usar el comando 'make run' con el formato indicado
+Todos los comandos deben estar seguidos de una especificacion con el formato de ciudad:
+- <commando> FORMAT=CHI para el formato de Chicago.
+- <commando> FORMAT=NYC para el formato de Nueva York.
+Siendo <commando> alguna de las opciones mencionadas anteriormente
 
 ## Ejecución
-Para la ejecución del programa utilizar el comando ./nombreDelEjecutable tickets.csv infractions.csv, donde tickets.csv contiene información de multas e infractions.csv contiene información de infracciones (en caso de querer modificar cantidad de parámetros, modificar la constante simbólica del main.c "EXPECTEDARGS"). Las funciones de lectura esperan que se pasen los parametros con los formatos acordes y que se utilicen los archivos con el formato correspondiente.
+Para la ejecución del programa en caso de solo haberlo compilado, utilizar el comando ./nombreDelEjecutable tickets.csv infractions.csv, donde tickets.csv contiene información de multas e infractions.csv contiene información de infracciones (en caso de querer modificar cantidad de parámetros, modificar la constante simbólica del main.c "EXPECTEDARGS"). Las funciones de lectura esperan que se pasen los parametros con los formatos acordes y que se utilicen los archivos con el formato correspondiente.
 
 ## Autores:
 Geronimo Naso Rodriguez - nro. de legajo: 64177 - gerorodriguez@itba.edu.ar
