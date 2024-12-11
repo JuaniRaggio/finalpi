@@ -1,4 +1,4 @@
-#include "../include/genericStackADT.h"
+#include "genericStackADT.h"
 
 #define STACKBLOCK 5
 #define NOELEMENTSLEFT 0
