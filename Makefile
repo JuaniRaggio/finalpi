@@ -34,7 +34,7 @@ clean: $(OUTPUT_FILE)
 	rm -rf $(OBJ) *.dSYM
 
 run: $(OUTPUT_FILE)
-	@rm -f $(OBJ)
+	rm -rf $(OBJ) *.dSYM
 	./$(OUTPUT_FILE) $(INPUT_FILE_TICKETS) $(INPUT_FILE_INFRACTIONS)
 
 
