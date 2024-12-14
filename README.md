@@ -47,7 +47,9 @@ Subdirectorio que contiene los archivos de implementación del programa.
 ## Compilación
 1. Si se desea compilar manteniendo los archivos, usar el comando 'make' con el formato indicado. Recuerde que en este caso, debe borrar los archivos objeto del directorio si desea volver a compilar el programa para otra ciudad
 2. Si se desea una compilacion limpia sin archivos objeto, usar el comando 'make clean' con el formato indicado
-3. Si se desea compilar y ejecutar el programa, usar el comando 'make run' con el formato indicado
+3. Si se desea compilar y ejecutar el programa, usar el comando 'make run' con el formato indicado. *Importante:* Si se desea compilar y 
+ejecutar sin modificar el Makefile, los archivos .csv a utilizar deben estar en el directorio actual y con los nombres correspondientes,
+*ticketsINICIALES.csv* *infractionsINICIALES.csv*, siendo INICIALES, las iniciales del formato de cada ciudad
 - *Todos los comandos deben estar seguidos de una especificacion con el formato de ciudad:*
     - *'commando'* FORMAT=CHI para el formato de Chicago.
     - *'commando'* FORMAT=NYC para el formato de Nueva York.
