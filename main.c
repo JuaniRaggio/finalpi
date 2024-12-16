@@ -1,7 +1,7 @@
-#include "include/agencyTreeADT.h"
-#include "include/readData.h"
-#include "include/errorManagement.h"
-#include "include/runQueries.h"
+#include "agencyTreeADT.h"
+#include "readData.h"
+#include "errorManagement.h"
+#include "runQueries.h"
 #include <stdlib.h>
 
 #define EXPECTEDARGS 3
